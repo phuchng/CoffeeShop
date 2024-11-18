@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/public/css/detail.css">
-    <link rel="stylesheet" href="/public/css/shop.css">
-    <link rel="stylesheet" href="/public/css/login.css">
-    <link rel="stylesheet" href="/public/css/register.css">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/detail.css">
+    <link rel="stylesheet" href="/css/shop.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <link rel="stylesheet" href="./assets/font/fontawesome-free-6.5.1-web/fontawesome-free-6.5.1-web/css/all.min.css" >
+    <link rel="stylesheet" href="/assets/font/fontawesome-free-6.5.1-web/fontawesome-free-6.5.1-web/css/all.min.css" >
 </head>
 <body>
     <div class="header">
@@ -19,7 +19,9 @@
                     <li class="bold">Shopping</li>
                 </ul>
                 <ul class="menuList">
-                    <li class="normal">Login</li>
+                    <li class="normal">
+                        <a href="/register">Register</a>
+                    </li>
                 </ul>
             </div>
             

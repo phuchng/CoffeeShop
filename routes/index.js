@@ -1,12 +1,20 @@
 var express = require('express');
+var product = require('../models/Product')
 var router = express.Router();
-const mongoose = require('mongoose');
-var Product  = require('../models/Product')
 
-/* GET home page. */
+/* GET users listing. */
+
 router.get('/', async function(req, res, next) {
-  const product = await Product.find();
-  res.render('index', { title: 'Coffeeno', product: product});
+  const productList = await product.find({});
+
+  res.render('shop', { title: 'Coffeeno', productList: productList })
+});
+
+router.get('/product/:id', async function(req, res, next) {
+  const productID = req.params.id;
+  const productList = await product.find({}).limit(4);
+  const productDetail = await product.findById(productID);
+  res.render('detail', { title: 'Detail', productList: productList, product: productDetail });
 });
 
 module.exports = router;

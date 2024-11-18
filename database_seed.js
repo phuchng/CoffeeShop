@@ -7,97 +7,66 @@ mongoose
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
 
-const Category = require('./models/Category');
 const Product = require('./models/Product');
-const Blog = require('./models/Blog');
+const Account = require('./models/Account');
 
 async function seedDatabase() {
   try {
-    await Category.deleteMany({});
     await Product.deleteMany({});
-    await Blog.deleteMany({});
-
-    const coffeeCategory = new Category({
-      name: 'Coffee',
-      image: '/images/img-1.png',
-      description: 'Selling the best coffee to your likings!',
-    });
-
-    const foodCategory = new Category({
-      name: 'Food',
-      image: '/images/img-2.png',
-      description: "Hungry for some? Just tell me what you'd like to eat!",
-    });
-
-    const drinksCategory = new Category({
-      name: 'Drinks',
-      image: '/images/img-3.png',
-      description: 'We sell more than just coffee here!',
-    });
-
-    const dessertsCategory = new Category({
-      name: 'Desserts',
-      image: '/images/img-4.png',
-      description: 'If you want to have something to go with your drinks',
-    });
-
-    const categories = [coffeeCategory, foodCategory, drinksCategory, dessertsCategory];
-
-    await Category.insertMany(categories);
-    console.log('Categories inserted');
+    await Account.deleteMany({});
 
     const products = [
     // Coffee Products
       {
         name: 'Coffee Cappuccino',
-        image: '/images/menu-1.jpg',
+        image: 'menu-1.jpg',
         description: 'A rich and creamy coffee with a frothy top.',
         price: 5.9,
-        category: coffeeCategory._id,
+        category: "Coffee",
         servingOptions: ['Small', 'Medium', 'Large'],
       },
       {
         name: 'Coffee Latte',
-        image: '/images/menu-2.jpg',
+        image: 'menu-2.jpg',
         description: 'A smooth blend of espresso and steamed milk.',
         price: 5.9,
-        category: coffeeCategory._id,
+        category: "Coffee",
         servingOptions: ['Small', 'Medium', 'Large'],
       },
     // Food Products
       {
         name: 'Grilled Beef',
-        image: '/images/dish-1.jpg',
+        image: 'dish-1.jpg',
         description: 'Succulent grilled beef cooked to perfection.',
         price: 12.9,
-        category: foodCategory._id,
+        category: "Food",
         servingOptions: ['Rare', 'Medium', 'Well-done'],
       },
 
     // Drinks Products
       {
         name: 'Lemonade Juice',
-        image: '/images/drink-1.jpg',
+        image: 'drink-1.jpg',
         description: 'Refreshing lemonade made from fresh lemons.',
         price: 2.9,
-        category: drinksCategory._id,
+        category: "Drink",
         servingOptions: ['Medium', 'Large'],
       },
       {
         name: 'Pineapple Juice',
-        image: '/images/drink-2.jpg',
+        image: 'drink-2.jpg',
         description: 'Refreshing pineapple juice made from fresh pineapples.',
         price: 2.9,
-        category: drinksCategory._id,
+        category: "Drink",
         servingOptions: ['Medium', 'Large'],
       },
     // Desserts Products
       {
         name: 'Hot Cake Honey',
-        image: '/images/dessert-1.jpg',
+        image: 'dessert-1.jpg',
         description: 'Delicious hot cakes drizzled with honey.',
         price: 4.9,
-        category: dessertsCategory._id,
+        category: "Dessert",
         servingOptions: [],
       },
     ];
@@ -105,24 +74,18 @@ async function seedDatabase() {
     await Product.insertMany(products);
     console.log('Products inserted');
 
-    const blogs = [
+    const accounts = [
       {
-        title: 'PREP TECHNIQUES Coffee',
-        image: '/images/blog-img1.png',
-        date: new Date('2023-04-05'),
-        content:
-          'Discover various coffee preparation techniques that bring out unique flavors.',
+        username: 'quocthai',
+        password: '123',
       },
       {
-        title: 'Enjoy Best Coffee',
-        image: '/images/blog-img2.png',
-        date: new Date('2023-04-05'),
-        content:
-          'Learn how to enjoy the best coffee experiences at our shop.',
+        username: 'thanhnhan',
+        password: '456',
       },
     ];
 
-    await Blog.insertMany(blogs);
+    await Account.insertMany(accounts);
     console.log('Blogs inserted');
 
     console.log('Database seeded successfully');
