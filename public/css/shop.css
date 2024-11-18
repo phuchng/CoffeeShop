@@ -1,0 +1,127 @@
+.grid {
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+.header {
+    padding-top: 30px;
+    background-color: #F5F2E0;
+}
+.menuList {
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
+}
+
+.normal{
+    font-weight: 300;
+}
+.box {
+    display: flex;
+    justify-content: space-between;
+}
+.menuList li {
+    cursor: pointer;
+    font-size: 20px;
+    color: #736450;
+    padding:5px;
+}
+.menuList li:hover {
+    color: #fff;
+    background-color: #91470B;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.linkNavigation {
+    padding: 25px 0 25px;
+}
+.linkNavigation span,.linkNavigation a {
+    margin-right: 5px;
+    text-decoration: none;
+}
+
+.cate {
+    cursor: pointer;
+    color: #000;
+}
+.cate:hover {
+    color: #BF6701;
+}
+
+.intro h1 {
+    margin: 0;
+    color: #70604D;
+}
+.intro p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+.filter {
+    background-color: #F4F4F4;
+    display: flex;
+    padding: 14px;
+}
+.filter .sp1 {
+    margin-right: 8px;
+    font-weight: bold;
+}
+.dv1 {
+    display: flex;
+    width: 100px;
+    justify-content: space-between;
+    align-items: center;
+}
+.dv1:hover {
+    cursor: pointer;
+    border: 1px solid #000;
+    border-radius: 3px;
+
+}
+.dv1 span {
+    font-size: 12px;
+}
+.boxPro {
+    margin: 25px 0;
+}
+.productList {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 cột chia đều */
+    gap: 10px;
+    width: 100%; 
+}
+.product {
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 20px;
+    box-sizing: border-box; 
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.cost {
+    margin-top: 10px;
+    color: #B07632;
+    font-size: 18px;
+}
+.eval {
+    font-size: 12px;
+    margin:5px 0;
+}
+.name {
+    color:#2f2f2f;
+    font-size: 14px;
+    margin-top: 5px;
+}
+.eval i {
+    color: #FFB829;
+   
+}
+.bold {
+    font-weight: bold;
+}
+.red {
+    color: #BF6701;
+}
