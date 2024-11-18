@@ -5,7 +5,7 @@ const ProductSchema = new mongoose.Schema({
   image: String, // URL or path to the image
   description: String,
   price: Number,
-  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
+  category: String,
   servingOptions: [String],
 });
 
