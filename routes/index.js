@@ -19,8 +19,12 @@ router.get('/product/:id', async function(req, res, next) {
 
 router.get('/search', async function(req, res, next) {
   const search = req.query.search;
-  const searchResults = await product.find({ name: { $regex: search, $options: 'i' } });
-  res.render('search', { title: 'Search Results', searchResults: searchResults, query: search });
+  const products = await product.find({ $or: [
+    { name: { $regex: search, $options: 'i' } },
+    { description: { $regex: search, $options: 'i' } },
+    { category: { $regex: search, $options: 'i' } }
+  ]});
+  res.render('search', { title: 'Search Results', search: search, products: products });
 });
 
 router.get('/filter', async function(req, res, next) {
