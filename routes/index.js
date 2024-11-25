@@ -19,13 +19,31 @@ router.get('/product/:id', async function(req, res, next) {
 
 router.get('/search', async function(req, res, next) {
   const search = req.query.search;
-  const products = await product.find({ $or: [
-    { name: { $regex: search, $options: 'i' } },
-    { description: { $regex: search, $options: 'i' } },
-    { category: { $regex: search, $options: 'i' } }
-  ]});
+  const searchResults = await product.find({ name: { $regex: search, $options: 'i' } });
+  res.render('search', { title: 'Search Results', searchResults: searchResults, query: search });
+});
 
-  return res.render('search', { search: search, products: products});
-})
+router.get('/filter', async function(req, res, next) {
+  const filter = req.query.filter;
+  const filteredProducts = await product.find({ category: filter });
+  res.render('shop', { title: 'Filtered Products', productList: filteredProducts });
+});
+
+router.get('/sort', async function(req, res, next) {
+  const sortOption = req.query.sort;
+  let sortedProducts;
+
+  if (sortOption === 'best-selling') {
+    sortedProducts = await product.find({}).sort({ sales: -1 });
+  } else if (sortOption === 'price-low-high') {
+    sortedProducts = await product.find({}).sort({ price: 1 });
+  } else if (sortOption === 'price-high-low') {
+    sortedProducts = await product.find({}).sort({ price: -1 });
+  } else {
+    sortedProducts = await product.find({});
+  }
+
+  res.render('shop', { title: 'Sorted Products', productList: sortedProducts });
+});
 
 module.exports = router;

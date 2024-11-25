@@ -20,6 +20,10 @@
     display: flex;
     justify-content: space-between;
 }
+.menuList {
+    display: flex;
+    gap: 10px; 
+}
 .menuList li a{
     cursor: pointer;
     font-size: 20px;
