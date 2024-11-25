@@ -17,4 +17,16 @@ router.get('/product/:id', async function(req, res, next) {
   res.render('detail', { title: 'Detail', productList: productList, product: productDetail });
 });
 
+router.get('/search', async function(req, res, next) {
+  const query = req.query.query;
+  const searchResults = await product.find({ name: { $regex: query, $options: 'i' } });
+  res.render('search', { title: 'Search Results', searchResults: searchResults });
+});
+
+router.get('/filter', async function(req, res, next) {
+  const filter = req.query.filter;
+  const filteredProducts = await product.find({ category: filter });
+  res.render('shop', { title: 'Filtered Products', productList: filteredProducts });
+});
+
 module.exports = router;
