@@ -20,13 +20,14 @@
     display: flex;
     justify-content: space-between;
 }
-.menuList li {
+.menuList li a{
     cursor: pointer;
     font-size: 20px;
     color: #736450;
     padding:5px;
+    text-decoration: none;
 }
-.menuList li:hover {
+.menuList li a:hover {
     color: #fff;
     background-color: #91470B;
     border-top-left-radius: 5px;
