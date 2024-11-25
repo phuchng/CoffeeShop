@@ -17,4 +17,15 @@ router.get('/product/:id', async function(req, res, next) {
   return res.render('detail', { title: 'Detail', productList: productList, product: productDetail });
 });
 
+router.get('/search', async function(req, res, next) {
+  const search = req.query.search;
+  const products = await product.find({ $or: [
+    { name: { $regex: search, $options: 'i' } },
+    { description: { $regex: search, $options: 'i' } },
+    { category: { $regex: search, $options: 'i' } }
+  ]});
+
+  return res.render('search', { search: search, products: products});
+})
+
 module.exports = router;

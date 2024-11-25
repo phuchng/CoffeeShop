@@ -19,13 +19,15 @@
                 <div class="logo">
                     <img src="/img/logo-coffeeam.png" alt="">
                 </div>
-                <div class="formSearch">
-                    <input type="text" placeholder="What are you looking for?">
-                    <button><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div> 
-                <div class="cart">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                </div>
+                <form action="/search" method="get">
+                    <div class="formSearch">
+                        <input type="text" name="search" placeholder="What are you looking for?">
+                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div> 
+                    <div class="cart">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                </form>
             </div>
 
             <div class="box">
@@ -36,7 +38,7 @@
                 </ul>
                 <ul class="menuList">
                     <li class="normal">
-                        <a href="/register">Register</a>
+                        <a href="/login">Login</a>
                     </li>
                 </ul>
             </div>
