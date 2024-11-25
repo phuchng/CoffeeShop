@@ -7,14 +7,14 @@ var router = express.Router();
 router.get('/', async function(req, res, next) {
   const productList = await product.find({});
 
-  res.render('shop', { title: 'Coffeeno', productList: productList })
+  return res.render('shop', { title: 'Coffeeno', productList: productList })
 });
 
 router.get('/product/:id', async function(req, res, next) {
   const productID = req.params.id;
   const productList = await product.find({}).limit(4);
   const productDetail = await product.findById(productID);
-  res.render('detail', { title: 'Detail', productList: productList, product: productDetail });
+  return res.render('detail', { title: 'Detail', productList: productList, product: productDetail });
 });
 
 module.exports = router;

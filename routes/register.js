@@ -1,6 +1,5 @@
 var express = require('express');
 var account = require('../models/Account');
-const Account = require('../models/Account');
 var router = express.Router();
 
 /* GET users listing. */
@@ -25,12 +24,12 @@ router.post('/', async function(req, res, next){
         const newAccount = new account({ name: name , password: password, email: email })
 
         await newAccount.save();
-        res.send('<script>alert("Registration complete!"); window.location.href = "/";</script>');
+        return res.send('<script>alert("Registration complete!"); window.location.href = "/";</script>');
     }
     catch(error)
     {
         console.error(error);
-        res.status(500).send('<script>alert("Registration failed: Internal Server Error"); window.location.href = "/register";</script>');
+        return res.status(500).send('<script>alert("Registration failed: Internal Server Error"); window.location.href = "/register";</script>');
     }
 })
 
