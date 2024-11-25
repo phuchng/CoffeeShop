@@ -6,13 +6,14 @@
             <a href="/" class="cate">Shop</a>
         </div>
 
-        <form class="filter" action="/filter" method="GET">
+        <form class="filter" action="/sort" method="GET">
             <span class="sp1">Sort by</span>
             <select name="sort">
                 <option value="best-selling">Best Selling</option>
                 <option value="price-low-high">Price: Low to High</option>
                 <option value="price-high-low">Price: High to Low</option>
             </select>
+            <input type="hidden" name="selectedSortOption" value="">
             <button type="submit">Sort</button>
         </form>
         
