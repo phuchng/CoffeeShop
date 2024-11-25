@@ -106,7 +106,7 @@ async function seedDatabase() {
     ];
 
     await Account.insertMany(accounts);
-    console.log('Blogs inserted');
+    console.log('Accounts inserted');
 
     console.log('Database seeded successfully');
   } catch (error) {

@@ -5,10 +5,6 @@
             <span>></span>
             <span>Search results for "<%= query %>"</span>
         </div>
-        <form class="formSearch" action="/search" method="GET">
-            <input type="text" name="query" placeholder="What are you looking for?" value="<%= query %>">
-            <button><i class="fa-solid fa-magnifying-glass searchIcon"></i></button>
-        </form>
         <div class="boxPro">
             <ul class="productList">
                 <% searchResults.forEach(product => { %>
