@@ -21,7 +21,7 @@ app.set('port', port);
 const uri = 'mongodb+srv://phuchng0612:VzYXbzn8SzZdEv5n@cluster0.q010e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose
-  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(uri)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
 
