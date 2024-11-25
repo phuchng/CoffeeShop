@@ -20,7 +20,7 @@ router.get('/product/:id', async function(req, res, next) {
 router.get('/search', async function(req, res, next) {
   const query = req.query.query;
   const searchResults = await product.find({ name: { $regex: query, $options: 'i' } });
-  res.render('search', { title: 'Search Results', searchResults: searchResults });
+  res.render('search', { title: 'Search Results', searchResults: searchResults, query: query });
 });
 
 router.get('/filter', async function(req, res, next) {
