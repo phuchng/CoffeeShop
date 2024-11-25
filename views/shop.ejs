@@ -6,13 +6,16 @@
             <a href="/" class="cate">Shop</a>
         </div>
 
-        <div class="filter">
+        <form class="filter" action="/filter" method="GET">
             <span class="sp1">Sort by</span>
-            <div class="dv1">
-                <span>Best seling</span>
-                <span>*</span>
-            </div>
-        </div>
+            <select name="sort">
+                <option value="best-selling">Best Selling</option>
+                <option value="price-low-high">Price: Low to High</option>
+                <option value="price-high-low">Price: High to Low</option>
+            </select>
+            <button type="submit">Sort</button>
+        </form>
+        
         <div class="boxPro">
             <ul class="productList">
                 <% productList.forEach(product => { %>
