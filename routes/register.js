@@ -1,5 +1,6 @@
 var express = require('express');
 var account = require('../models/Account');
+var bcrypt = require('bcrypt')
 var router = express.Router();
 
 /* GET users listing. */
@@ -21,7 +22,9 @@ router.post('/', async function(req, res, next){
             return res.status(400).send('<script>alert("Registration failed: User already exists!"); window.location.href = "/register";</script>');
         }   
 
-        const newAccount = new account({ name: name , password: password, email: email })
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newAccount = new account({ name: name , password: hashedPassword, email: email })
 
         await newAccount.save();
         return res.send('<script>alert("Registration complete!"); window.location.href = "/";</script>');

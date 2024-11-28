@@ -4,19 +4,43 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const expressLayouts = require('express-ejs-layouts');
+var passport = require('passport')
+var flash = require('connect-flash')
+var session = require('express-session');
+
+
 
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login')
 var app = express();
-var loginRouter = require('./routes/login');
+
+require('./config/passport')(passport);
+
+
+app.use(session({
+  secret: 'jidfpsogfdg',
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  next();
+})
 // view engine setup
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(expressLayouts);
 app.set('layout', 'layouts/layout');
-
 
 app.use(logger('dev'));
 app.use(express.json());

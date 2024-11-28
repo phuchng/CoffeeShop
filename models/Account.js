@@ -6,4 +6,12 @@ const AccountSchema = new mongoose.Schema({
   password: { type: String, required: true }
 });
 
+AccountSchema.virtual('id').get(function(){
+  return this._id.toHexString();
+})
+
+AccountSchema.set('toJSON', {
+  virtuals: true
+})
+
 module.exports = mongoose.model('Account', AccountSchema);

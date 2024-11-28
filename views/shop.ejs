@@ -1,4 +1,7 @@
 <div class="container">
+    <% if (success_msg) { %>
+        <h1 class="d-flex justify-content-center"><span class="badge text-success"><%= success_msg %></span></h1>
+      <% } %>
     <div class="grid">
         <div class="linkNavigation">
             <a href="/" class="cate red">Home</a>

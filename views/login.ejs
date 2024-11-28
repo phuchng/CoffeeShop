@@ -1,5 +1,8 @@
 <div class="container">
-    <div class="grid">
+   <% if (error_msg) { %>
+      <h1 class="d-flex justify-content-center"><span class="badge text-danger"><%= error_msg %></span></h1>
+    <% } %>
+    <div class="grid d-flex justify-content-center">
        <div class="col-md-6">
           <div class="login_box">
              <h1 class="login_title text-center mb-4">LOGIN</h1>

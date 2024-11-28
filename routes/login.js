@@ -1,29 +1,34 @@
 var express = require('express');
 var account = require('../models/Account');
+var passport = require('passport');
 var router = express.Router();
 
 /* GET users listing. */
 
 router.get('/', async function(req, res, next) {
-  res.render('login', { title: 'Register' })
+  res.render('login', { title: 'Login' })
 });
 
-router.post('/', async function(req, res, next){
-    const { email, password } = req.body;
+router.post('/', async function (req, res, next){ 
+  passport.authenticate('local', (err, user, info) => {
+  if (err) return next(err);
 
-    const findLogin = await account.findOne({ email: email });
+  if (!user) {
+    // Failure: Set flash message explicitly for error_msg
+    req.flash('error_msg', info.message); // info.message contains the error from the strategy
+    return res.redirect('/login');
+  }
 
-    if (!findLogin)
-    {
-        return res.status(400).send('<script>alert("Email or Password is incorrect!"); window.location.href = "/login";</script>');
-    }
+  // Success: Log the user in
+  req.logIn(user, (err) => {
+    if (err) return next(err);
 
-    if (password !== findLogin.password)
-    {
-        return res.status(400).send('<script>alert("Email or Password is incorrect!"); window.location.href = "/login";</script>');
-    }
+    // Set flash message explicitly for success_msg
+    req.flash('success_msg', `Welcome back, ${user.name}!`); // Customize success message
+    return res.redirect('/');
+  });
+})(req, res, next);
+});
 
-    return res.send('<script>alert("Login Successful!"); window.location.href = "/";</script>');
-})
 
 module.exports = router;
