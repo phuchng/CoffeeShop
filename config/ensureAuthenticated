@@ -5,3 +5,5 @@ function ensureAuthenticated(req, res, next) {
   req.flash('error_msg', 'Please log in to view that resource');
   res.redirect('/login'); // Redirect to login page if not authenticated
 }
+
+module.exports = ensureAuthenticated;
