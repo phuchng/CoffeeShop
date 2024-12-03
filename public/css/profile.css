@@ -1,0 +1,314 @@
+body {
+    background-color: #F5F5F5;
+}
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.headerP {
+    background-color: #fff;
+
+}
+.boxHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo h1{
+    font-size:  19px;
+    cursor: pointer;
+}
+.userHeader {
+    display: flex;
+    align-items: center;
+}
+.userSet {
+    position: relative;
+}
+
+.userSet .icon {
+    display: block;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    margin-right: 40px;
+    border: 1px  solid #f2f2f2;
+}
+.userSet .icon:hover {
+    background-color: #b9b3b3b7;
+}
+.userHeader button {
+        padding: 10px;
+        border-radius: 5px;
+        background-color: rgb(23, 115, 176);
+        border: none;
+        color: #fff;
+        cursor: pointer;
+}
+.userHeader button:hover {
+    background-color: rgb(17, 77, 116);
+}
+
+.listSet {
+    border-radius: 5px;
+    padding: 14px;
+    background-color: #fff;
+    position: absolute;
+    top: 50px;
+    display: none;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+   
+}
+.listSet::before {
+    content: "";
+    width: 100%;
+    height: 10px;
+    position: absolute;
+    top:-10px;
+    left: -5px;
+}
+.userSet:hover .listSet{
+    display: block;
+}
+.infoSet {
+    display: flex;
+    border-bottom: 1px solid #b9b5b5;
+    padding: 10px 0;
+}
+.infoSet i {
+    display: block;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    margin-right: 20px;
+    border: 1px  solid #f2f2f2;
+    flex-shrink: 0; 
+}
+.boxTemp span{
+     font-size: 15px;
+}
+.lSetting {
+    padding-left: 0;
+    list-style: none;
+    margin: 10px 0 0 0;
+}
+.ISetting {
+    padding: 9px 14px;
+    margin-bottom: 10px;
+}
+.ISetting:hover {
+    background-color: rgb(245, 245, 245);
+    cursor: pointer;
+}
+/* CONTAINER */
+.containerP {
+    flex: 1;
+}
+.BoxInfoName {
+    background-color: #fff;
+    width: 100%;
+    padding: 21px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-sizing: border-box;
+}
+.infoName {
+    margin-bottom: 20px;
+}
+.infoName span {
+    font-weight: 600;
+    margin-right: 20px;
+    font-size: 16px;
+}
+.infoName i {
+    color: rgb(23, 115, 176);
+    font-size: 14px;
+    cursor: pointer;
+}
+.boxInfoAddress {
+    width: 100%;
+    background-color: #fff;
+    padding: 21px;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+.infoAddress span {
+    margin-right: 20px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.listAddress {
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+.itemAddress {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+}
+.itemAddress i {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: rgb(23, 115, 176);
+    font-size: 14px;
+    cursor: pointer;
+}
+.itemAddress span { 
+    display: block;
+    margin-bottom: 10px;
+}
+.boxFooter {
+    border-top: 1px solid #b9b5b5;
+    margin-top: 40px;
+}
+.boxFooter {
+    padding: 20px 0;
+
+}
+.boxFooter span {
+    text-decoration: underline;
+    color: #3B73B6;
+    margin-right: 20px;
+    cursor: pointer;
+}
+/* MODAL */
+.modal {
+    display: flex;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    animation: fadeIn linear 0.1s;
+}
+
+.modal__overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal__body {
+    --growth-form: 0.7;
+    --growth-to: 1;
+    margin: auto;
+    position: relative;
+    z-index: 1;
+    animation: growth linear 0.1s;
+}
+.boxEditName {
+    background-color: #fff;
+    padding: 14px 21px;
+    border-radius: 10px;
+    width: 800px;
+    box-sizing: border-box;
+}
+.headerBoxEditName {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.headerBoxEditName h1 {
+    margin: 0;
+    font-size: 21px;
+}
+.headerBoxEditName span {
+    cursor: pointer;
+}
+@keyframes growth {
+    from {
+        transform: scale(var(--growth-form));
+    }
+    to {
+        transform: scale(var(--growth-to));
+    }
+}
+.boxFormName {
+    display: flex;
+    margin-bottom: 15px;
+}
+.boxFormName input {
+    flex: 1;
+    padding: 14px 11px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #DEDEDE;
+  
+}
+.boxFormName input:focus {
+    outline: 2px solid #007BFF;
+}
+.boxFormEmail {
+    width: 100%;
+    padding: 11px 11px;
+    background-color: #FAFAFA;
+    border: 1px solid #DEDEDE;
+    font-size: 14px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.note {
+    margin: 0;
+    font-size: 12px;
+    color:rgb(132,132,132); 
+    margin-bottom: 20px;
+}
+.buttonBox {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: right;
+}
+.modal{
+    display: flex;
+}
+.boxAddAddress {
+    background-color: #fff;
+    padding: 14px 21px;
+    border-radius: 10px;
+    width: 800px;
+    box-sizing: border-box;
+}
+.form input{
+    padding: 14px 11px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #DEDEDE;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+.form input:focus {
+    outline: 2px solid #007BFF;
+}
+.formCheckBox {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+.formCheckBox input {
+    margin-right: 10px;
+}
+.boxEditAddress {
+    background-color: #fff;
+    padding: 14px 21px;
+    border-radius: 10px;
+    width: 800px;
+    box-sizing: border-box;
+}
