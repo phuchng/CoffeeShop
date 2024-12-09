@@ -176,3 +176,26 @@
     top: 12px;
     cursor: pointer;
 }
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 4px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #333;
+}
+
+.pagination a.active {
+    background-color: #914701;
+    color: white;
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0;
+}

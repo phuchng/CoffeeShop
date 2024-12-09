@@ -19,6 +19,9 @@ router.get('/products', async function (req, res, next) {
     let query = {};
     let sortOption = {};
     const searchTerm = req.query.search;
+    const page = parseInt(req.query.page) || 1; // Get page number from query, default to 1
+    const perPage = 9; // Products per page
+    const skip = (page - 1) * perPage; // Calculate the number of products to skip
 
     // Search query
     if (searchTerm) {
@@ -65,7 +68,9 @@ router.get('/products', async function (req, res, next) {
         }
     }
 
-    const products = await product.find(query).sort(sortOption);
+    const products = await product.find(query).sort(sortOption).skip(skip).limit(perPage);
+    const totalProducts = await product.countDocuments(query); // Count total products matching the query
+    const totalPages = Math.ceil(totalProducts / perPage); // Calculate total pages
 
     if (req.xhr) {
         // AJAX request: Send only JSON data
@@ -75,7 +80,9 @@ router.get('/products', async function (req, res, next) {
             selectedPriceRange: req.query.priceRange || '',
             selectedGrind: req.query.grind || [],
             selectedRoast: req.query.roast || [],
-            selectedSort: req.query.sort || ''
+            selectedSort: req.query.sort || '',
+            currentPage: page,
+            totalPages: totalPages
         });
     } else {
         // Regular request: Render the full EJS template
@@ -87,7 +94,9 @@ router.get('/products', async function (req, res, next) {
             selectedPriceRange: req.query.priceRange || '',
             selectedGrind: req.query.grind || [],
             selectedRoast: req.query.roast || [],
-            selectedSort: req.query.sort || ''
+            selectedSort: req.query.sort || '',
+            currentPage: page,
+            totalPages: totalPages
         });
     }
 });
