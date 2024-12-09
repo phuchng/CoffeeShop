@@ -51,22 +51,43 @@
     margin: 25px 0;
 }
 .productList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 20px; /* Increased gap for better spacing */
     padding: 0;
     margin: 0;
     list-style: none;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 cột chia đều */
-    gap: 10px;
-    width: 100%; 
 }
+
 .product {
     display: flex;
     flex-direction: column;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     padding: 20px;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    border-radius: 5px; /* Rounded corners */
+    transition: transform 0.2s ease; /* Smooth hover effect */
+}
+
+.product:hover {
+    transform: scale(1.03); /* Subtle zoom on hover */
+}
+
+.product img {
+    max-width: 100%; /* Prevent images from overflowing */
+    height: auto;
     margin-bottom: 10px;
-    cursor: pointer;
+    border-radius: 5px; /* Rounded image corners */
+}
+
+.name a {
+    color: #2f2f2f; /* Black text */
+    text-decoration: none; /* Remove underline */
+    font-weight: 500; /* Slightly bolder */
+}
+
+.name a:hover {
+    text-decoration: underline; /* Underline only on hover */
 }
 .cost {
     margin-top: 10px;

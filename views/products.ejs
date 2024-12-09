@@ -1,4 +1,4 @@
-<!-- views/search.ejs -->
+<!-- views/products.ejs -->
 <div class="container">
     <div class="grid">
         <div class="linkNavigation">
@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="sidebar">
-                    <form id="filter-form" action="/search" method="GET">
+                    <form id="filter-form" action="/products" method="GET">
                         <input type="hidden" name="search" value="<%= search || '' %>">
                         <div class="filter-group">
                             <h4>Category</h4>
@@ -133,7 +133,7 @@ $(document).ready(function() {
     function fetchProducts() {
         const filters = getFilters();
         $.ajax({
-            url: `/search?${filters}`,
+            url: `/products?${filters}`,
             method: 'GET',
             dataType: 'json',
             success: function(data) {

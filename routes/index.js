@@ -5,7 +5,7 @@ var router = express.Router();
 /* GET users listing. */
 
 router.get('/', (req, res) => {
-  res.redirect('/search');
+  res.redirect('/products');
 });
 
 router.get('/product/:id', async function (req, res, next) {
@@ -15,7 +15,7 @@ router.get('/product/:id', async function (req, res, next) {
     return res.render('detail', { title: 'Detail', productList: productList, product: productDetail });
 });
 
-router.get('/search', async function (req, res, next) {
+router.get('/products', async function (req, res, next) {
     let query = {};
     let sortOption = {};
     const searchTerm = req.query.search;
@@ -79,7 +79,7 @@ router.get('/search', async function (req, res, next) {
         });
     } else {
         // Regular request: Render the full EJS template
-        res.render('search', {
+        res.render('products', {
             title: 'Search Results',
             search: searchTerm,
             products: products,
