@@ -3,14 +3,68 @@
         <div class="linkNavigation">
             <a href="/" class="cate red">Home</a>
             <span>></span>
-            <span>Search results for "<%= search %>"</span>
-        </div>        
-        <div class="boxPro">
-            <% if (products.length > 0) { %>
-                <ul class="productList">
-                    <% products.forEach(product => { %>
+            <% if (search) { %>
+                <span>Search results for "<%= search %>"</span>
+            <% } else { %>
+                <span>All Products</span>
+            <% } %>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <form action="/search" method="GET">
+                        <input type="hidden" name="search" value="<%= search || '' %>">
+                        <div class="filter-group">
+                            <h4>Category</h4>
+                            <% ['Coffee', 'Tea', 'Food', 'Juice'].forEach(category => { %>
+                            <label>
+                                <input type="checkbox" name="category" value="<%= category %>" <%= (selectedCategory.includes(category) ? 'checked' : '') %>> <%= category %>
+                            </label>
+                            <% }); %>
+                        </div>
+
+                        <div class="filter-group">
+                            <h4>Price Range</h4>
+                            <% ['0-20', '20-50', '50+'].forEach(range => { %>
+                                <label>
+                                    <input type="radio" name="priceRange" value="<%= range %>" <%= (selectedPriceRange === range ? 'checked' : '') %>> <%= range %>
+                                </label>
+                            <% }); %>
+                        </div>
+                        <div class="filter-group">
+                            <h4>Grind</h4>
+                            <% ['Whole Bean', 'Ground'].forEach(grind => { %>
+                                <label>
+                                    <input type="checkbox" name="grind" value="<%= grind %>" <%= (selectedGrind.includes(grind) ? 'checked' : '') %>> <%= grind %>
+                                </label>
+                            <% }); %>
+                        </div>
+                        <div class="filter-group">
+                            <h4>Roast Level</h4>
+                            <% ['Light', 'Medium', 'Dark'].forEach(roast => { %>
+                                <label>
+                                    <input type="checkbox" name="roast" value="<%= roast %>" <%= (selectedRoast.includes(roast) ? 'checked' : '') %>> <%= roast %>
+                                </label>
+                            <% }); %>
+                        </div>
+                        <div class="filter-group">
+                            <h4>Sort by</h4>
+                            <select name="sort">
+                                <option value="best-selling" <%= (selectedSort === 'best-selling' ? 'selected' : '') %>>Best Selling</option>
+                                <option value="price-low-high" <%= (selectedSort === 'price-low-high' ? 'selected' : '') %>>Price: Low to High</option>
+                                <option value="price-high-low" <%= (selectedSort === 'price-high-low' ? 'selected' : '') %>>Price: High to Low</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="filter-button">Filter</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="boxPro">
+                    <ul class="productList">
+                        <% products.forEach(product => { %>
                         <li class="product">
-                            <a href="/product/<%= product._id %>" class="img"><img src="/assets/images/<%= product.image %>"  width="230" height="230" alt="" class="image"></a>
+                            <a href="/product/<%= product._id %>" class="img"><img src="/assets/images/<%= product.image %>" width="230" height="230" alt="" class="image"></a>
                             <span class="cost">$<%= product.price %></span>
                             <div class="eval">
                                 <i class="fa-solid fa-star"></i>
@@ -24,11 +78,13 @@
                                 <a href="/product/<%= product._id %>"><%= product.name %></a>
                             </span>
                         </li>
-                    <% }) %>
-                </ul>
-            <% } else { %>
-              <p>No products found for "<%= search %>".</p>
-            <% } %>
+                        <% }) %>
+                    </ul>
+                    <% if (products.length === 0) { %>
+                        <p>No products found.</p>
+                    <% } %>
+                </div>
+            </div>
         </div>
     </div>
 </div>

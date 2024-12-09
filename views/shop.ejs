@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="sidebar">
-                    <form action="/filter" method="GET">
+                    <form action="/search" method="GET">
                         <div class="filter-group">
                             <h4>Category</h4>
                             <label>
@@ -59,10 +59,6 @@
                                 <input type="checkbox" name="roast" value="Dark"> Dark
                             </label>
                         </div>
-                        <button type="submit" class="filter-button">Filter</button>
-                    </form>
-
-                    <form class="sort-form" action="/sort" method="GET">
                         <div class="filter-group">
                             <h4>Sort by</h4>
                             <select name="sort">
@@ -71,7 +67,7 @@
                                 <option value="price-high-low">Price: High to Low</option>
                             </select>
                         </div>
-                        <button type="submit" class="filter-button">Sort</button>
+                        <button type="submit" class="filter-button">Filter</button>
                     </form>
                 </div>
             </div>
