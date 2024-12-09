@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 var app = require('../app');
 var debug = require('debug')('mvc:server');
 var http = require('http');
+require('dotenv').config({ path: '.env' });
 
 /**
  * Get port from environment and store in Express.
@@ -15,13 +16,9 @@ var http = require('http');
 var port = normalizePort(process.env.PORT || '2000');
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
-const uri = 'mongodb+srv://phuchng0612:VzYXbzn8SzZdEv5n@cluster0.q010e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose
-  .connect(uri)
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
   

@@ -1,7 +1,4 @@
 <div class="container">
-    <% if (success_msg) { %>
-        <h1 class="d-flex justify-content-center"><span class="badge text-success"><%= success_msg %></span></h1>
-      <% } %>
     <div class="grid">
         <div class="linkNavigation">
             <a href="/" class="cate red">Home</a>
@@ -9,38 +6,102 @@
             <a href="/" class="cate">Shop</a>
         </div>
 
-        <form class="filter" action="/sort" method="GET">
-            <span class="sp1">Sort by</span>
-            <select name="sort">
-                <option value="best-selling">Best Selling</option>
-                <option value="price-low-high">Price: Low to High</option>
-                <option value="price-high-low">Price: High to Low</option>
-            </select>
-            <input type="hidden" name="selectedSortOption" value="">
-            <button type="submit">Sort</button>
-        </form>
-        
-        <div class="boxPro">
-            <ul class="productList">
-                <% productList.forEach(product => { %>
-                    <li class="product">
-                        <a href="/product/<%= product._id %>" class="img"><img src="/assets/images/<%= product.image %>"  width="230" height="230" alt="" class="image"></a>
-                        <span class="cost">$<%= product.price %></span>
-                        <div class="eval">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            94 reviews
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar">
+                    <form action="/filter" method="GET">
+                        <div class="filter-group">
+                            <h4>Category</h4>
+                            <label>
+                                <input type="checkbox" name="category" value="Coffee"> Coffee
+                            </label>
+                            <label>
+                                <input type="checkbox" name="category" value="Tea"> Tea
+                            </label>
+                            <label>
+                                <input type="checkbox" name="category" value="Food"> Food
+                            </label>
+                            <label>
+                                <input type="checkbox" name="category" value="Juice"> Juice
+                            </label>
                         </div>
-                        <span class="name">
-                            <a href="/product/<%= product._id %>"><%= product.name %></a>
-                        </span>
-                    </li>
-                <% }) %>
-            </ul>
+
+                        <div class="filter-group">
+                            <h4>Price Range</h4>
+                            <label>
+                                <input type="radio" name="priceRange" value="0-20"> $0 - $20
+                            </label>
+                            <label>
+                                <input type="radio" name="priceRange" value="20-50"> $20 - $50
+                            </label>
+                            <label>
+                                <input type="radio" name="priceRange" value="50+"> $50+
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <h4>Grind</h4>
+                            <label>
+                                <input type="checkbox" name="grind" value="Whole Bean"> Whole Bean
+                            </label>
+                            <label>
+                                <input type="checkbox" name="grind" value="Ground"> Ground
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <h4>Roast Level</h4>
+                            <label>
+                                <input type="checkbox" name="roast" value="Light"> Light
+                            </label>
+                            <label>
+                                <input type="checkbox" name="roast" value="Medium"> Medium
+                            </label>
+                            <label>
+                                <input type="checkbox" name="roast" value="Dark"> Dark
+                            </label>
+                        </div>
+                        <button type="submit" class="filter-button">Filter</button>
+                    </form>
+
+                    <form class="sort-form" action="/sort" method="GET">
+                        <div class="filter-group">
+                            <h4>Sort by</h4>
+                            <select name="sort">
+                                <option value="best-selling">Best Selling</option>
+                                <option value="price-low-high">Price: Low to High</option>
+                                <option value="price-high-low">Price: High to Low</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="filter-button">Sort</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="boxPro">
+                    <ul class="productList">
+                        <% productList.forEach(product => { %>
+                        <li class="product">
+                            <a href="/product/<%= product._id %>" class="img"><img
+                                    src="/assets/images/<%= product.image %>" width="230" height="230" alt=""
+                                    class="image"></a>
+                            <span class="cost">$<%= product.price %></span>
+                            <div class="eval">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                94 reviews
+                            </div>
+                            <span class="name">
+                                <a href="/product/<%= product._id %>">
+                                    <%= product.name %>
+                                </a>
+                            </span>
+                        </li>
+                        <% }) %>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-    
 </div>

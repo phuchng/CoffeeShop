@@ -28,10 +28,48 @@ router.get('/search', async function(req, res, next) {
 });
 
 router.get('/filter', async function(req, res, next) {
-  const filter = req.query.filter;
-  const filteredProducts = await product.find({ category: filter });
+  let query = {};
+
+  // Filter by category
+  if (req.query.category) {
+      if (Array.isArray(req.query.category)) {
+          query.category = { $in: req.query.category };
+      } else {
+          query.category = req.query.category;
+      }
+  }
+
+  // Filter by price range
+  if (req.query.priceRange) {
+      const priceRange = req.query.priceRange.split('-');
+      if (priceRange.length === 2) {
+          query.price = { $gte: Number(priceRange[0]), $lte: Number(priceRange[1]) };
+      } else if (req.query.priceRange === '50+') {
+          query.price = { $gte: 50 };
+      }
+  }
+  // Filter by grind
+  if (req.query.grind) {
+      if (Array.isArray(req.query.grind)) {
+          query.grind = { $in: req.query.grind };
+      } else {
+          query.grind = req.query.grind;
+      }
+  }
+
+  // Filter by roast level
+  if (req.query.roast) {
+      if (Array.isArray(req.query.roast)) {
+          query.roast = { $in: req.query.roast };
+      } else {
+          query.roast = req.query.roast;
+      }
+  }
+  const filteredProducts = await product.find(query);
   res.render('shop', { title: 'Filtered Products', productList: filteredProducts });
 });
+
+
 
 router.get('/sort', async function(req, res, next) {
   const sortOption = req.query.sort;
