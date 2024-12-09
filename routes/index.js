@@ -4,10 +4,8 @@ var router = express.Router();
 
 /* GET users listing. */
 
-router.get('/', async function (req, res, next) {
-    const productList = await product.find({});
-
-    return res.render('shop', { title: 'Coffeeno', productList: productList })
+router.get('/', (req, res) => {
+  res.redirect('/search');
 });
 
 router.get('/product/:id', async function (req, res, next) {
@@ -68,16 +66,30 @@ router.get('/search', async function (req, res, next) {
     }
 
     const products = await product.find(query).sort(sortOption);
-    res.render('search', {
-        title: 'Search Results',
-        search: searchTerm,
-        products: products,
-        selectedCategory: req.query.category || [],
-        selectedPriceRange: req.query.priceRange || '',
-        selectedGrind: req.query.grind || [],
-        selectedRoast: req.query.roast || [],
-        selectedSort: req.query.sort || ''
-    });
+
+    if (req.xhr) {
+        // AJAX request: Send only JSON data
+        res.json({
+            products: products,
+            selectedCategory: req.query.category || [],
+            selectedPriceRange: req.query.priceRange || '',
+            selectedGrind: req.query.grind || [],
+            selectedRoast: req.query.roast || [],
+            selectedSort: req.query.sort || ''
+        });
+    } else {
+        // Regular request: Render the full EJS template
+        res.render('search', {
+            title: 'Search Results',
+            search: searchTerm,
+            products: products,
+            selectedCategory: req.query.category || [],
+            selectedPriceRange: req.query.priceRange || '',
+            selectedGrind: req.query.grind || [],
+            selectedRoast: req.query.roast || [],
+            selectedSort: req.query.sort || ''
+        });
+    }
 });
 
 module.exports = router;

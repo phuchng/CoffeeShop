@@ -1,3 +1,4 @@
+<!-- views/search.ejs -->
 <div class="container">
     <div class="grid">
         <div class="linkNavigation">
@@ -12,7 +13,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="sidebar">
-                    <form action="/search" method="GET">
+                    <form id="filter-form" action="/search" method="GET">
                         <input type="hidden" name="search" value="<%= search || '' %>">
                         <div class="filter-group">
                             <h4>Category</h4>
@@ -61,7 +62,7 @@
             </div>
             <div class="col-md-9">
                 <div class="boxPro">
-                    <ul class="productList">
+                    <ul id="product-list" class="productList">
                         <% products.forEach(product => { %>
                         <li class="product">
                             <a href="/product/<%= product._id %>" class="img"><img src="/assets/images/<%= product.image %>" width="230" height="230" alt="" class="image"></a>
@@ -88,3 +89,68 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    const productList = $('#product-list'); 
+    const filterForm = $('#filter-form');
+
+    function updateProducts(data) {
+        productList.empty(); // Clear existing products
+
+        if (data.products.length === 0) {
+            productList.append('<p>No products found.</p>');
+            return;
+        }
+
+        data.products.forEach(product => {
+            const productItem = `
+                <li class="product">
+                    <a href="/product/${product._id}" class="img"><img src="/assets/images/${product.image}" width="230" height="230" alt="" class="image"></a>
+                    <span class="cost">$${product.price}</span>
+                    <div class="eval">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        94 reviews
+                    </div>
+                    <span class="name">
+                        <a href="/product/${product._id}">${product.name}</a>
+                    </span>
+                </li>
+            `;
+            productList.append(productItem);
+        });
+    }
+
+    function getFilters() {
+        const formData = new FormData(filterForm[0]); // Get form data
+        return new URLSearchParams(formData).toString(); // Convert to query string
+    }
+
+    function fetchProducts() {
+        const filters = getFilters();
+        $.ajax({
+            url: `/search?${filters}`,
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                updateProducts(data);
+            },
+            error: function(error) {
+                console.error("Error fetching products:", error);
+            }
+        });
+    }
+
+    // Event listeners for filter changes
+    filterForm.on('change', 'input, select', function() {
+        fetchProducts();
+    });
+
+    // Initial fetch on page load
+    fetchProducts();
+});
+</script>
