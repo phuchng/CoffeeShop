@@ -1,16 +1,12 @@
-# Coffeeno - Your Online Coffee Shop
-
-## Project Overview
-
-Coffeeno is a web application developed as the final project for the Web Application Development course at VNUHCM - University of Science. This project is a collaborative effort by a team of three students. Coffeeno aims to provide a user-friendly platform for customers to browse, purchase, and learn about a variety of coffee, tea, food, and juice products.
+# Coffee Shop - Web Application Development Project
 
 ## Team Information
 
 | Student ID   | Full Name           | 
 | :----------- | :------------------ |
-| `21127655` | `Lê Phan Thanh Nhân` |
-| `21127671` | `Nguyễn Hoàng Phúc` |
-| `21127545` | `Đặng Quốc Thái` |
+| 21127655 | Lê Phan Thanh Nhân |
+| 21127671 | Nguyễn Hoàng Phúc |
+| 21127545 | Đặng Quốc Thái |
 
 ## Technology Stack
 
@@ -32,15 +28,15 @@ Coffeeno is a web application developed as the final project for the Web Applica
 
 ## Features Checklist
 
-### 1. Overall Requirements
+### 1. Basic Requirements
 
--   [ ] Database design
--   [ ] Database mock data
--   [x] Website layout (at least two layouts for customer and admin websites)
+-   [x] Database design
+-   [x] Database mock data
+-   [ ] Website layout (at least two layouts for customer and admin websites)
 -   [x] Website architect (Based on MVC. With a clear separation of concerns)
--   [ ] Document
+-   [x] Document
 -   [ ] Demo video
--   [ ] Publish to public hosts
+-   [x] Publish to public hosts
 -   [x] Development progress is recorded in Github
 
 ### 2. Guest Features
@@ -131,8 +127,8 @@ Coffeeno is a web application developed as the final project for the Web Applica
 1. **Clone the repository:**
 
     ```bash
-    git clone <repository-url>
-    cd <repository-name>
+    git clone https://github.com/ThaiCoder2003/MVC.git
+    cd MVC
     ```
 
 2. **Install dependencies:**
