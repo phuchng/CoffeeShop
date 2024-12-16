@@ -7,11 +7,7 @@
         opacity: 1;
     }
 }
-.grid {
-    width: 1200px;
-    max-width: 100%;
-    margin: 0 auto;
-}
+
 /*container*/
 .linkNavigation {
     padding: 25px 0 25px;
@@ -300,7 +296,7 @@
 .slide img {
     width: 100%;
 }
-button {
+.slide-button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

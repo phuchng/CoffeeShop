@@ -93,7 +93,7 @@ $(document).ready(function() {
         data.products.forEach(product => {
             const productItem = `
                 <li class="product">
-                    <a href="/product/${product._id}" class="img"><img src="/assets/images/${product.image}" width="230" height="230" alt="" class="image"></a>
+                    <a href="/product/${product._id}" class="img" style="width: 100%; height: 170px; overflow: hidden; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px">><img src="/assets/images/${product.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="" class="image"></a>
                     <span class="cost">$${product.price}</span>
                     <div class="eval">
                         <i class="fa-solid fa-star"></i>
