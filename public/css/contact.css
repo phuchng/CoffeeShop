@@ -1,0 +1,55 @@
+.grid {
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+.linkNavigation {
+    padding: 25px 0 25px;
+}
+.linkNavigation span,.linkNavigation a {
+    margin-right: 5px;
+    text-decoration: none;
+}
+.contact-header {
+    font-size: 32px;
+    margin: 22px 0;
+    text-align: center;
+    color: #70604d;
+}
+.contact-box {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+.contact-box-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    max-width: 50%;
+    box-sizing: border-box; 
+}
+
+.contact-box-item img {
+    width: 100%;
+    height: auto;
+}
+
+.box-form-contact input {
+    width: 100%; /* Đầu vào full chiều rộng */
+    margin-bottom: 10px; /* Khoảng cách giữa các input */
+    padding: 10px; /* Padding trong input */
+    border: 1px solid #ccc; /* Đường viền nhạt */
+    border-radius: 5px; /* Bo tròn góc */
+}
+.box-form-button{
+    width: 100px;
+    padding: 12px 18px;
+    font-size: 16px;
+    background-color: #5b7d33;
+    border:none;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 3px;
+}
