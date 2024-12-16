@@ -5,7 +5,7 @@ var router = express.Router();
 /* GET users listing. */
 
 router.get('/', (req, res) => {
-  res.redirect('/products');
+    return res.render('homepage');
 });
 
 router.get('/product/:id', async function (req, res, next) {
