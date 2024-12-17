@@ -1,0 +1,73 @@
+.grid {
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+.linkNavigation {
+    padding: 25px 0 25px;
+}
+.linkNavigation span,.linkNavigation a {
+    margin-right: 5px;
+    text-decoration: none;
+}
+.about-header {
+    font-size: 32px;
+    margin: 22px 0;
+    text-align: center;
+    color: #70604d;
+}
+.contact-box h3{
+    font-size: 40px;
+    font-family: Domine, serif;
+    color:  rgb(112, 96, 77);
+    margin: 0 0 14px 0;
+}
+.contact-box p {
+    font-size: 18px;
+    font-family: Lato, serif;
+    color:  #2f2f2f;
+    margin: 14px 0;
+}
+.contact-img {
+    width: 100%;
+    object-fit: cover;
+    margin: 20px 0;
+}
+.contact-box1 {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+.certifications-header {
+    font-size: 40px;
+    font-family: Domine, serif;
+    color:  rgb(112, 96, 77);
+    margin: 0 0 14px 0;
+}
+.Certified-box {
+    padding: 20px 0;
+    border-top: 1px solid #2f2f2f;
+    border-bottom: 1px solid #2f2f2f;
+}
+.Certified-box p {
+    font-size: 16px;
+
+}
+.Certified-box-list{
+    padding: 0;
+    list-style: none;
+
+
+}
+.Certified-box-item {
+    display: flex;
+    margin-bottom: 20px ;
+    align-items: center;
+}
+.Certified-box-item img {
+    width: 95px;
+    height: 131px;
+    object-fit: contain;
+    margin-right: 30px;
+
+}
