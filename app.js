@@ -16,6 +16,10 @@ var loginRouter = require('./routes/login');
 var logout = require('./routes/logout');
 var app = express();
 
+var fetchMenu = require('./middleware/menu');
+
+
+
 require('./config/passport')(passport);
 
 
@@ -37,6 +41,8 @@ app.use((req, res, next) => {
   res.locals.user = req.user || null;     
   next();
 })
+
+app.use(fetchMenu);
 // view engine setup
 
 app.set('views', path.join(__dirname, 'views'));
