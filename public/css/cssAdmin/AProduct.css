@@ -1,0 +1,121 @@
+@keyframes fadeIn{
+    from{
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.box-content-product {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 80px;
+    border-radius: 12px;
+}
+.box-content-product-temp {
+    position: absolute;
+    width: 1100px;
+    border-radius: 5px;
+    top: 80px;
+    padding: 12px 16px;
+    background-color: #EC407A;
+}
+.box-content-product--header {
+    display: flex;
+    color: #A5A8BA;
+    padding: 40px 0 10px 0;
+    font-size: 11px;
+    border-bottom: 1px solid #f0f2f5;
+    margin: 0;
+}
+.box-content-product--header-name {
+    width: 40%;
+}
+.box-content-product--header-cost {
+    width: 20%;
+}
+.box-content-product--header-date {
+    width: 40%;
+}
+.box-content-product--list {
+    padding: 0;
+    list-style: none;
+
+}
+.box-content-product--item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+.box-content-product--item:last-child {
+    border: none;
+}
+.box-content-product--item-name {
+    display: flex;
+    align-items: center;
+    width: 40%;
+}
+.box-content-product--item-name img {
+    margin-right: 10px;
+}
+.box-content-product--item-name a {
+    font-size: 14px;
+    color: #344767;
+    font-weight: 600;
+    line-height: 21px;
+    text-decoration: none;
+}
+.box-content-product--item-cost {
+    width: 20%;
+    font-size: 12px;
+    color: #7b809a;
+    font-weight: 600;
+}
+.box-content-product--item-date {
+    width: 40%;
+    font-size: 12px;
+    color: #7b809a;
+    font-weight: 600;
+}
+.box-content-product-temp button {
+    padding: 10px 24px;
+    float: right;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    outline: none;
+    color: #fff;
+    background-color: rgb(21, 92, 186);
+    font-size: 12px;
+}
+.box-content-product-temp-listS{
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    position: absolute;
+    top: 45px;
+    right: 18   px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 5px 0;
+    border-radius: 5px;
+    animation: fadeIn 0.1s ease-in;
+}
+.box-content-product-temp-listS--item {
+    padding: 6px 12px;
+    font-size: 12px;
+    color: #7b809a;
+}
+
+.box-content-product-temp-listS--item:hover {
+    cursor: pointer;
+    color: #344767;
+    background-color: #f0f2f5;
+}
+.hidden {
+    display: none;
+}
+.box-content-product--pagination {
+    text-align: center;
+}
