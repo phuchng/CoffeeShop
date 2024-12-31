@@ -1,19 +1,24 @@
 var express = require('express');
-var product = require('../models/Product')
+var { Product } = require('../models/Product')
 var router = express.Router();
 
 /* GET users listing. */
 
-router.get('/', (req, res) => {
-    
+router.get('/', async function (req, res)  {
+    const productExample = Product.find({}).limit(6);
 
-    return res.render('homepage');
+    const topRatedProducts = await Product.find()
+    .sort({ 'ratings.averageRating': -1 })
+    .limit(5)
+    .exec();
+
+    return res.render('homepage', { productExample: productExample });
 });
 
 router.get('/product/:id', async function (req, res, next) {
     const productID = req.params.id;
-    const productList = await product.find({}).limit(4);
-    const productDetail = await product.findById(productID);
+    const productList = await Product.find({}).limit(4);
+    const productDetail = await Product.findById(productID);
     return res.render('detail', { title: 'Detail', productList: productList, product: productDetail });
 });
 
@@ -70,8 +75,8 @@ router.get('/products', async function (req, res, next) {
         }
     }
 
-    const products = await product.find(query).sort(sortOption).skip(skip).limit(perPage);
-    const totalProducts = await product.countDocuments(query); // Count total products matching the query
+    const products = await Product.find(query).sort(sortOption).skip(skip).limit(perPage);
+    const totalProducts = await Product.countDocuments(query); // Count total products matching the query
     const totalPages = Math.ceil(totalProducts / perPage); // Calculate total pages
 
     if (req.xhr) {

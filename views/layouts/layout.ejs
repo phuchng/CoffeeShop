@@ -137,9 +137,11 @@
                 </ul>
                 <ul class="menuList">
                     <% if (isAuthenticated) { %>
-                        <li class="normal "><a href="/dashboard" class="blur cItem">
-                                <%= user.name %>
-                            </a></li>
+                        <li class="normal ">
+                            <a href="/profile" class="blur cItem">
+                                <%= user.first_name %> <%= user.last_name %>
+                            </a>
+                        </li>
                         <li class="normal">
                             <form action="/logout" method="POST" style="display: inline;">
                                 <button type="submit" class="blur cItem"

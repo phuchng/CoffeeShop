@@ -1,17 +1,21 @@
 <div class="container">
+    <% if (success_msg) { %>
+        <h1 class="d-flex justify-content-center"><span class="badge text-success"><%= success_msg %></span></h1>
+      <% } %>
     <div class="slider">
         <div class="slide_box">
-            <div class="slide"><a href=""><img src="/img/slider1.png" alt=""></a></div>
-            <div class="slide"><a href=""><img src="/img/slider2.jpg" alt=""></a></div>
-            <div class="slide"><a href=""><img src="/img/slider3.png" alt=""></a></div>
+            <div class="slide"><a href="/products"><img src="/img/slider1.png" alt=""></a></div>
+            <div class="slide"><a href="/products"><img src="/img/slider2.jpg" alt=""></a></div>
+            <div class="slide"><a href="/products"><img src="/img/slider3.jpg" alt=""></a></div>
         </div>
         <button class="prev slide-button" onclick="prevSlide()">&#10094;</button>
         <button class="next slide-button" onclick="nextSlide()">&#10095;</button>
     </div>
     <div class="grid">
         <div class="coffeeMenu" style="margin-top: 40px;">
-            <h1>Gourmet Coffee</h1>
+            <h1>View Our Coffee here!</h1>
             <ul class="listM">
+
                 <li>
                     <a href="">
                         <img src="/img/coffee1.png" alt="">
@@ -55,67 +59,29 @@
         <h2 style="text-align: center; margin: 40px 0 20px 0; color:rgb(112, 96, 77);">Top-Rated Drink Shop</h2>
         <div class="box">
             <div class="box-item">
-                <img src="/img/product.png" class="box-item--image">
-                <span class="box-item--name">Earl Grey Tea</span>
-                <div class="box-item--eval">
-                    <div style="color:#FFB829">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <span style="margin: 5px 0;">94 Reviews</span>
-                </div>
-                <span class="box-item--cost">from $9.95</span>
-            </div>
-            <div class="box-item">
-                <img src="/img/product.png" class="box-item--image">
-                <span class="box-item--name">Earl Grey Tea</span>
-                <div class="box-item--eval">
-                    <div style="color:#FFB829">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <span style="margin: 5px 0;">94 Reviews</span>
-                </div>
-                <span class="box-item--cost">from $9.95</span>
-            </div>
-            <div class="box-item">
-                <img src="/img/product.png" class="box-item--image">
-                <span class="box-item--name">Earl Grey Tea</span>
-                <div class="box-item--eval">
-                    <div style="color:#FFB829">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <span style="margin: 5px 0;">94 Reviews</span>
-                </div>
-                <span class="box-item--cost">from $9.95</span>
-            </div>
-            <div class="box-item">
-                <img src="/img/product.png" class="box-item--image">
-                <span class="box-item--name">Earl Grey Tea</span>
-                <div class="box-item--eval">
-                    <div style="color:#FFB829">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <span style="margin: 5px 0;">94 Reviews</span>
-                </div>
-                <span class="box-item--cost">from $9.95</span>
+                <%= if (topRated) { %>
+                    <% topRated.forReach(product => { %>
+                        <img src="/img/<%= product.image %>" class="box-item--image">
+                        <span class="box-item--name"><%= product.name %></span>
+                        <div class="box-item--eval">
+                            <div style="color:#FFB829">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <span style="margin: 5px 0;"><%= product.ratings.totalRatings %> Reviews</span>
+                        </div>
+                        <span class="box-item--cost">from $<%= product.price %></span>
+                    <% }); %> 
+                <% } else { %>
+                    <p>No top-rated product available at the moment.</p>
+                <% } %>
+
             </div>
             <div class="box-item box-item--last" style="background-color: #A7661B; display: flex; justify-content: center;align-items: center; cursor: pointer; font-family: Domine, serif;">
-                <span style="color: #fff; font-size: 13px">VIEW ALL</span>
+                <a href="/products"><span style="color: #fff; font-size: 13px">VIEW ALL</span></a>
                 <span style="color: #fff; font-size: 21px; margin: 10.5px 0;">Top Rated Coffee</span>
             </div>
         </div>
