@@ -45,7 +45,8 @@ const fetchCoffeeTagsAndProducts = async (req, res, next) => {
         res.locals.categories = { coffee, tea, food, juice };
         next();
     }catch(err){
-
+        console.error(err);
+        next(err);
     }
 };
 

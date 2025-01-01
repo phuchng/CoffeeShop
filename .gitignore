@@ -1,3 +1,5 @@
 .vercel
 *.txt
 *.py
+.vscode/
+node_modules/

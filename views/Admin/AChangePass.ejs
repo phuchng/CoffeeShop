@@ -51,7 +51,8 @@
     </div>
     <div class="box-content">
         <a href="/login"><button class="box-content-button">RETURN TO LOG-IN PAGE</button></a>
-        <form action="/admin/change-password" method="POST">
+        <div id="message"></div>
+        <form id="changePasswordForm">
             <div class="box-content-changePass-form" style="margin-top: 200px;">
                 <input type="password" name="currentPassword" required>
                 <h3 class="box-content-changePass-form--header">Current password</h3>
@@ -69,5 +70,26 @@
             </div>
         </form>
     </div>
-    
+        
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#changePasswordForm').submit(function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: '/admin/change-password',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#message').html('<p class="success-message">' + response.message + '</p>');
+                    $('#changePasswordForm')[0].reset(); // Clear the form
+                },
+                error: function(error) {
+                    $('#message').html('<p class="error-message">' + error.responseJSON.error + '</p>');
+                }
+            });
+        });
+    });
+</script>

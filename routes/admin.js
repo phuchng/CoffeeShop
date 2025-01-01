@@ -126,13 +126,13 @@ router.post('/products/update/:id', isAdmin, async (req, res) => {
         }, { new: true });
 
         if (!updatedProduct) {
-            return res.status(404).send('Product not found');
+            return res.status(404).json({ error: 'Product not found' });
         }
 
-        res.redirect('/admin/products');
+        res.json({ message: 'Product updated successfully!' });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Failed to update product' });
     }
 });
 
@@ -141,12 +141,12 @@ router.get('/products/delete/:id', isAdmin, async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
         if (!deletedProduct) {
-            return res.status(404).send('Product not found');
+            return res.status(404).json({ error: 'Product not found' });
         }
-        res.redirect('/admin/products');
+        res.json({ message: 'Product deleted successfully!' });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Failed to delete product' });
     }
 });
 
@@ -181,21 +181,21 @@ router.post('/change-password', isAdmin, async (req, res) => {
         const admin = await Account.findById(req.user.id);
 
         if (!await bcrypt.compare(currentPassword, admin.password)) {
-            return res.status(400).send('Incorrect current password');
+            return res.status(400).json({ error: 'Incorrect current password' });
         }
 
         if (newPassword !== confirmNewPassword) {
-            return res.status(400).send('New passwords do not match');
+            return res.status(400).json({ error: 'New passwords do not match' });
         }
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         admin.password = hashedPassword;
         await admin.save();
 
-        res.redirect('/admin/profile');
+        res.json({ message: 'Password changed successfully!' });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Failed to change password' });
     }
 });
 
