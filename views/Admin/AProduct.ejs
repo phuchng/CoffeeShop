@@ -1,149 +1,105 @@
 <div class="AHomepage-box AHomepage-box-color">
     <div class="box-sidebar">
         <h1 class="box-sidebar--header">
-            <i class="fa-solid fa-network-wired"></i> Masterial Dashboard 2
+            <i class="fa-solid fa-network-wired"></i> Admin Dashboard
         </h1>
         <ul class="box-sidebar--list">
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/dashboard" class="box-sidebar--item-link">
                     <i class="fa-solid fa-gauge"></i>
                     Dashboard
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/users" class="box-sidebar--item-link">
                     <i class="fa-solid fa-user"></i>
                     Users
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/products" class="box-sidebar--item-link">
                     <i class="fa-solid fa-cart-shopping"></i>
                     Products
                 </a>
             </li> 
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/products/add" class="box-sidebar--item-link">
                     <i class="fa-solid fa-cart-plus"></i>
                     Add New Products
                 </a>
             </li> 
         </ul>
-        <h3 class="box-sidebar-setAccout--header">ACCOUNT PAGES</h3>
+        <h3 class="box-sidebar-setAccout--header">Account</h3>
         <ul class="box-sidebar--list">
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/profile" class="box-sidebar--item-link">
                     Profile
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/create-admin" class="box-sidebar--item-link">
                     Create new admin
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
-                    Logout
-                </a>
+                <form action="/logout" method="POST" style="display: inline; margin-left: 25px;">
+                    <button type="submit" class="box-sidebar--item-link"
+                        style="background: none; border: none; color: inherit; cursor: pointer; font: inherit; padding: 0;">Logout</button>
+                </form>
             </li>
         </ul>
     </div>
     <div class="box-content">
-        <button class="box-content-button">RETURN TO LOG-IN PAGE</button>
+        <a href="/login"><button class="box-content-button">RETURN TO LOG-IN PAGE</button></a>
         <div class="box-content-product">
-            <div class="box-content-product-temp">
-                <button id="sortButton">
-                    SORT <i class="fa-solid fa-arrow-down-wide-short"></i>
-                </button>
-                <div class="box-content-product-temp-listS hidden" id="dropdownMenu">
-                    <span class="box-content-product-temp-listS--item">Name</span>
-                    <span class="box-content-product-temp-listS--item">Price</span>
-                    <span class="box-content-product-temp-listS--item">Creation time</span>
+            <div class="box-content-product">
+                <div class="box-content-product-temp">
+                    <button id="sortButton">
+                        SORT <i class="fa-solid fa-arrow-down-wide-short"></i>
+                    </button>
+                    <div class="box-content-product-temp-listS hidden" id="dropdownMenu">
+                        <span class="box-content-product-temp-listS--item">Name</span>
+                        <span class="box-content-product-temp-listS--item">Price</span>
+                        <span class="box-content-product-temp-listS--item">Creation time</span>
+                    </div>
                 </div>
-            </div>
-            <div class="box-content-product--header">
-                <span class="box-content-product--header-name">
-                    Name
-                </span>
-                <span class="box-content-product--header-cost">
-                    Cost
-                </span>
-                <span class="box-content-product--header-date">
-                    Creation time
-                </span>
-            </div>
-            <ul class="box-content-product--list">
-                <li class="box-content-product--item">
-                    <div class="box-content-product--item-name">
-                        <img src="/img/avatar.jpg" height="36" width="36" alt="">
-                        <a href="">Coffee</a>
-                    </div>
-                    
-                    <span class="box-content-product--item-cost">
-                        $7
+                <div class="box-content-product--header">
+                    <span class="box-content-product--header-name">
+                        Name
                     </span>
-                    <span class="box-content-product--item-date">
-                        Monday, August 5, 2024
+                    <span class="box-content-product--header-cost">
+                        Cost
                     </span>
-                </li>
-                <li class="box-content-product--item">
-                    <div class="box-content-product--item-name">
-                        <img src="/img/avatar.jpg" height="36" width="36" alt="">
-                        <a href="">Coffee</a>
-                    </div>
-                    
-                    <span class="box-content-product--item-cost">
-                        $7
+                    <span class="box-content-product--header-date">
+                        Creation time
                     </span>
-                    <span class="box-content-product--item-date">
-                        Monday, August 5, 2024
-                    </span>
-                </li>
-                <li class="box-content-product--item">
-                    <div class="box-content-product--item-name">
-                        <img src="/img/avatar.jpg" height="36" width="36" alt="">
-                        <a href="">Coffee</a>
-                    </div>
-                    
-                    <span class="box-content-product--item-cost">
-                        $7
-                    </span>
-                    <span class="box-content-product--item-date">
-                        Monday, August 5, 2024
-                    </span>
-                </li>
-                <li class="box-content-product--item">
-                    <div class="box-content-product--item-name">
-                        <img src="/img/avatar.jpg" height="36" width="36" alt="">
-                        <a href="">Coffee</a>
-                    </div>
-                    
-                    <span class="box-content-product--item-cost">
-                        $7
-                    </span>
-                    <span class="box-content-product--item-date">
-                        Monday, August 5, 2024
-                    </span>
-                </li>
-                <li class="box-content-product--item">
-                    <div class="box-content-product--item-name">
-                        <img src="/img/avatar.jpg" height="36" width="36" alt="">
-                        <a href="">Coffee</a>
-                    </div>
-                    
-                    <span class="box-content-product--item-cost">
-                        $7
-                    </span>
-                    <span class="box-content-product--item-date">
-                        Monday, August 5, 2024
-                    </span>
-                </li>
-            </ul>
-            <div class="box-content-product--pagination">
-                <button>PREV</button>
-                <span>1/3</span>
-                <button>NEXT</button>
+                </div>
+                <ul class="box-content-product--list">
+                    <% products.forEach(product => { %>
+                        <li class="box-content-product--item">
+                            <div class="box-content-product--item-name">
+                                <img src="/assets/images/<%= product.image %>" height="36" width="36" alt="">
+                                <a href="/admin/products/<%= product._id %>"><%= product.name %></a>
+                            </div>
+                            
+                            <span class="box-content-product--item-cost">
+                                $<%= product.price %>
+                            </span>
+                            <span class="box-content-product--item-date">
+                                <%= product.createdAt.toDateString() %>
+                            </span>
+                        </li>
+                    <% }); %>
+                </ul>
+                <div class="box-content-product--pagination">
+                    <% if (currentPage > 1) { %>
+                        <a href="?page=<%= currentPage - 1 %>"><button>PREV</button></a>
+                    <% } %>
+                    <span><%= currentPage %>/<%= totalPages %></span>
+                    <% if (currentPage < totalPages) { %>
+                        <a href="?page=<%= currentPage + 1 %>"><button>NEXT</button></a>
+                    <% } %>
+                </div>
             </div>
         </div>
     </div>
-</div>

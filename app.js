@@ -9,7 +9,7 @@ var flash = require('connect-flash')
 var session = require('express-session');
 
 
-
+var adminRouter = require('./routes/admin');
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');

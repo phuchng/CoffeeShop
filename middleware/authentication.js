@@ -5,4 +5,11 @@ function isAuthenticated(req, res, next) {
     res.redirect('/login'); // Redirect to the login page if not authenticated
 }
 
-module.exports = isAuthenticated;
+function isAdmin(req, res, next) {
+    if (req.isAuthenticated() && req.user.role === 'admin') {
+        return next();
+    }
+    res.redirect('/login'); // Or redirect to an error page
+}
+
+module.exports = { isAuthenticated, isAdmin };

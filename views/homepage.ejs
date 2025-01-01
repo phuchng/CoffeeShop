@@ -8,8 +8,8 @@
             <div class="slide"><a href="/products"><img src="/img/slider2.jpg" alt=""></a></div>
             <div class="slide"><a href="/products"><img src="/img/slider3.jpg" alt=""></a></div>
         </div>
-        <button class="prev slide-button" onclick="prevSlide()">&#10094;</button>
-        <button class="next slide-button" onclick="nextSlide()">&#10095;</button>
+        <button class="prev slide-button" onclick="prevSlide()">❮</button>
+        <button class="next slide-button" onclick="nextSlide()">❯</button>
     </div>
     <div class="grid">
         <div class="coffeeMenu" style="margin-top: 40px;">
@@ -59,17 +59,15 @@
         <h2 style="text-align: center; margin: 40px 0 20px 0; color:rgb(112, 96, 77);">Top-Rated Drink Shop</h2>
         <div class="box">
             <div class="box-item">
-                <%= if (topRated) { %>
-                    <% topRated.forReach(product => { %>
+                <% if (topRated && topRated.length > 0) { %>
+                    <% topRated.forEach(product => { %>
                         <img src="/img/<%= product.image %>" class="box-item--image">
                         <span class="box-item--name"><%= product.name %></span>
                         <div class="box-item--eval">
                             <div style="color:#FFB829">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
+                                <% for (let i = 0; i < product.ratings.averageRating; i++) { %>
+                                    <i class="fa-solid fa-star"></i>
+                                <% } %>
                             </div>
                             <span style="margin: 5px 0;"><%= product.ratings.totalRatings %> Reviews</span>
                         </div>
