@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 const AccountSchema = new mongoose.Schema({
-  first_name: { type: String, required: true }, 
-  last_name: { type: String, required: true } ,
-  email: { type: String, required: true },
-  password: { type: String, required: true },
-  address: 
+    first_name: { type: String, required: true },
+    last_name: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    role: { type: String, enum: ['user', 'admin'], default: 'user' }, 
+    address:
     {
         first_name: String,
         last_name: String,
@@ -17,12 +18,12 @@ const AccountSchema = new mongoose.Schema({
     }
 });
 
-AccountSchema.virtual('id').get(function(){
-  return this._id.toHexString();
+AccountSchema.virtual('id').get(function () {
+    return this._id.toHexString();
 })
 
 AccountSchema.set('toJSON', {
-  virtuals: true
+    virtuals: true
 })
 
 module.exports = mongoose.model('Account', AccountSchema);

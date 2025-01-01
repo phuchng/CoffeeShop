@@ -30,7 +30,7 @@ const ProductSchema = new mongoose.Schema({
   ingredients: [String],
   sales: { type: Number, default: 0 },
   tag: { type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }
-});
+}, { timestamps: true });
 
 const TagScheme = new mongoose.Schema({
   tag: { type: String, required: true },

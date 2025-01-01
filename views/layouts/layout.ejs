@@ -121,7 +121,7 @@
                             <div class="menuItem">
                                 <% for (let juiceCategory of categories.juice) { %>
                                     <div class="menuItem+Col">
-                                        <h1><%= foodCategory.tag  %></h1>
+                                        <h1><%= juiceCategory.tag  %></h1>
                                         <% for (let product of juiceCategory.products) { %>
                                             <a href="/product/<%= product._id %>"><%= product.name %></a>
                                         <% } %>

@@ -1,19 +1,21 @@
 var express = require('express');
 var { Product } = require('../models/Product')
 var router = express.Router();
+var { isAdmin } = require('../middleware/authentication');
 
 /* GET users listing. */
 
 router.get('/', async function (req, res)  {
-    const productExample = Product.find({}).limit(6);
+    const productExample = await Product.find({}).limit(6);
 
     const topRatedProducts = await Product.find()
     .sort({ 'ratings.averageRating': -1 })
     .limit(5)
     .exec();
 
-    return res.render('homepage', { productExample: productExample });
+    return res.render('homepage', { productExample: productExample, topRated: topRatedProducts });
 });
+
 
 router.get('/product/:id', async function (req, res, next) {
     const productID = req.params.id;

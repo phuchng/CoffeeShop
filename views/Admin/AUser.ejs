@@ -1,119 +1,82 @@
 <div class="AHomepage-box AHomepage-box-color">
     <div class="box-sidebar">
         <h1 class="box-sidebar--header">
-            <i class="fa-solid fa-network-wired"></i> Masterial Dashboard 2
+            <i class="fa-solid fa-network-wired"></i> Admin Dashboard
         </h1>
         <ul class="box-sidebar--list">
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/dashboard" class="box-sidebar--item-link">
                     <i class="fa-solid fa-gauge"></i>
                     Dashboard
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/users" class="box-sidebar--item-link">
                     <i class="fa-solid fa-user"></i>
                     Users
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/products" class="box-sidebar--item-link">
                     <i class="fa-solid fa-cart-shopping"></i>
                     Products
                 </a>
             </li> 
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/products/add" class="box-sidebar--item-link">
                     <i class="fa-solid fa-cart-plus"></i>
                     Add New Products
                 </a>
             </li> 
         </ul>
-        <h3 class="box-sidebar-setAccout--header">ACCOUNT PAGES</h3>
+        <h3 class="box-sidebar-setAccout--header">Account</h3>
         <ul class="box-sidebar--list">
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/profile" class="box-sidebar--item-link">
                     Profile
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/create-admin" class="box-sidebar--item-link">
                     Create new admin
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
-                    Logout
-                </a>
+                <form action="/logout" method="POST" style="display: inline; margin-left: 25px;">
+                    <button type="submit" class="box-sidebar--item-link"
+                        style="background: none; border: none; color: inherit; cursor: pointer; font: inherit; padding: 0;">Logout</button>
+                </form>
             </li>
         </ul>
     </div>
     <div class="box-content">
-        <button class="box-content-button">RETURN TO LOG-IN PAGE</button>
+        <a href="/login"><button class="box-content-button">RETURN TO LOG-IN PAGE</button></a>
         <div class="box-content-user">
             <div class="box-content-user-temp"></div>
             <h3 class="box-content-user--header">User</h3>
             <ul class="box-content-user--list">
-                <li class="box-content-user--item">
-                    <img src="/img/avatar.jpg" height="36" width="36" alt="">
-                    <div class="box-content-user--item-content">
-                        <span class="box-content-user--item-email">
-                            tnhan@gmail.com
-                        </span>
-                        <span class="box-content-user--item-role">
-                            Role: customer
-                        </span>
-                    </div>
-                </li>
-                <li class="box-content-user--item">
-                    <img src="/img/avatar.jpg" height="36" width="36" alt="">
-                    <div class="box-content-user--item-content">
-                        <span class="box-content-user--item-email">
-                            tnhan@gmail.com
-                        </span>
-                        <span class="box-content-user--item-role">
-                            Role: customer
-                        </span>
-                    </div>
-                </li>
-                <li class="box-content-user--item">
-                    <img src="/img/avatar.jpg" height="36" width="36" alt="">
-                    <div class="box-content-user--item-content">
-                        <span class="box-content-user--item-email">
-                            tnhan@gmail.com
-                        </span>
-                        <span class="box-content-user--item-role">
-                            Role: customer
-                        </span>
-                    </div>
-                </li>
-                <li class="box-content-user--item">
-                    <img src="/img/avatar.jpg" height="36" width="36" alt="">
-                    <div class="box-content-user--item-content">
-                        <span class="box-content-user--item-email">
-                            tnhan@gmail.com
-                        </span>
-                        <span class="box-content-user--item-role">
-                            Role: customer
-                        </span>
-                    </div>
-                </li>
-                <li class="box-content-user--item">
-                    <img src="/img/avatar.jpg" height="36" width="36" alt="">
-                    <div class="box-content-user--item-content">
-                        <span class="box-content-user--item-email">
-                            tnhan@gmail.com
-                        </span>
-                        <span class="box-content-user--item-role">
-                            Role: customer
-                        </span>
-                    </div>
-                </li>
+                <% users.forEach(user => { %>
+                    <li class="box-content-user--item">
+                        <img src="/img/avatar.jpg" height="36" width="36" alt="">
+                        <div class="box-content-user--item-content">
+                            <span class="box-content-user--item-email">
+                                <%= user.email %>
+                            </span>
+                            <span class="box-content-user--item-role">
+                                Role: <%= user.role %>
+                            </span>
+                        </div>
+                    </li>
+                <% }); %>
             </ul>
             <div class="box-content-user--pagination">
-                <button>PREV</button>
-                <span>1/3</span>
-                <button>NEXT</button>
+                <% if (currentPage > 1) { %>
+                    <a href="?page=<%= currentPage - 1 %>"><button>PREV</button></a>
+                <% } %>
+                <span><%= currentPage %>/<%= totalPages %></span>
+                <% if (currentPage < totalPages) { %>
+                    <a href="?page=<%= currentPage + 1 %>"><button>NEXT</button></a>
+                <% } %>
             </div>
         </div>
     </div>

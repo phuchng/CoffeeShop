@@ -1,90 +1,81 @@
 <div class="AHomepage-box AHomepage-box-color">
     <div class="box-sidebar">
         <h1 class="box-sidebar--header">
-            <i class="fa-solid fa-network-wired"></i> Masterial Dashboard 2
+            <i class="fa-solid fa-network-wired"></i> Admin Dashboard
         </h1>
         <ul class="box-sidebar--list">
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/dashboard" class="box-sidebar--item-link">
                     <i class="fa-solid fa-gauge"></i>
                     Dashboard
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/users" class="box-sidebar--item-link">
                     <i class="fa-solid fa-user"></i>
                     Users
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/products" class="box-sidebar--item-link">
                     <i class="fa-solid fa-cart-shopping"></i>
                     Products
                 </a>
             </li> 
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/products/add" class="box-sidebar--item-link">
                     <i class="fa-solid fa-cart-plus"></i>
                     Add New Products
                 </a>
             </li> 
         </ul>
-        <h3 class="box-sidebar-setAccout--header">ACCOUNT PAGES</h3>
+        <h3 class="box-sidebar-setAccout--header">Account</h3>
         <ul class="box-sidebar--list">
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/profile" class="box-sidebar--item-link">
                     Profile
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
+                <a href="/admin/create-admin" class="box-sidebar--item-link">
                     Create new admin
                 </a>
             </li>
             <li class="box-sidebar--item">
-                <a href="" class="box-sidebar--item-link">
-                    Logout
-                </a>
+                <form action="/logout" method="POST" style="display: inline; margin-left: 25px;">
+                    <button type="submit" class="box-sidebar--item-link"
+                        style="background: none; border: none; color: inherit; cursor: pointer; font: inherit; padding: 0;">Logout</button>
+                </form>
             </li>
         </ul>
     </div>
     <div class="box-content">
-        <button class="box-content-button">RETURN TO LOG-IN PAGE</button>
-        <h1 class="box-content-detail--header">Coffee name</h1>
+        <a href="/login"><button class="box-content-button">RETURN TO LOG-IN PAGE</button></a>
+        <h1 class="box-content-detail--header"><%= product.name %></h1>
         <div class="box-content-detail-product">
-            <img src="/img/product.png" width="305" height="277" alt="">
+            <img src="/assets/images/<%= product.image %>" width="305" height="277" alt="">
             <div class="box-content-detail-product--text">
                 <div class="row">
                     <div class="box-detail--text">
                         <span class="box-detail--text--header">Name</span>
-                        <p class="box-detail--text--header-content">Coffee name</p>
+                        <p class="box-detail--text--header-content"><%= product.name %></p>
                     </div>
                     <div class="box-detail--text">
                         <span class="box-detail--text--header">Cost</span>
-                        <p class="box-detail--text--header-content">$7</p>
+                        <p class="box-detail--text--header-content">$<%= product.price %></p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="box-detail--text">
                         <span class="box-detail--text--header">Description</span>
-                        <p class="box-detail--text--header-content">Earl Grey tea is named after it's English Benefactor, 
-                            Charles Earl Grey, who lived in politics and for a short time and served as Prime Minister under 
-                            King William IV. This decaffeinated tea is a time-tested treasure and a real celebration of flavor. 
-                            The unusual flavoring and winning combination that makes Earl Grey so special is the oil of Bergamot.
-                             Bergamot has potential health benefits that include its ability to fight off colds and flu.
-                            <br>
-                            <br>
-                            We take the concentration of this exotic flavor and blend it with mild decaffeinated teas. You can now 
-                            experience the wonder of decaffeinated Earl Grey loose-leaf tea without worries of insomnia or jitters. 
-                            This tea is paired well when served with cheese as well as meat and fish. Take advantage of the money-saving 2lb bag offer.
-                        </p>
+                        <p class="box-detail--text--header-content"><%= product.description %></p>
                     </div>
                 </div>
             </div>                
         </div>
         <div class="box-content-detail-product--button">
-            <button class="detail-delete">DELETE PRODUCT</button>
-            <button class="detail-update">UPDATE PRODUCT INFORMATION</button>
+            <a href="/admin/products/delete/<%= product._id %>"><button class="detail-delete">DELETE PRODUCT</button></a>
+            <a href="/admin/products/update/<%= product._id %>"><button class="detail-update">UPDATE PRODUCT INFORMATION</button></a>
         </div>
     </div>
 </div>
