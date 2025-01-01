@@ -3,7 +3,7 @@
         <div class="linkNavigation">
             <a href="/" class="cate red">Home</a>
             <span>></span>
-            <a href="/" class="cate">Shop</a>
+            <a href="/products" class="cate">Shop</a>
             <span>></span>
             <a href="/product/<%= product._id %>" class="cate"><%= product.name %></a>
         </div>
@@ -33,10 +33,12 @@
             </div>
             <div class="options">
                 <div>
-                    <h3>Options</h3>
+                    <h3>Serving Options</h3>
                     <div class="optionWeight">
                         <% product.servingOptions.forEach(option => { %>
-                            <span> <%= option %></span>
+                            <span class="option-span" data-value="<%= option %>">
+                                <%= option %>
+                            </span>
                         <% }) %>
 
                     </div>
@@ -45,9 +47,9 @@
                 <div class="boxQuantity">
                     <div class="quantity">
                         <span>Quantity</span>
-                        <input type="text">
+                        <input id="quantity" type="number" value="1" min="1">
                     </div>
-                    <button>ADD TO CART</button>
+                    <button id="cartAdding">ADD TO CART</button>
                 </div>
             </div>
         </div>
@@ -76,3 +78,54 @@
     </div>
     
 </div>
+
+<script>
+
+    var optionSelect;
+
+    document.querySelectorAll('.option-span').forEach(span => {
+        span.addEventListener('click', () => {
+            // Remove 'selected' class from all spans
+            document.querySelectorAll('.option-span').forEach(sp => sp.classList.remove('selected'));
+
+            // Add 'selected' class to the clicked span
+            span.classList.add('selected');
+
+            optionSelect = span.dataset.value;
+        });
+    });
+
+    const addProduct = document.getElementById("cartAdding");
+
+
+    addProduct.addEventListener('click', async() => {
+        const quantity = document.getElementById('quantity').value;
+
+
+        try{
+            const response = await fetch('/cart/add-product', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    productId: '<%= product._id %>',
+                    quantity: parseInt(quantity),
+                    servingOption: optionSelect
+                }),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                const data = await response.json();
+                alert(data.message);
+                window.location.href = '/cart';
+            } else {
+                const error = await response.json();
+                alert(`Error: ${error.error}`)
+            }
+        }
+        catch (err) {
+            console.error('Error:', err);
+            alert('An error occurred. Please try again.');
+        }
+    })
+</script>

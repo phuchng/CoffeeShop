@@ -119,6 +119,11 @@
     cursor: pointer;
     background-color: #b07532ba;
 }
+
+.optionWeight span.selected {
+    cursor: pointer;
+    background-color: #b07532ba;
+}
 .boxQuantity {
     display: flex;
     justify-content: space-between;

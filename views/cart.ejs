@@ -5,7 +5,7 @@
             <div class="boxSub">
                 <div class="texSub">
                     <span>Subtotal</span>
-                    <span class="costSub">$13.00</span>
+                    <span class="costSub">$<%= cart.totalPrice %></span>
                 </div>
                 <button>
                     <i class="fa-solid fa-cart-shopping"></i>
@@ -14,34 +14,38 @@
             </div>
         </div>
         <div class="boxListCart">
-            <ul class="listCart">
-                <li class="itemCart">
-                    <div class="boxInfoProductC">
-                        <img src="product.png" alt="" width="120px" height="120px">
-                        <div class="InfoProductC">
-                            <h3>Costa Rica Reserve Coffee</h3>
-                            <span><strong>Reg/Decaf:</strong> Regular</span>
-                            <span><strong>Coffee Grind:</strong> Whole Bean</span>
-                            <span><strong>Bag Size:</strong> 1LB</span>
-                            <span><strong>Price:</strong> $13.00</span>
-                            <span><strong>SKU:</strong> COSRICRESEWHOLE BEAN</span>
-                        </div>
-                    </div>
-                    <div class="boxInfoCostC">
-                        <div class="BoxQuantity">
-                            <span>Quantity</span>
-                            <span class="qtt">1</span>
-                        </div>
-                        <span class="costC">$13.00</span>
-                        <span class="x">x</span>
-                    </div>
-                </li>
-            </ul>
+            <% if (cartItems.length > 0) { %>
+                <ul class="listCart">
+                    <% cartItems.forEach(item => { %>
+                        <li class="itemCart">
+                            <div class="boxInfoProductC">
+                                <img src="/img/<%= item.image %>" alt="<%= item.name %>" width="120px" height="120px">
+                                <div class="InfoProduct">
+                                    <h3><%= item.name %></h3>
+                                    <span><strong>Serving Option:</strong> <%= item.servingOption %></span>
+                                    <span><strong>Price:</strong> $<%= item.price %></span>
+                                </div>
+                            </div>
+                            <div class="boxInfoCostC">
+                                <div class="BoxQuantity">
+                                    <span>Quantity</span>
+                                    <span class="qtt"><%= item.quantity %></span>
+                                </div>
+                                <span class="costC">$<%= item.totalCost %></span>
+                                <span class="x" data-id="<%= item.product._id %>" data-option="<%= item.servingOption %>">x</span>
+                            </div>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>Your cart is empty.</p>
+            <% } %>
+
         </div>
         <div class="checkout">
             <div class="boxInfoCheckout">
                 <span>Subtotal</span>
-                <span class="InfoCost">$13.00</span>
+                <span class="InfoCost">$<%= totalPrice %></span>
             </div>
             <button>
                 <i class="fa-solid fa-cart-shopping"></i> CHECKOUT
@@ -50,3 +54,39 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.x').forEach((remove_span) => {
+        remove_span.addEventListener('click', async () => {
+            const productId = remove_span.dataset.id;
+            const servingOption = remove_span.dataset.option;
+
+            try{
+                const response = await fetch('/cart/remove-item', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productId: productId, servingOption: servingOption })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    const newTotalPrice = data.newTotalPrice;
+                    
+                    remove_span.closest('.itemCart').remove();
+                    const totalPrice = document.querySelector('.InfoCost');
+                    totalPrice.innerText = `${newTotalPrice}`;
+                    alert(data.message);
+                }
+
+                else{
+                    const error = await response.json();
+                    alert(`Error: ${error.error}`)
+                }
+            } catch (err){
+                console.error('Error:', err);
+                alert('An error occurred. Please try again.');
+            }
+        })
+    })
+</script>

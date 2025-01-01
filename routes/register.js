@@ -1,5 +1,6 @@
 var express = require('express');
 var Account = require('../models/Account');
+var Cart = require('../models/Cart')
 var bcrypt = require('bcrypt')
 var router = express.Router();
 
@@ -26,6 +27,10 @@ router.post('/', async function(req, res, next){
         const newAccount = new Account({ first_name: first_name, last_name: last_name, password: hashedPassword, email: email })
 
         await newAccount.save();
+
+        const newCart = new Cart({ account: newAccount._id })
+
+        await newCart.save();
         return res.send('<script>alert("Registration complete!"); window.location.href = "/";</script>');
     }
     catch(error)

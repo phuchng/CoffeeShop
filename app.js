@@ -13,7 +13,8 @@ var session = require('express-session');
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
-var logout = require('./routes/logout');
+var logoutRouter = require('./routes/logout');
+var profileRouter = require('./routes/profile');
 var app = express();
 
 var fetchMenu = require('./middleware/menu');
@@ -58,8 +59,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/register', registerRouter)
-app.use('/login', loginRouter)
+app.use('/register', registerRouter);
+app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
+app.use('/profile', profileRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
