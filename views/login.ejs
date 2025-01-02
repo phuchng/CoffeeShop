@@ -2,6 +2,10 @@
    <% if (error_msg) { %>
       <h1 class="d-flex justify-content-center"><span class="badge text-danger"><%= error_msg %></span></h1>
     <% } %>
+
+    <% if (success_msg) { %>
+      <h1 class="d-flex justify-content-center"><span class="badge text-success"><%= success_msg %></span></h1>
+    <% } %>
     <div class="grid d-flex justify-content-center">
        <div class="col-md-6">
           <div class="login_box">
@@ -24,3 +28,26 @@
        </div>
     </div>
  </div> 
+
+ <% if (resendEmail) { %>
+   <div class="modal show" tabindex="-1" role="dialog" style="display: block; background: rgba(0,0,0,0.5);">
+     <div class="modal-dialog" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title">Email Verification Needed</h5>
+           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+           <p>Your email (<%= resendEmail.email %>) is not verified. Would you like to resend the verification email?</p>
+         </div>
+         <div class="modal-footer">
+           <form action="/resend-email" method="POST">
+             <input type="hidden" name="email" value="<%= resendEmail.email %>">
+             <button type="submit" class="btn btn-primary">Resend Email</button>
+           </form>
+           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+         </div>
+       </div>
+     </div>
+   </div>
+   <% } %>

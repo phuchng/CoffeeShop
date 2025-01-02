@@ -65,7 +65,7 @@ router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
 
         const initialSize = cart.products.length;
 
-        cart.products = cart.products.filter(item => item.product.toString() !== productId && item.servingOption !== servingOption);
+        cart.products = cart.products.filter(item => item.product.toString() !== productId || item.servingOption !== servingOption);
 
         if (initialSize === cart.products.length) {
             return res.status(404).json({ success: false, message: 'Product not found in cart.' });
@@ -87,6 +87,6 @@ router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
     }
     catch (error) {
         console.error('Error adding product to cart:', error);
-        res.status(500).json({ success: false, message: 'Failed to remove product from cart.' });
+        res.status(500).json({ success: false, message: 'Failed to remove product from6 cart.' });
     }
 })

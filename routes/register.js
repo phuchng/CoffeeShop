@@ -1,9 +1,11 @@
 var express = require('express');
 var Account = require('../models/Account');
-var Cart = require('../models/Cart')
 var bcrypt = require('bcrypt')
 var router = express.Router();
 
+var sendVerificationEmail = require('../config/sendEmail')
+
+const crypto = require("crypto");
 /* GET users listing. */
 
 router.get('/', async function(req, res, next) {
@@ -23,14 +25,13 @@ router.post('/', async function(req, res, next){
         }   
 
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newAccount = new Account({ first_name: first_name, last_name: last_name, password: hashedPassword, email: email })
+        const verificationLink = `https://coffee-shop-4rpa.onrender.com/verify-email?token=${token}`;
+        const token = crypto.randomBytes(32).toString("hex");
+        const expirationTime = Date.now() + 6 * 60 * 1000;
+        const newAccount = new Account({ first_name: first_name, last_name: last_name, password: hashedPassword, email: email, isVerified: false, token: token, expirationTime: expirationTime })
 
         await newAccount.save();
-
-        const newCart = new Cart({ account: newAccount._id })
-
-        await newCart.save();
+        sendVerificationEmail(email, verificationLink);
         return res.send('<script>alert("Registration complete!"); window.location.href = "/";</script>');
     }
     catch(error)
@@ -39,5 +40,6 @@ router.post('/', async function(req, res, next){
         return res.status(500).send('<script>alert("Registration failed: Internal Server Error"); window.location.href = "/register";</script>');
     }
 })
+
 
 module.exports = router;

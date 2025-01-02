@@ -15,6 +15,8 @@ var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 var profileRouter = require('./routes/profile');
+var resendEmailRouter = require('./routes/resend-email');
+
 var app = express();
 
 var fetchMenu = require('./middleware/menu');

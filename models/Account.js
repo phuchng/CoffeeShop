@@ -14,8 +14,10 @@ const AccountSchema = new mongoose.Schema({
         address: String,
         apartment: String,
         phone: String,
-        isDefault: { type: Boolean, default: false },
-    }
+    },
+    isVerified: { type: Boolean, default: false },
+    token: String,
+    expirationTime: Date
 });
 
 AccountSchema.virtual('id').get(function () {
