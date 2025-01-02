@@ -2,9 +2,9 @@
 
 ## Contributors
 
-* phuchng - Nguyễn Hoàng Phúc
-* ThaiCoder2003 - Đặng Quốc Thái
-* thannhandz - Lê Phan Thanh Nhân
+-   phuchng - Nguyễn Hoàng Phúc
+-   ThaiCoder2003 - Đặng Quốc Thái
+-   thannhandz - Lê Phan Thanh Nhân
 
 ## Technology Stack
 
@@ -20,9 +20,32 @@
 
 ## Getting Started
 
-Try the demo at https://coffeeshop-demo.onrender.com/ (The demo is using a free instance that is slow to initialize). 
+Try the demo at https://coffeeshop-demo.onrender.com/ (The demo is using a free instance that is slow to initialize).
 
 Alternatively, host it locally by following the instructions below.
+
+### Running with Docker
+
+1. **Install Docker and Docker Compose:**
+
+2. **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/phuchng/CoffeeShop.git
+    cd CoffeeShop
+    ```
+
+3. **Build and run with Docker Compose:**
+
+    ```bash
+    docker-compose build
+    docker-compose up -d
+    ```
+
+4. **Access the application:**
+    -   Open your web browser and go to `http://localhost:2000`.
+
+### Running without Docker
 
 1. **Clone the repository:**
 
@@ -37,18 +60,10 @@ Alternatively, host it locally by following the instructions below.
     npm install
     ```
 
-3. **Set up environment variables:**
-    -   Create a `.env` file in the `CoffeeShop` directory.
-    -   Add your MongoDB connection string:
-
-        ```
-        MONGODB_URI=your_mongodb_connection_string
-        ```
-
-4. **Populate the database (optional):**
+3. **Populate the database (optional):**
     -   Run `npm run seed` to add initial data to the database.
-    
-5. **Start the application:**
+
+4. **Start the application:**
 
     ```bash
     npm start
@@ -62,6 +77,7 @@ Alternatively, host it locally by following the instructions below.
 
 6. **Access the application:**
     -   Open your web browser and go to `http://localhost:2000` (or the port specified in your configuration).
+
 
 ## Usage
 
@@ -119,7 +135,7 @@ Alternatively, host it locally by following the instructions below.
     -   [x] Verify user input: password complexity, full name, ...
     -   [x] AJAX checking username/email availability
     -   [ ] Account activation by email
--   [ ] Social Sign-up/Sign-In (Google or Facebook)
+-   [x] Social Sign-up/Sign-In (Google or Facebook)
 -   [x] Login to the website
 -   [x] Authorize website features
 -   [ ] Forgot password by email
@@ -177,5 +193,5 @@ Alternatively, host it locally by following the instructions below.
 -   [ ] Use memory cache to boost website performance
 -   [ ] Analyze and track user actions
 -   [ ] Show interactive chart in reports
--   [ ] Dockerize your project
+-   [x] Dockerize your project
 -   [x] CI/CD

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "2000:2000"
+    depends_on:
+      - db
+    environment:
+      - MONGODB_URI=mongodb://db:27017/coffeeshop
+      - SESSION_SECRET=uiodsjfkjnkr
+      - GOOGLE_CLIENT_ID=1054842495994-jig9irip1b5oprfgreg1077j2ucl5ffp.apps.googleusercontent.
+      - GOOGLE_CLIENT_SECRET=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
+      - GOOGLE_CALLBACK_URL=http://localhost:2000/auth/google/callback
+    volumes:
+      - .:/app
+      - /app/node_modules
+  db:
+    image: mongo
+    volumes:
+      - db-data:/data/db
+
+volumes:
+  db-data:
