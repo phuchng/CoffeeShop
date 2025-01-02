@@ -26,7 +26,9 @@
 
 ## Getting Started
 
-Try the demo at https://coffeeshop-demo.onrender.com/, or alternatively, host it locally by following the instructions below.
+Try the demo at https://coffeeshop-demo.onrender.com/ (The demo is using a free instance that is slow to initialize). 
+
+Alternatively, host it locally by following the instructions below.
 
 1. **Clone the repository:**
 
@@ -51,11 +53,8 @@ Try the demo at https://coffeeshop-demo.onrender.com/, or alternatively, host it
 
 4. **Populate the database (optional):**
     -   Run `npm run seed` to add initial data to the database.
-
-5. **Test the application (optional:)**
-    - Run `npm test` to run the automated test suites
     
-6. **Start the application:**
+5. **Start the application:**
 
     ```bash
     npm start
@@ -186,4 +185,3 @@ Try the demo at https://coffeeshop-demo.onrender.com/, or alternatively, host it
 -   [ ] Show interactive chart in reports
 -   [ ] Dockerize your project
 -   [x] CI/CD
--   [x] Automated testing
