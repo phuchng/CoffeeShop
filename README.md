@@ -16,13 +16,7 @@
 -   **Backend:**
     -   Node.js
     -   Express.js
-    -   MongoDB (with Mongoose for database interactions)
-    -   Passport.js (for authentication)
-    -   Bcrypt (for password hashing)
--   **Other:**
-    -   Connect-flash (for flash messages)
-    -   Express-session (for session management)
-    -   Express-ejs-layouts (for layout management)
+    -   MongoDB
 
 ## Getting Started
 
@@ -94,7 +88,7 @@ Alternatively, host it locally by following the instructions below.
 -   [x] Website architect (Based on MVC. With a clear separation of concerns)
 -   [x] Document
 -   [ ] Demo video
--   [ ] Publish to public hosts
+-   [x] Publish to public hosts
 -   [x] Development progress is recorded in Github
 
 ### 2. Guest Features

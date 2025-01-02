@@ -448,8 +448,16 @@ async function addMockData() {
         // Hash passwords and add users
         await Account.deleteMany({});
         for (const user of usersData) {
-            const hashedPassword = await bcrypt.hash(user.password, 10);
-            const newUser = new Account({ ...user, password: hashedPassword });
+            if (!user.password) {
+                user.google = {
+                    id: user._id,
+                    email: user.email,
+                };
+            } else {
+                const hashedPassword = await bcrypt.hash(user.password, 10);
+                user.password = hashedPassword;
+            }
+            const newUser = new Account(user);
             await newUser.save();
         }
         console.log('Users added successfully!');
