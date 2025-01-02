@@ -1,101 +1,46 @@
-<div class="AHomepage-box AHomepage-box-color">
-    <div class="box-sidebar">
-        <h1 class="box-sidebar--header">
-            <i class="fa-solid fa-network-wired"></i> Admin Dashboard
-        </h1>
-        <ul class="box-sidebar--list">
-            <li class="box-sidebar--item">
-                <a href="/admin/dashboard" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-gauge"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/users" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-user"></i>
-                    Users
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/products" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Products
-                </a>
-            </li> 
-            <li class="box-sidebar--item">
-                <a href="/admin/products/add" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-cart-plus"></i>
-                    Add New Products
-                </a>
-            </li> 
-        </ul>
-        <h3 class="box-sidebar-setAccout--header">Account</h3>
-        <ul class="box-sidebar--list">
-            <li class="box-sidebar--item">
-                <a href="/admin/profile" class="box-sidebar--item-link">
-                    Profile
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/create-admin" class="box-sidebar--item-link">
-                    Create new admin
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <form action="/logout" method="POST" style="display: inline; margin-left: 25px;">
-                    <button type="submit" class="box-sidebar--item-link"
-                        style="background: none; border: none; color: inherit; cursor: pointer; font: inherit; padding: 0;">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </div>
-    <div class="box-content">
-        <a href="/login"><button class="box-content-button">RETURN TO LOG-IN PAGE</button></a>
-        <h1 class="box-content-detail--header"><%= product.name %></h1>
-        <div class="box-content-detail-product">
-            <img src="/assets/images/<%= product.image %>" width="305" height="277" alt="">
-            <div class="box-content-detail-product--text">
-                <div class="row">
-                    <div class="box-detail--text">
-                        <span class="box-detail--text--header">Name</span>
-                        <p class="box-detail--text--header-content"><%= product.name %></p>
-                    </div>
-                    <div class="box-detail--text">
-                        <span class="box-detail--text--header">Cost</span>
-                        <p class="box-detail--text--header-content">$<%= product.price %></p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="box-detail--text">
-                        <span class="box-detail--text--header">Description</span>
-                        <p class="box-detail--text--header-content"><%= product.description %></p>
-                    </div>
-                </div>
-            </div>                
+<h1 class="box-content-detail--header"><%= product.name %></h1>
+<div class="box-content-detail-product">
+    <img src="/assets/images/<%= product.image %>" width="305" height="277" alt="">
+    <div class="box-content-detail-product--text">
+        <div class="row">
+            <div class="box-detail--text">
+                <span class="box-detail--text--header">Name</span>
+                <p class="box-detail--text--header-content"><%= product.name %></p>
+            </div>
+            <div class="box-detail--text">
+                <span class="box-detail--text--header">Cost</span>
+                <p class="box-detail--text--header-content">$<%= product.price %></p>
+            </div>
         </div>
-        <div class="box-content-detail-product--button">
-            <button class="detail-delete" id="deleteProductButton">DELETE PRODUCT</button>
-            <a href="/admin/products/update/<%= product._id %>"><button class="detail-update">UPDATE PRODUCT INFORMATION</button></a>
+        <div class="row">
+            <div class="box-detail--text">
+                <span class="box-detail--text--header">Description</span>
+                <p class="box-detail--text--header-content"><%= product.description %></p>
+            </div>
         </div>
-        
     </div>
+</div>
+<div class="box-content-detail-product--button">
+    <button class="detail-delete" id="deleteProductButton">DELETE PRODUCT</button>
+    <a href="/admin/products/update/<%= product._id %>"><button class="detail-update">UPDATE PRODUCT
+            INFORMATION</button></a>
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('#deleteProductButton').click(function(event) {
+    $(document).ready(function () {
+        $('#deleteProductButton').click(function (event) {
             event.preventDefault();
             const productId = '<%= product._id %>';
 
             if (confirm('Are you sure you want to delete this product?')) {
                 $.ajax({
                     url: '/admin/products/delete/' + productId,
-                    method: 'GET', // Using GET for delete as a workaround
-                    success: function(response) {
+                    method: 'DELETE',
+                    success: function (response) {
                         // Redirect to product list on success
-                        window.location.href = '/admin/products';
+                        loadContent('/admin/products');
                     },
-                    error: function(error) {
+                    error: function (error) {
                         // Display error message
                         $('#message').html('<p class="error-message">' + error.responseJSON.error + '</p>');
                     }

@@ -1,140 +1,89 @@
-<div class="AHomepage-box AHomepage-box-color">
-    <div class="box-sidebar">
-        <h1 class="box-sidebar--header">
-            <i class="fa-solid fa-network-wired"></i> Admin Dashboard
-        </h1>
-        <ul class="box-sidebar--list">
-            <li class="box-sidebar--item">
-                <a href="/admin/dashboard" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-gauge"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/users" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-user"></i>
-                    Users
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/products" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Products
-                </a>
-            </li> 
-            <li class="box-sidebar--item">
-                <a href="/admin/products/add" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-cart-plus"></i>
-                    Add New Products
-                </a>
-            </li> 
-        </ul>
-        <h3 class="box-sidebar-setAccout--header">Account</h3>
-        <ul class="box-sidebar--list">
-            <li class="box-sidebar--item">
-                <a href="/admin/profile" class="box-sidebar--item-link">
-                    Profile
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/create-admin" class="box-sidebar--item-link">
-                    Create new admin
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <form action="/logout" method="POST" style="display: inline; margin-left: 25px;">
-                    <button type="submit" class="box-sidebar--item-link"
-                        style="background: none; border: none; color: inherit; cursor: pointer; font: inherit; padding: 0;">Logout</button>
-                </form>
-            </li>
-        </ul>
+<h1 class="box-content-addproduct--header">
+    Update Product
+</h1>
+<div id="message"></div>
+<form id="updateProductForm">
+    <div style="display: flex;">
+        <div class="box-content-addproduct-form">
+            <h3 class="box-content-addproduct-form--header">Product Name</h3>
+            <input type="text" name="name" placeholder="Product Name" value="<%= product.name %>" required>
+        </div>
+        <div class="box-content-addproduct-form">
+            <h3 class="box-content-addproduct-form--header">Price</h3>
+            <input type="number" name="price" placeholder="Price $" value="<%= product.price %>" required>
+        </div>
     </div>
-    <div class="box-content">
-        <a href="/login"><button class="box-content-button">RETURN TO LOG-IN PAGE</button></a>
-        <h1 class="box-content-addproduct--header">
-            Update Product
-        </h1>
-        <div id="message"></div>
-        <form id="updateProductForm">
-            <div style="display: flex;">
-                <div class="box-content-addproduct-form">
-                    <h3 class="box-content-addproduct-form--header">Product Name</h3>
-                    <input type="text" name="name" placeholder="Product Name" value="<%= product.name %>" required>
-                </div>
-                <div class="box-content-addproduct-form">
-                    <h3 class="box-content-addproduct-form--header">Price</h3>
-                    <input type="number" name="price" placeholder="Price $" value="<%= product.price %>" required>
-                </div>
-            </div>      
-            <div class="box-content-addproduct-form">
-                <h3 class="box-content-addproduct-form--header">Description</h3>
-                <textarea name="description" required><%= product.description %></textarea>
-            </div>
-            <div class="box-content-addproduct-form">
-                <h3 class="box-content-addproduct-form--header">Category</h3>
-                <select name="category">
-                    <option value="Coffee" <%= product.category === 'Coffee' ? 'selected' : '' %>>Coffee</option>
-                    <option value="Tea" <%= product.category === 'Tea' ? 'selected' : '' %>>Tea</option>
-                    <option value="Food" <%= product.category === 'Food' ? 'selected' : '' %>>Food</option>
-                    <option value="Juice" <%= product.category === 'Juice' ? 'selected' : '' %>>Juice</option>
-                </select>
-            </div>
-            <div class="box-content-addproduct-form">
-                <h3 class="box-content-addproduct-form--header">Tag</h3>
-                <select name="tag">
-                    <% tags.forEach(tag => { %>
-                        <option value="<%= tag._id %>" <%= product.tag.toString() === tag._id.toString() ? 'selected' : '' %>><%= tag.tag %> (<%= tag.category %>)</option>
-                    <% }); %>
-                </select>
-            </div>
-            <div class="box-content-addproduct-form">
-                <h3 class="box-content-addproduct-form--header">Serving Options (comma-separated)</h3>
-                <input type="text" name="servingOptions" placeholder="e.g., 12 oz, 1 lb, 5 lb" value="<%= product.servingOptions.join(', ') %>">
-            </div>
-            <div class="box-content-addproduct-form">
-                <h3 class="box-content-addproduct-form--header">Grind</h3>
-                <select name="grind">
-                    <option value="Whole Bean" <%= product.grind === 'Whole Bean' ? 'selected' : '' %>>Whole Bean</option>
-                    <option value="Ground" <%= product.grind === 'Ground' ? 'selected' : '' %>>Ground</option>
-                </select>
-            </div>
-            <div class="box-content-addproduct-form">
-                <h3 class="box-content-addproduct-form--header">Roast</h3>
-                <select name="roast">
-                    <option value="Light" <%= product.roast === 'Light' ? 'selected' : '' %>>Light</option>
-                    <option value="Medium" <%= product.roast === 'Medium' ? 'selected' : '' %>>Medium</option>
-                    <option value="Dark" <%= product.roast === 'Dark' ? 'selected' : '' %>>Dark</option>
-                </select>
-            </div>
-            <div class="box-content-addproduct-form">
-                <h3 class="box-content-addproduct-form--header">Origin</h3>
-                <input type="text" name="origin" placeholder="Origin" value="<%= product.origin %>">
-            </div>
-            <div class="box-content-addproduct-form">
-                <h3 class="box-content-addproduct-form--header">Ingredients (comma-separated)</h3>
-                <input type="text" name="ingredients" placeholder="e.g., Ingredient 1, Ingredient 2" value="<%= product.ingredients.join(', ') %>">
-            </div>
-            <div class="box-content-addproduct--button">
-                <button type="submit" class="detail-create">UPDATE PRODUCT</button>
-            </div>
-        </form>
-    </div>    
-</div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Description</h3>
+        <textarea name="description" required><%= product.description %></textarea>
+    </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Category</h3>
+        <select name="category">
+            <option value="Coffee" <%=product.category === 'Coffee' ? 'selected' : '' %>>Coffee</option>
+            <option value="Tea" <%=product.category === 'Tea' ? 'selected' : '' %>>Tea</option>
+            <option value="Food" <%=product.category === 'Food' ? 'selected' : '' %>>Food</option>
+            <option value="Juice" <%=product.category === 'Juice' ? 'selected' : '' %>>Juice</option>
+        </select>
+    </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Tag</h3>
+        <select name="tag">
+            <% tags.forEach(tag => { %>
+                <option value="<%= tag._id %>" <%=product.tag.toString() === tag._id.toString() ? 'selected' : '' %>>
+                    <%= tag.tag %> (<%= tag.category %>)
+                </option>
+                <% }); %>
+        </select>
+    </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Serving Options (comma-separated)</h3>
+        <input type="text" name="servingOptions" placeholder="e.g., 12 oz, 1 lb, 5 lb"
+            value="<%= product.servingOptions.join(', ') %>">
+    </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Grind</h3>
+        <select name="grind">
+            <option value="Whole Bean" <%=product.grind === 'Whole Bean' ? 'selected' : '' %>>Whole Bean</option>
+            <option value="Ground" <%=product.grind === 'Ground' ? 'selected' : '' %>>Ground</option>
+        </select>
+    </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Roast</h3>
+        <select name="roast">
+            <option value="Light" <%=product.roast === 'Light' ? 'selected' : '' %>>Light</option>
+            <option value="Medium" <%=product.roast === 'Medium' ? 'selected' : '' %>>Medium</option>
+            <option value="Dark" <%=product.roast === 'Dark' ? 'selected' : '' %>>Dark</option>
+        </select>
+    </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Origin</h3>
+        <input type="text" name="origin" placeholder="Origin" value="<%= product.origin %>">
+    </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Ingredients (comma-separated)</h3>
+        <input type="text" name="ingredients" placeholder="e.g., Ingredient 1, Ingredient 2"
+            value="<%= product.ingredients.join(', ') %>">
+    </div>
+    <div class="box-content-addproduct--button">
+        <button type="submit" class="detail-create">UPDATE PRODUCT</button>
+    </div>
+</form>
 
 <script>
-    $(document).ready(function() {
-        $('#updateProductForm').submit(function(event) {
+    $(document).ready(function () {
+        $('#updateProductForm').submit(function (event) {
             event.preventDefault();
-            const productId = '<%= product._id %>'; 
+            const productId = '<%= product._id %>';
 
             $.ajax({
                 url: '/admin/products/update/' + productId,
                 method: 'POST',
                 data: $(this).serialize(),
-                success: function(response) {
+                success: function (response) {
                     $('#message').html('<p class="success-message">' + response.message + '</p>');
                 },
-                error: function(error) {
+                error: function (error) {
                     $('#message').html('<p class="error-message">' + error.responseJSON.error + '</p>');
                 }
             });

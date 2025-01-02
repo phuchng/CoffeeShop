@@ -1,10 +1,11 @@
+<!-- views/layouts/layoutAdmin.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coffeeno</title>
+    <title>Coffeeno - Admin</title>
     <link rel="stylesheet" href="/css/cssAdmin/sidebar.css">
     <link rel="stylesheet" href="/css/cssAdmin/AAddProduct.css">
     <link rel="stylesheet" href="/css/cssAdmin/AChangePass.css">
@@ -18,10 +19,32 @@
     <link rel="stylesheet" href="/assets/font/fontawesome-free-6.5.1-web/fontawesome-free-6.5.1-web/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 
 <body>
-    <%- body %>
+    <div class="AHomepage-box AHomepage-box-color">
+        <%- include('./adminSidebar') %>
+        <div class="box-content">
+            <a href="/login"><button class="box-content-button">RETURN TO LOG-IN PAGE</button></a>
+            <div id="content-container">
+                <%- body %>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            // Set active class on page load
+            function setActiveLink() {
+                const currentPath = window.location.pathname;
+                $(`.box-sidebar--item-link`).removeClass('active');
+                $(`.box-sidebar--item-link[href="${currentPath}"]`).addClass('active');
+            }
+
+            // Call setActiveLink on page load
+            setActiveLink();
+        });
+    </script>
 </body>
-<script src="/js/AProduct.js"></script>
+
 </html>

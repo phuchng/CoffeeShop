@@ -1,62 +1,6 @@
-<div class="AHomepage-box AHomepage-box-color">
-    <div class="box-sidebar">
-        <h1 class="box-sidebar--header">
-            <i class="fa-solid fa-network-wired"></i> Admin Dashboard
-        </h1>
-        <ul class="box-sidebar--list">
-            <li class="box-sidebar--item">
-                <a href="/admin/dashboard" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-gauge"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/users" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-user"></i>
-                    Users
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/products" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Products
-                </a>
-            </li> 
-            <li class="box-sidebar--item">
-                <a href="/admin/products/add" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-cart-plus"></i>
-                    Add New Products
-                </a>
-            </li> 
-        </ul>
-        <h3 class="box-sidebar-setAccout--header">Account</h3>
-        <ul class="box-sidebar--list">
-            <li class="box-sidebar--item">
-                <a href="/admin/profile" class="box-sidebar--item-link">
-                    Profile
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/create-admin" class="box-sidebar--item-link">
-                    Create new admin
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <form action="/logout" method="POST" style="display: inline; margin-left: 25px;">
-                    <button type="submit" class="box-sidebar--item-link"
-                        style="background: none; border: none; color: inherit; cursor: pointer; font: inherit; padding: 0;">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </div>
-    <div class="box-content">
-        <a href="/login"><button class="box-content-button">RETURN TO LOG-IN PAGE</button></a>
-        <div class="box-content-AProfile">
-            <span style="margin-bottom: 20px;">Admin Email: <%= admin.email %></span>
-        </div>
-        <div style="text-align: center;">
-            <a href="/admin/change-password"><button class="box-content-button-change">CHANGE PASSWORD</button></a>
-        </div>
-    </div>
-    
+<div class="box-content-AProfile">
+    <span style="margin-bottom: 20px;">Admin Email: <%= admin.email %></span>
+</div>
+<div style="text-align: center;">
+    <a href="/admin/change-password"><button class="box-content-button-change">CHANGE PASSWORD</button></a>
 </div>

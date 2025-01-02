@@ -3,9 +3,9 @@ var account = require('../models/Account');
 var passport = require('passport');
 var router = express.Router();
 
-var isAuthenticated = require('../middleware/authentication')
+var { isAuthenticated } = require('../middleware/authentication')
 
-router.get('/', isAuthenticated, async(req, res) => {
+router.get('/', isAuthenticated, async (req, res) => {
     res.render('profile', { layout: 'layoutProfile' });
 });
 
@@ -57,3 +57,5 @@ router.post('/change-address', isAuthenticated, async(req, res) => {
         res.status(500).json({ error: 'Failed to update address' });
     });
 })
+
+module.exports = router;
