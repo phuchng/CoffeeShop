@@ -5,7 +5,8 @@ var { Product } = require('../models/Product');
 var Account = require('../models/Account');
 var Cart = require('../models/Cart')
 var router = express.Router();
-var { isAuthenticated } = require('../middleware/authentication')
+var { isAuthenticated } = require('../middleware/authentication');
+const Order = require('../models/Order');
 
 router.get('/', isAuthenticated, async (req, res, next) => {
     const userID = req.user.id;
@@ -91,6 +92,44 @@ router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
         console.error('Error adding product to cart:', error);
         res.status(500).json({ success: false, message: 'Failed to remove product from6 cart.' });
     }
+})
+
+router.post('/order', isAuthenticated, async (req, res, next) => {
+    const { address, shipTime, specialInstruction } = req.body;
+    if (!address || !shipTime){
+        return res.status(400).json({ error: 'Address or Ship Time is Missing!'})
+    }
+
+    const accountID = req.user.id;
+    try {
+        // Retrieve the user's cart
+        const cart = await Cart.findOne({ account: accountID }).populate('products.product');
+
+        if (!cart || cart.products.length === 0){
+            return res.status(400).json({ error: 'Cart is Empty!'})
+        }
+
+        const newOrder = new Order({
+            account: accountID,
+            products: cart.products,
+            totalPrice: cart.totalPrice,
+            orderDate: new Date(),
+            shipTime: shipTime,
+            specialInstruction: specialInstruction || null
+        })
+
+        await newOrder.save();
+
+        // Clear the user's cart after order submission
+        cart.products = [];
+        cart.totalPrice = 0;
+        await cart.save();
+
+        res.status(200).json({ success: true, message: 'Order submitted successfully.' });
+    } catch (error) {
+        console.error('Error submitting order:', error);
+        res.status(500).json({ success: false, message: 'Failed to submit order.' });
+      }
 })
 
 module.exports = router;

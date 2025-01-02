@@ -134,7 +134,7 @@ Alternatively, host it locally by following the instructions below.
 -   [x] Registration
     -   [x] Verify user input: password complexity, full name, ...
     -   [x] AJAX checking username/email availability
-    -   [ ] Account activation by email
+    -   [x] Account activation by email
 -   [x] Social Sign-up/Sign-In (Google or Facebook)
 -   [x] Login to the website
 -   [x] Authorize website features

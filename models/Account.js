@@ -34,4 +34,6 @@ AccountSchema.set('toJSON', {
     virtuals: true
 })
 
-module.exports = mongoose.model('Account', AccountSchema);
+const Account = mongoose.model('Account', AccountSchema)
+
+module.exports = Account;
