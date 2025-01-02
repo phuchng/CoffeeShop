@@ -21,7 +21,43 @@ const productsData = [
         roast: 'Light',
         origin: 'Ethiopia',
         sales: 150,
-        tag: '6662f8929459785498999999'
+        tag: '6662f8929459785498999999',
+        ratings: {
+            averageRating: 4.5,
+            totalRatings: 6,
+            allRatings: [
+                {
+                    user: '666300959459785498000001',
+                    rating: 5,
+                    review: 'This coffee is amazing! The floral notes are so refreshing.'
+                },
+                {
+                    user: '666300959459785498000002',
+                    rating: 4,
+                    review: 'Good coffee, but a bit too light for my taste.'
+                },
+                {
+                    user: '666300959459785498000003',
+                    rating: 5,
+                    review: 'Best coffee I have ever had! Highly recommend.'
+                },
+                {
+                    user: '666300959459785498000004',
+                    rating: 3,
+                    review: 'It was okay. Expected a bit more flavor.'
+                },
+                {
+                    user: '666300959459785498000005',
+                    rating: 5,
+                    review: 'Absolutely love this coffee! The citrusy notes are perfect.'
+                },
+                {
+                    user: '666300959459785498000006',
+                    rating: 4,
+                    review: 'Great aroma and taste. Will buy again.'
+                }
+            ]
+        }
     },
     {
         name: 'Sumatra Mandheling',
@@ -34,7 +70,23 @@ const productsData = [
         roast: 'Dark',
         origin: 'Indonesia',
         sales: 120,
-        tag: '6662f8929459785498999999'
+        tag: '6662f8929459785498999999',
+        ratings: {
+            averageRating: 4,
+            totalRatings: 2,
+            allRatings: [
+                {
+                    user: '666300959459785498000007',
+                    rating: 4,
+                    review: 'Love the earthy flavor of this coffee!'
+                },
+                {
+                    user: '666300959459785498000008',
+                    rating: 4,
+                    review: 'A bit too strong for me, but still enjoyable.'
+                }
+            ]
+        }
     },
     {
         name: 'Colombian Supremo',
@@ -47,7 +99,18 @@ const productsData = [
         roast: 'Medium',
         origin: 'Colombia',
         sales: 200,
-        tag: '6662f8929459785498999999'
+        tag: '6662f8929459785498999999',
+        ratings: {
+            averageRating: 5,
+            totalRatings: 1,
+            allRatings: [
+                {
+                    user: '666300959459785498000009',
+                    rating: 5,
+                    review: 'Perfectly balanced coffee. My new favorite!'
+                }
+            ]
+        }
     },
     {
         name: 'Guatemalan Antigua',
@@ -60,7 +123,18 @@ const productsData = [
         roast: 'Medium',
         origin: 'Guatemala',
         sales: 100,
-        tag: '6662f8929459785498999999'
+        tag: '6662f8929459785498999999',
+        ratings: {
+            averageRating: 3,
+            totalRatings: 1,
+            allRatings: [
+                {
+                    user: '666300959459785498000010',
+                    rating: 3,
+                    review: 'Interesting flavor, but not my favorite.'
+                }
+            ]
+        }
     },
     {
         name: 'Brazilian Santos',
@@ -73,7 +147,18 @@ const productsData = [
         roast: 'Light',
         origin: 'Brazil',
         sales: 180,
-        tag: '6662f8929459785498999999'
+        tag: '6662f8929459785498999999',
+        ratings: {
+            averageRating: 4,
+            totalRatings: 1,
+            allRatings: [
+                {
+                    user: '666300959459785498000011',
+                    rating: 4,
+                    review: 'Great for everyday drinking. Smooth and mild.'
+                }
+            ]
+        }
     },
 
     // Tea
@@ -86,7 +171,12 @@ const productsData = [
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Black Tea', 'Bergamot Oil'],
         sales: 80,
-        tag: '6662f8929459785498888888'
+        tag: '6662f8929459785498888888',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Green Tea Sencha',
@@ -97,7 +187,12 @@ const productsData = [
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Green Tea'],
         sales: 90,
-        tag: '6662f8929459785498888888'
+        tag: '6662f8929459785498888888',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Chamomile Tea',
@@ -108,7 +203,12 @@ const productsData = [
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Chamomile Flowers'],
         sales: 60,
-        tag: '6662f8929459785498888888'
+        tag: '6662f8929459785498888888',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Peppermint Tea',
@@ -119,7 +219,12 @@ const productsData = [
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Peppermint Leaves'],
         sales: 70,
-        tag: '6662f8929459785498888888'
+        tag: '6662f8929459785498888888',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Rooibos Tea',
@@ -130,7 +235,12 @@ const productsData = [
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Rooibos'],
         sales: 50,
-        tag: '6662f8929459785498888888'
+        tag: '6662f8929459785498888888',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
 
     // Food
@@ -141,7 +251,12 @@ const productsData = [
         price: 4,
         category: 'Food',
         sales: 120,
-        tag: '6662f8929459785498777777'
+        tag: '6662f8929459785498777777',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Blueberry Muffin',
@@ -150,7 +265,12 @@ const productsData = [
         price: 3.5,
         category: 'Food',
         sales: 100,
-        tag: '6662f8929459785498777777'
+        tag: '6662f8929459785498777777',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Almond Biscotti',
@@ -159,7 +279,12 @@ const productsData = [
         price: 2.5,
         category: 'Food',
         sales: 80,
-        tag: '6662f8929459785498777777'
+        tag: '6662f8929459785498777777',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Spinach and Feta Quiche',
@@ -168,7 +293,12 @@ const productsData = [
         price: 5,
         category: 'Food',
         sales: 60,
-        tag: '6662f8929459785498777777'
+        tag: '6662f8929459785498777777',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Fruit Tart',
@@ -177,7 +307,12 @@ const productsData = [
         price: 6,
         category: 'Food',
         sales: 70,
-        tag: '6662f8929459785498777777'
+        tag: '6662f8929459785498777777',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
 
     // Juice
@@ -188,7 +323,12 @@ const productsData = [
         price: 5,
         category: 'Juice',
         sales: 150,
-        tag: '6662f8929459785498666666'
+        tag: '6662f8929459785498666666',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Green Detox Smoothie',
@@ -197,7 +337,12 @@ const productsData = [
         price: 7,
         category: 'Juice',
         sales: 120,
-        tag: '6662f8929459785498666666'
+        tag: '6662f8929459785498666666',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Carrot Ginger Juice',
@@ -206,7 +351,12 @@ const productsData = [
         price: 6,
         category: 'Juice',
         sales: 90,
-        tag: '6662f8929459785498666666'
+        tag: '6662f8929459785498666666',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Berry Blast Smoothie',
@@ -215,7 +365,12 @@ const productsData = [
         price: 7,
         category: 'Juice',
         sales: 110,
-        tag: '6662f8929459785498666666'
+        tag: '6662f8929459785498666666',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     },
     {
         name: 'Tropical Mango Smoothie',
@@ -224,7 +379,12 @@ const productsData = [
         price: 7,
         category: 'Juice',
         sales: 100,
-        tag: '6662f8929459785498666666'
+        tag: '6662f8929459785498666666',
+        ratings: {
+            averageRating: 0,
+            totalRatings: 0,
+            allRatings: []
+        }
     }
 ];
 
@@ -254,6 +414,7 @@ const tagsData = [
 const usersData = [];
 for (let i = 1; i <= 20; i++) {
     const user = {
+        _id: `6663009594597854980000${String(i).padStart(2, '0')}`,
         first_name: `User${i}`,
         last_name: `Test${i}`,
         email: `user${i}@example.com`,

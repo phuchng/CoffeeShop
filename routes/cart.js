@@ -1,9 +1,11 @@
+// File: routes\cart.js
+
 var express = require('express');
 var { Product } = require('../models/Product');
 var Account = require('../models/Account');
 var Cart = require('../models/Cart')
 var router = express.Router();
-var isAuthenticated = require('../middleware/authentication')
+var { isAuthenticated } = require('../middleware/authentication')
 
 router.get('/', isAuthenticated, async (req, res, next) => {
     const userID = req.user.id;
@@ -90,3 +92,5 @@ router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
         res.status(500).json({ success: false, message: 'Failed to remove product from cart.' });
     }
 })
+
+module.exports = router;

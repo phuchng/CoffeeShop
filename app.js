@@ -8,13 +8,13 @@ var passport = require('passport')
 var flash = require('connect-flash')
 var session = require('express-session');
 
-
 var adminRouter = require('./routes/admin');
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 var profileRouter = require('./routes/profile');
+var cartRouter = require('./routes/cart');
 var app = express();
 
 var fetchMenu = require('./middleware/menu');
@@ -22,7 +22,6 @@ var fetchMenu = require('./middleware/menu');
 
 
 require('./config/passport')(passport);
-
 
 app.use(session({
   secret: 'jidfpsogfdg',
@@ -64,6 +63,7 @@ app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
 app.use('/profile', profileRouter);
 app.use('/admin', adminRouter);
+app.use('/cart', cartRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -82,4 +82,3 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-//  hi

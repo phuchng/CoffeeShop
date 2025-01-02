@@ -1,3 +1,5 @@
+// File: models\Product.js
+
 const mongoose = require('mongoose');
 
 const ProductSchema = new mongoose.Schema({
@@ -21,9 +23,18 @@ const ProductSchema = new mongoose.Schema({
     },
     allRatings: [
       {
-        type: Number,
-        min: 1,
-        max: 5
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Account'
+        },
+        rating: {
+          type: Number,
+          min: 1,
+          max: 5
+        },
+        review: {
+          type: String
+        }
       }
     ]
   },
@@ -40,7 +51,7 @@ const TagScheme = new mongoose.Schema({
 ProductSchema.methods.updateRatings = function () {
   const totalRatings = this.ratings.allRatings.length;
   const averageRating = totalRatings 
-    ? this.ratings.allRatings.reduce((sum, rating) => sum + rating, 0) / totalRatings 
+    ? this.ratings.allRatings.reduce((sum, rating) => sum + rating.rating, 0) / totalRatings 
     : 0;
 
   this.ratings.totalRatings = totalRatings;

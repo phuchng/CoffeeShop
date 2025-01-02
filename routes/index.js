@@ -1,3 +1,5 @@
+// File: routes\index.js
+
 var express = require('express');
 var { Product } = require('../models/Product')
 var router = express.Router();
@@ -16,20 +18,120 @@ router.get('/', async function (req, res)  {
     return res.render('homepage', { productExample: productExample, topRated: topRatedProducts });
 });
 
-
 router.get('/product/:id', async function (req, res, next) {
     const productID = req.params.id;
     const productList = await Product.find({}).limit(4);
-    const productDetail = await Product.findById(productID);
-    return res.render('detail', { title: 'Detail', productList: productList, product: productDetail });
+    const productDetail = await Product.findById(productID).populate('ratings.allRatings.user');
+
+    // Handle case where product is not found
+    if (!productDetail) {
+        return res.status(404).render('error', { message: 'Product not found', error: { status: 404 } });
+    }
+
+    // Pagination for reviews
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 5;
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+    const paginatedReviews = productDetail.ratings.allRatings.slice(start, end);
+
+    const totalReviews = productDetail.ratings.allRatings.length;
+    const totalPages = Math.ceil(totalReviews / perPage);
+
+    if (req.xhr) {
+        // AJAX request: Send only JSON data for reviews
+        res.json({
+            reviews: paginatedReviews,
+            currentPage: page,
+            totalPages: totalPages
+        });
+    } else {
+        // Regular request: Render the full EJS template
+        return res.render('detail', {
+            title: 'Detail',
+            productList: productList,
+            product: productDetail,
+            reviews: paginatedReviews,
+            currentPage: page,
+            totalPages: totalPages
+        });
+    }
 });
+
+router.post('/product/:id/rate', async function (req, res, next) {
+    if (!req.isAuthenticated()) {
+        return res.status(401).json({ error: 'You must be logged in to rate a product.' });
+    }
+
+    const productId = req.params.id;
+    const { rating, review } = req.body;
+    const userId = req.user.id;
+
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found.' });
+        }
+
+        // Check if the user has already rated the product
+        const existingRatingIndex = product.ratings.allRatings.findIndex(r => r.user.toString() === userId);
+        if (existingRatingIndex !== -1) {
+            // Update existing rating
+            product.ratings.allRatings[existingRatingIndex].rating = rating;
+            product.ratings.allRatings[existingRatingIndex].review = review;
+        } else {
+            // Add new rating
+            product.ratings.allRatings.push({ user: userId, rating, review });
+        }
+
+        product.updateRatings();
+        await product.save();
+
+        res.status(200).json({ message: 'Rating updated successfully.', averageRating: product.ratings.averageRating });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to update rating.' });
+    }
+});
+
+router.delete('/product/:id/rate', async function (req, res, next) {
+    if (!req.isAuthenticated()) {
+        return res.status(401).json({ error: 'You must be logged in to delete a rating.' });
+    }
+
+    const productId = req.params.id;
+    const userId = req.user.id;
+
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found.' });
+        }
+
+        const existingRatingIndex = product.ratings.allRatings.findIndex(r => r.user.toString() === userId);
+        if (existingRatingIndex === -1) {
+            return res.status(404).json({ error: 'Rating not found.' });
+        }
+
+        // Remove the rating
+        product.ratings.allRatings.splice(existingRatingIndex, 1);
+        product.updateRatings();
+        await product.save();
+
+        res.status(200).json({ message: 'Rating deleted successfully.', averageRating: product.ratings.averageRating });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to delete rating.' });
+    }
+});
+
 
 router.get('/products', async function (req, res, next) {
     let query = {};
     let sortOption = {};
     const searchTerm = req.query.search;
     const page = parseInt(req.query.page) || 1; // Get page number from query, default to 1
-    const perPage = 9; // Products per page
+    const perPage = 8; // Products per page
     const skip = (page - 1) * perPage; // Calculate the number of products to skip
 
     // Search query

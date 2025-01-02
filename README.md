@@ -111,8 +111,8 @@ Alternatively, host it locally by following the instructions below.
 -   [x] SSR search, filtering, and paging
 -   [x] View product details
     -   [x] Show related products
-    -   [ ] View list of product reviews
-    -   [ ] AJAX paging product reviews
+    -   [x] View list of product reviews
+    -   [x] AJAX paging product reviews
 -   [x] Shopping cart
     -   [x] Add product to cart
     -   [x] View products in the cart
