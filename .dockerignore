@@ -1,0 +1,12 @@
+.vscode/
+.github/
+node_modules
+.git
+.gitignore
+.env
+Dockerfile
+.dockerignore
+*.py
+*.txt
+*.docx
+README.md

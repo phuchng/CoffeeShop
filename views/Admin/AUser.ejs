@@ -1,83 +1,97 @@
-<div class="AHomepage-box AHomepage-box-color">
-    <div class="box-sidebar">
-        <h1 class="box-sidebar--header">
-            <i class="fa-solid fa-network-wired"></i> Admin Dashboard
-        </h1>
-        <ul class="box-sidebar--list">
-            <li class="box-sidebar--item">
-                <a href="/admin/dashboard" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-gauge"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/users" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-user"></i>
-                    Users
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/products" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Products
-                </a>
-            </li> 
-            <li class="box-sidebar--item">
-                <a href="/admin/products/add" class="box-sidebar--item-link">
-                    <i class="fa-solid fa-cart-plus"></i>
-                    Add New Products
-                </a>
-            </li> 
-        </ul>
-        <h3 class="box-sidebar-setAccout--header">Account</h3>
-        <ul class="box-sidebar--list">
-            <li class="box-sidebar--item">
-                <a href="/admin/profile" class="box-sidebar--item-link">
-                    Profile
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <a href="/admin/create-admin" class="box-sidebar--item-link">
-                    Create new admin
-                </a>
-            </li>
-            <li class="box-sidebar--item">
-                <form action="/logout" method="POST" style="display: inline; margin-left: 25px;">
-                    <button type="submit" class="box-sidebar--item-link"
-                        style="background: none; border: none; color: inherit; cursor: pointer; font: inherit; padding: 0;">Logout</button>
-                </form>
-            </li>
-        </ul>
+<div class="box-content-user">
+    <div class="box-content-user-temp"></div>
+    <h3 class="box-content-user--header">Users</h3>
+    <ul class="box-content-user--list" id="user-list">
+        <!-- Users will be loaded here by AJAX -->
+    </ul>
+    <div class="box-content-user--pagination" id="user-pagination">
+        <!-- User pagination will be loaded here by AJAX -->
     </div>
-    <div class="box-content">
-        <a href="/login"><button class="box-content-button">RETURN TO LOG-IN PAGE</button></a>
-        <div class="box-content-user">
-            <div class="box-content-user-temp"></div>
-            <h3 class="box-content-user--header">User</h3>
-            <ul class="box-content-user--list">
-                <% users.forEach(user => { %>
+
+    <h3 class="box-content-user--header">Admins</h3>
+    <ul class="box-content-user--list" id="admin-list">
+        <!-- Admins will be loaded here by AJAX -->
+    </ul>
+    <div class="box-content-user--pagination" id="admin-pagination">
+        <!-- Admin pagination will be loaded here by AJAX -->
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        function loadUsers(page) {
+            $.ajax({
+                url: `/admin/users?page=${page}`,
+                method: 'GET',
+                success: function (data) {
+                    updateList(data.users, $('#user-list'));
+                    updatePagination(data.currentPage, data.totalPagesUsers, $('#user-pagination'), loadUsers);
+
+                    updateList(data.admins, $('#admin-list'));
+                    updatePagination(data.currentPage, data.totalPagesAdmins, $('#admin-pagination'), loadAdmins);
+                },
+                error: function (error) {
+                    console.error("Error fetching users:", error);
+                }
+            });
+        }
+
+        function loadAdmins(page) {
+            $.ajax({
+                url: `/admin/users?page=${page}`,
+                method: 'GET',
+                success: function (data) {
+                    updateList(data.admins, $('#admin-list'));
+                    updatePagination(data.currentPage, data.totalPagesAdmins, $('#admin-pagination'), loadAdmins);
+                },
+                error: function (error) {
+                    console.error("Error fetching admins:", error);
+                }
+            });
+        }
+
+        function updateList(accounts, listElement) {
+            listElement.empty();
+            accounts.forEach(account => {
+                const listItem = `
                     <li class="box-content-user--item">
                         <img src="/img/avatar.jpg" height="36" width="36" alt="">
                         <div class="box-content-user--item-content">
-                            <span class="box-content-user--item-email">
-                                <%= user.email %>
-                            </span>
-                            <span class="box-content-user--item-role">
-                                Role: <%= user.role %>
-                            </span>
+                            <span class="box-content-user--item-email">${account.email}</span>
+                            <span class="box-content-user--item-role">Role: ${account.role}</span>
                         </div>
                     </li>
-                <% }); %>
-            </ul>
-            <div class="box-content-user--pagination">
-                <% if (currentPage > 1) { %>
-                    <a href="?page=<%= currentPage - 1 %>"><button>PREV</button></a>
-                <% } %>
-                <span><%= currentPage %>/<%= totalPages %></span>
-                <% if (currentPage < totalPages) { %>
-                    <a href="?page=<%= currentPage + 1 %>"><button>NEXT</button></a>
-                <% } %>
-            </div>
-        </div>
-    </div>
-</div>
+                `;
+                listElement.append(listItem);
+            });
+        }
+
+        function updatePagination(currentPage, totalPages, paginationElement, loadFunction) {
+            paginationElement.empty();
+            if (currentPage > 1) {
+                paginationElement.append(`<button data-page="${currentPage - 1}">PREV</button>`);
+            }
+            paginationElement.append(`<span>${currentPage}/${totalPages}</span>`);
+            if (currentPage < totalPages) {
+                paginationElement.append(`<button data-page="${currentPage + 1}">NEXT</button>`);
+            }
+
+            paginationElement.off('click', 'button').on('click', 'button', function () {
+                const page = $(this).data('page');
+                loadFunction(page);
+            });
+        }
+
+        $('#user-pagination').on('click', 'button', function () {
+            const page = $(this).data('page');
+            loadUsers(page);
+        });
+
+        $('#admin-pagination').on('click', 'button', function () {
+            const page = $(this).data('page');
+            loadAdmins(page);
+        });
+
+        loadUsers(1);
+        loadAdmins(1);
+    });
+</script>

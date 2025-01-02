@@ -5,12 +5,23 @@ const Account = require('../models/Account');
 const { isAdmin } = require('../middleware/authentication');
 const bcrypt = require('bcrypt');
 
+// Function to render admin pages with AJAX support
+function renderAdminPage(req, res, page, options = {}) {
+    if (req.xhr) {
+        // For AJAX requests, send only the partial content
+        res.render(`Admin/${page}`, { ...options, layout: false });
+    } else {
+        // For regular requests, render the full layout
+        res.render(`Admin/${page}`, { ...options, layout: 'layouts/layoutAdmin' });
+    }
+}
+
 // Dashboard
 router.get('/dashboard', isAdmin, async (req, res) => {
     try {
         const totalUsers = await Account.countDocuments({ role: 'user' });
         const totalProducts = await Product.countDocuments({});
-        res.render('Admin/ADashboard', { layout: 'layouts/layoutAdmin', totalUsers, totalProducts });
+        renderAdminPage(req, res, 'ADashboard', { totalUsers, totalProducts });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -24,11 +35,35 @@ router.get('/users', isAdmin, async (req, res) => {
         const perPage = 5;
         const skip = (page - 1) * perPage;
 
+        // Fetch users and admins separately
         const users = await Account.find({ role: 'user' }).skip(skip).limit(perPage);
-        const totalUsers = await Account.countDocuments({ role: 'user' });
-        const totalPages = Math.ceil(totalUsers / perPage);
+        const admins = await Account.find({ role: 'admin' }).skip(skip).limit(perPage);
 
-        res.render('Admin/AUser', { layout: 'layouts/layoutAdmin', users, currentPage: page, totalPages });
+        const totalUsers = await Account.countDocuments({ role: 'user' });
+        const totalAdmins = await Account.countDocuments({ role: 'admin' });
+
+        const totalPagesUsers = Math.ceil(totalUsers / perPage);
+        const totalPagesAdmins = Math.ceil(totalAdmins / perPage);
+
+        if (req.xhr) {
+            // Respond with JSON for AJAX requests
+            res.json({
+                users,
+                admins,
+                currentPage: page,
+                totalPagesUsers,
+                totalPagesAdmins
+            });
+        } else {
+            // Render the full page for initial requests
+            renderAdminPage(req, res, 'AUser', {
+                users,
+                admins,
+                currentPage: page,
+                totalPagesUsers,
+                totalPagesAdmins
+            });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -46,7 +81,21 @@ router.get('/products', isAdmin, async (req, res) => {
         const totalProducts = await Product.countDocuments({});
         const totalPages = Math.ceil(totalProducts / perPage);
 
-        res.render('Admin/AProduct', { layout: 'layouts/layoutAdmin', products, currentPage: page, totalPages });
+        if (req.xhr) {
+            // Respond with JSON for AJAX requests
+            res.json({
+                products,
+                currentPage: page,
+                totalPages
+            });
+        } else {
+            // Render the full page for initial requests
+            renderAdminPage(req, res, 'AProduct', {
+                products,
+                currentPage: page,
+                totalPages
+            });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -57,7 +106,7 @@ router.get('/products', isAdmin, async (req, res) => {
 router.get('/products/add', isAdmin, async (req, res) => {
     try {
         const tags = await Tag.find({});
-        res.render('Admin/AAddProduct', { layout: 'layouts/layoutAdmin', tags });
+        renderAdminPage(req, res, 'AAddProduct', { tags });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -100,7 +149,7 @@ router.get('/products/update/:id', isAdmin, async (req, res) => {
         if (!product) {
             return res.status(404).send('Product not found');
         }
-        res.render('Admin/AUpdateProduct', { layout: 'layouts/layoutAdmin', product, tags });
+        renderAdminPage(req, res, 'AUpdateProduct', { product, tags });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -137,7 +186,7 @@ router.post('/products/update/:id', isAdmin, async (req, res) => {
 });
 
 // Delete Product
-router.get('/products/delete/:id', isAdmin, async (req, res) => {
+router.delete('/products/delete/:id', isAdmin, async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
         if (!deletedProduct) {
@@ -157,7 +206,7 @@ router.get('/products/:id', isAdmin, async (req, res) => {
         if (!product) {
             return res.status(404).send('Product not found');
         }
-        res.render('Admin/Adetail', { layout: 'layouts/layoutAdmin', product });
+        renderAdminPage(req, res, 'Adetail', { product });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -166,12 +215,12 @@ router.get('/products/:id', isAdmin, async (req, res) => {
 
 // Admin Profile - GET
 router.get('/profile', isAdmin, (req, res) => {
-    res.render('Admin/AProfile', { layout: 'layouts/layoutAdmin', admin: req.user });
+    renderAdminPage(req, res, 'AProfile', { admin: req.user });
 });
 
 // Change Password - GET
 router.get('/change-password', isAdmin, (req, res) => {
-    res.render('Admin/AChangePass', { layout: 'layouts/layoutAdmin' });
+    renderAdminPage(req, res, 'AChangePass');
 });
 
 // Change Password - POST
@@ -201,7 +250,7 @@ router.post('/change-password', isAdmin, async (req, res) => {
 
 // Create New Admin - GET
 router.get('/create-admin', isAdmin, (req, res) => {
-    res.render('Admin/ACreateNewAdmin', { layout: 'layouts/layoutAdmin' });
+    renderAdminPage(req, res, 'ACreateNewAdmin');
 });
 
 // Create New Admin - POST

@@ -18,12 +18,14 @@
             <div class="infoProduct">
                 <span class="nameP"><%= product.name %></span>
                 <div class="evalP">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    94 reviews
+                    <% for (let i = 0; i < 5; i++) { %>
+                        <% if (i < Math.round(product.ratings.averageRating)) { %>
+                            <i class="fa-solid fa-star"></i>
+                        <% } else { %>
+                            <i class="fa-regular fa-star"></i>
+                        <% } %>
+                    <% } %>
+                    <%= product.ratings.totalRatings %> reviews
                 </div>
                 <span class="costP">$<%= product.price %></span>
                 <span class="sku"><strong>SKU</strong> 2DECEARGRET</span>
@@ -61,12 +63,14 @@
                         <a href="/product/<%= product._id %>" class="img"><img src="/assets/images/<%= product.image %>"  width="230" height="230" alt="" class="image"></a>
                         <span class="cost">$<%= product.price %></span>
                         <div class="eval">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            94 reviews
+                            <% for (let i = 0; i < 5; i++) { %>
+                                <% if (i < Math.round(product.ratings.averageRating)) { %>
+                                    <i class="fa-solid fa-star"></i>
+                                <% } else { %>
+                                    <i class="fa-regular fa-star"></i>
+                                <% } %>
+                            <% } %>
+                            <%= product.ratings.totalRatings %> reviews
                         </div>
                         <span class="name">
                             <a href="/product/<%= product._id %>"><%= product.name %></a>
@@ -75,15 +79,81 @@
                 <% }) %>
             </ul>
         </div>
+        <!-- Reviews Section -->
+        <div class="reviews-section">
+            <h2>Reviews</h2>
+            <div id="reviews-list">
+                <% if (reviews.length > 0) { %>
+                    <% reviews.forEach(review => { %>
+                        <div class="review">
+                            <p class="review-user"><%= review.user.first_name %> <%= review.user.last_name %></p>
+                            <div class="review-rating">
+                                <% for (let i = 0; i < 5; i++) { %>
+                                    <% if (i < review.rating) { %>
+                                        <i class="fa-solid fa-star"></i>
+                                    <% } else { %>
+                                        <i class="fa-regular fa-star"></i>
+                                    <% } %>
+                                <% } %>
+                            </div>
+                            <p class="review-text"><%= review.review %></p>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No reviews yet.</p>
+                <% } %>
+            </div>
+            <!-- Pagination for Reviews -->
+            <div id="reviews-pagination" class="pagination">
+                <% if (totalPages > 1) { %>
+                    <% if (currentPage > 1) { %>
+                        <a href="#" data-page="<%= currentPage - 1 %>">Previous</a>
+                    <% } %>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <a href="#" data-page="<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+                    <% } %>
+                    <% if (currentPage < totalPages) { %>
+                        <a href="#" data-page="<%= currentPage + 1 %>">Next</a>
+                    <% } %>
+                <% } %>
+            </div>
+            <!-- Review Form -->
+            <% if (isAuthenticated) { %>
+                <div class="review-form">
+                    <h3></h3>
+                    <form id="review-form">
+                        <div>
+                            <label for="rating">Rating:</label>
+                            <select id="rating" name="rating">
+                                <option value="5">5 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="2">2 Stars</option>
+                                <option value="1">1 Star</option>
+                            </select>
+                        </div>
+                        <textarea id="review-text" name="review" placeholder="Write your review here..."></textarea>
+                        <button type="submit" id="submit-review">Submit Review</button>
+                        <button type="button" id="delete-review" style="display: none;">Delete Review</button>
+                    </form>
+                </div>
+            <% } else { %>
+                <p><a href="/login">Login</a> to leave a review.</p>
+            <% } %>            
+        </div>
     </div>
     
 </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
-    var optionSelect;
+    var optionSelect = "<%= product.servingOptions[0] %>"; // Initialize with the first serving option
 
     document.querySelectorAll('.option-span').forEach(span => {
+        // Add 'selected' class to the first option by default
+        if (optionSelect === span.dataset.value) {
+            span.classList.add('selected');
+        }
+        
         span.addEventListener('click', () => {
             // Remove 'selected' class from all spans
             document.querySelectorAll('.option-span').forEach(sp => sp.classList.remove('selected'));
@@ -97,30 +167,26 @@
 
     const addProduct = document.getElementById("cartAdding");
 
-
     addProduct.addEventListener('click', async() => {
         const quantity = document.getElementById('quantity').value;
 
-
         try{
-            const response = await fetch('/cart/add-product', {
+            const response = await fetch('/cart/add-cart', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    productId: '<%= product._id %>',
+                    productID: '<%= product._id %>',
                     quantity: parseInt(quantity),
                     servingOption: optionSelect
                 }),
             });
 
             const result = await response.json();
-            if (result.success) {
-                const data = await response.json();
-                alert(data.message);
+            if (response.ok) {
+                alert(result.message);
                 window.location.href = '/cart';
             } else {
-                const error = await response.json();
-                alert(`Error: ${error.error}`)
+                alert(`Error: ${result.error}`);
             }
         }
         catch (err) {
@@ -128,4 +194,165 @@
             alert('An error occurred. Please try again.');
         }
     })
+
+    $(document).ready(function() {
+        function loadReviews(page) {
+            $.ajax({
+                url: `/product/<%= product._id %>?page=${page}`,
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    updateReviewsList(data.reviews);
+                    updateReviewsPagination(data.currentPage, data.totalPages);
+                },
+                error: function(error) {
+                    console.error("Error fetching reviews:", error);
+                }
+            });
+        }
+
+        function updateReviewsList(reviews) {
+            const reviewsList = $('#reviews-list');
+            reviewsList.empty();
+
+            if (reviews.length === 0) {
+                reviewsList.append('<p>No reviews yet.</p>');
+                return;
+            }
+
+            reviews.forEach(review => {
+                let stars = '';
+                for (let i = 0; i < 5; i++) {
+                    stars += i < review.rating ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>';
+                }
+
+                const reviewItem = `
+                    <div class="review">
+                        <p class="review-user">${review.user.first_name} ${review.user.last_name}</p>
+                        <div class="review-rating">
+                            ${stars}
+                        </div>
+                        <p class="review-text">${review.review}</p>
+                    </div>
+                `;
+                reviewsList.append(reviewItem);
+            });
+        }
+
+        function updateReviewsPagination(currentPage, totalPages) {
+            const pagination = $('#reviews-pagination');
+            pagination.empty();
+
+            if (totalPages <= 1) return;
+
+            if (currentPage > 1) {
+                pagination.append(`<a href="#" data-page="${currentPage - 1}">Previous</a>`);
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                pagination.append(`<a href="#" data-page="${i}" ${i === currentPage ? 'class="active"' : ''}>${i}</a>`);
+            }
+
+            if (currentPage < totalPages) {
+                pagination.append(`<a href="#" data-page="${currentPage + 1}">Next</a>`);
+            }
+        }
+
+        // Event delegation for pagination links
+        $('#reviews-pagination').on('click', 'a', function(e) {
+            e.preventDefault();
+            const page = $(this).data('page');
+            loadReviews(page);
+        });
+
+        $('#review-form').on('submit', function(e) {
+            e.preventDefault();
+            const rating = $('#rating').val();
+            const review = $('#review-text').val();
+
+            $.ajax({
+                url: `/product/<%= product._id %>/rate`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ rating, review }),
+                success: function(response) {
+                    alert('Review added successfully!');
+                    loadReviews(1); // Reload reviews
+                },
+                error: function(error) {
+                    console.error("Error submitting review:", error);
+                    alert(error.responseJSON.error);
+                }
+            });
+        });
+
+        function checkUserReview() {
+            $.ajax({
+                url: `/product/<%= product._id %>`,
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    const userId = '<%= user ? user.id : null %>';
+                    const userReview = data.reviews.find(review => review.user._id === userId);
+                    if (userReview) {
+                        $('#review-form h3').text('Edit Your Review');
+                        $('#submit-review').text('Update Review');
+                        $('#delete-review').show();
+                        $('#rating').val(userReview.rating);
+                        $('#review-text').val(userReview.review);
+                    } else {
+                        $('#review-form h3').text('Add Your Review');
+                        $('#submit-review').text('Submit Review');
+                        $('#delete-review').hide();
+                        $('#rating').val('5');
+                        $('#review-text').val('');
+                    }
+                },
+                error: function(error) {
+                    console.error("Error fetching reviews:", error);
+                }
+            });
+        }
+
+        $('#review-form').on('submit', function(e) {
+            e.preventDefault();
+            const rating = $('#rating').val();
+            const review = $('#review-text').val();
+
+            $.ajax({
+                url: `/product/<%= product._id %>/rate`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ rating, review }),
+                success: function(response) {
+                    alert('Review updated successfully!');
+                    loadReviews(1); // Reload reviews
+                    checkUserReview();
+                },
+                error: function(error) {
+                    console.error("Error submitting review:", error);
+                    alert(error.responseJSON.error);
+                }
+            });
+        });
+
+        $('#delete-review').on('click', function() {
+            $.ajax({
+                url: `/product/<%= product._id %>/rate`,
+                method: 'DELETE',
+                success: function(response) {
+                    alert('Review deleted successfully!');
+                    loadReviews(1); // Reload reviews
+                    checkUserReview();
+                },
+                error: function(error) {
+                    console.error("Error deleting review:", error);
+                    alert(error.responseJSON.error);
+                }
+            });
+        });
+
+        loadReviews(1); // Initial reviews load
+        checkUserReview();
+    });
 </script>
