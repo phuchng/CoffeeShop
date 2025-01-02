@@ -3,10 +3,10 @@ name: CoffeeShop CI/CD
 on:
   push:
     branches:
-      - main  # Or master, if that's your default branch
+      - main  
   pull_request:
     branches:
-      - main  # Or master
+      - main  
 
 jobs:
   build:
@@ -24,10 +24,13 @@ jobs:
       - name: Install dependencies
         run: npm ci --unsafe-perm
 
+      - name: Run tests
+        run: npm test
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'  # Only deploy on push to main
+    if: github.ref == 'refs/heads/main'  
 
     steps:
       - name: Checkout code

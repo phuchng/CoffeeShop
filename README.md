@@ -26,6 +26,8 @@
 
 ## Getting Started
 
+Try the demo at https://coffeeshop-demo.onrender.com/, or alternatively, host it locally by following the instructions below.
+
 1. **Clone the repository:**
 
     ```bash
@@ -50,7 +52,10 @@
 4. **Populate the database (optional):**
     -   Run `npm run seed` to add initial data to the database.
 
-5. **Start the application:**
+5. **Test the application (optional:)**
+    - Run `npm test` to run the automated test suites
+    
+6. **Start the application:**
 
     ```bash
     npm start
@@ -75,8 +80,8 @@
 -   **Registered Users:**
     -   Log in to the application.
     -   Manage your profile information.
-    -   (TODO) Add products to your cart and proceed to checkout.
-    -   (TODO) View your order history.
+    -   Add products to your cart and proceed to checkout.
+    -   View your order history.
 -   **Admin Users:**
     -   Access the admin panel to manage products, users, and orders.
 
@@ -110,9 +115,10 @@
     -   [ ] View list of product reviews
     -   [ ] AJAX paging product reviews
 -   [x] Shopping cart
-    -   [ ] Add product to cart
-    -   [ ] View products in the cart
-    -   [ ] AJAX update the product count in the cart
+    -   [x] Add product to cart
+    -   [x] View products in the cart
+    -   [x] AJAX update the product count in the cart
+    
 ### 3. Authentication and Authorization
 
 -   [x] Use a popular authentication library (Passport.js)
@@ -122,7 +128,7 @@
     -   [ ] Account activation by email
 -   [ ] Social Sign-up/Sign-In (Google or Facebook)
 -   [x] Login to the website
--   [ ] Authorize website features
+-   [x] Authorize website features
 -   [ ] Forgot password by email
 
 ### 4. Features for Logged-in Users
@@ -132,7 +138,7 @@
     -   [ ] Update the user's avatar
     -   [x] Update password (The user must input old password to update new password)
 -   [ ] Checkout and payment
-    -   [ ] Bind the shopping cart to the user when login
+    -   [x] Bind the shopping cart to the user when login
     -   [ ] Input shipping details
     -   [ ] Process payment
     -   [ ] View order list and status
@@ -179,4 +185,5 @@
 -   [ ] Analyze and track user actions
 -   [ ] Show interactive chart in reports
 -   [ ] Dockerize your project
--   [ ] CI/CD
+-   [x] CI/CD
+-   [x] Automated testing

@@ -9,29 +9,28 @@ router.get('/', async function(req, res, next) {
   res.render('login', { title: 'Login' })
 });
 
-router.post('/', async function (req, res, next){ 
+router.post('/', function (req, res, next) {
   passport.authenticate('local', (err, user, info) => {
-    if (err) return next(err);
-
+    if (err) {
+      return next(err);
+    }
     if (!user) {
-      // Failure: Set flash message explicitly for error_msg
-      req.flash('error_msg', info.message); // info.message contains the error from the strategy
+      req.flash('error_msg', info.message);
       return res.redirect('/login');
     }
-
-    // Success: Log the user in
     req.logIn(user, (err) => {
-      if (err) return next(err);
-
+      if (err) {
+        return next(err);
+      }
       // Redirect based on user role
       if (user.role === 'admin') {
         return res.redirect('/admin/dashboard');
       } else {
-        req.flash('success_msg', `Welcome back, ${user.first_name}!`); // Customize success message
+        req.flash('success_msg', `Welcome back, ${user.first_name}!`);
         return res.redirect('/');
       }
     });
-  })(req, res, next);
+  })(req, res, next); // Pass req, res, and next here
 });
 
 module.exports = router;
