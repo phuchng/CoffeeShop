@@ -142,15 +142,15 @@
 
 -   [x] Update your admin profile
 -   [x] View account list
-    -   [x] Filter account by name, email
-    -   [x] Sort account by name, email, registration time, ...
+    -   [ ] Filter account by name, email
+    -   [ ] Sort account by name, email, registration time, ...
     -   [x] AJAX paging account list
 -   [x] View account details
--   [x] Ban/unban an account
+-   [ ] Ban/unban an account
 -   [ ] Manage product categories, manufacturer
 -   [x] View product list
-    -   [x] Filter product by name, category, manufacturer
-    -   [x] Sort product by creation time, price, total purchase
+    -   [ ] Filter product by name, category, manufacturer
+    -   [ ] Sort product by creation time, price, total purchase
     -   [x] AJAX paging product list
 -   [x] Create a new product
     -   [ ] Upload multiple product photos

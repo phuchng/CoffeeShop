@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
-    "seed": "node seedData.js"
+    "seed": "node mockData.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

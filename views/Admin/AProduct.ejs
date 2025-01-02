@@ -21,31 +21,70 @@
                 Creation time
             </span>
         </div>
-        <ul class="box-content-product--list">
-            <% products.forEach(product => { %>
-                <li class="box-content-product--item">
-                    <div class="box-content-product--item-name">
-                        <img src="/assets/images/<%= product.image %>" height="36" width="36" alt="">
-                        <a href="/admin/products/<%= product._id %>"><%= product.name %></a>
-                    </div>
-
-                    <span class="box-content-product--item-cost">
-                        $<%= product.price %>
-                    </span>
-                    <span class="box-content-product--item-date">
-                        <%= product.createdAt.toDateString() %>
-                    </span>
-                </li>
-            <% }); %>
+        <ul class="box-content-product--list" id="product-list">
+            <!-- Products will be loaded here by AJAX -->
         </ul>
-        <div class="box-content-product--pagination">
-            <% if (currentPage > 1) { %>
-                <a href="?page=<%= currentPage - 1 %>"><button>PREV</button></a>
-            <% } %>
-            <span><%= currentPage %>/<%= totalPages %></span>
-            <% if (currentPage < totalPages) { %>
-                <a href="?page=<%= currentPage + 1 %>"><button>NEXT</button></a>
-            <% } %>
+        <div class="box-content-product--pagination" id="pagination">
+            <!-- Pagination will be loaded here by AJAX -->
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        function loadProducts(page) {
+            $.ajax({
+                url: `/admin/products?page=${page}`,
+                method: 'GET',
+                success: function (data) {
+                    updateProductList(data.products);
+                    updatePagination(data.currentPage, data.totalPages);
+                },
+                error: function (error) {
+                    console.error("Error fetching products:", error);
+                }
+            });
+        }
+
+        function updateProductList(products) {
+            const productList = $('#product-list');
+            productList.empty();
+
+            products.forEach(product => {
+                const productItem = `
+                    <li class="box-content-product--item">
+                        <div class="box-content-product--item-name">
+                            <img src="/assets/images/${product.image}" height="36" width="36" alt="">
+                            <a href="/admin/products/${product._id}">${product.name}</a>
+                        </div>
+                        <span class="box-content-product--item-cost">$${product.price}</span>
+                        <span class="box-content-product--item-date">${new Date(product.createdAt).toDateString()}</span>
+                    </li>
+                `;
+                productList.append(productItem);
+            });
+        }
+
+        function updatePagination(currentPage, totalPages) {
+            const pagination = $('#pagination');
+            pagination.empty();
+
+            if (currentPage > 1) {
+                pagination.append(`<button data-page="${currentPage - 1}">PREV</button>`);
+            }
+
+            pagination.append(`<span>${currentPage}/${totalPages}</span>`);
+
+            if (currentPage < totalPages) {
+                pagination.append(`<button data-page="${currentPage + 1}">NEXT</button>`);
+            }
+        }
+
+        $('#pagination').on('click', 'button', function () {
+            const page = $(this).data('page');
+            loadProducts(page);
+        });
+
+        loadProducts(1); // Load initial products
+    });
+</script>

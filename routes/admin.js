@@ -35,11 +35,35 @@ router.get('/users', isAdmin, async (req, res) => {
         const perPage = 5;
         const skip = (page - 1) * perPage;
 
+        // Fetch users and admins separately
         const users = await Account.find({ role: 'user' }).skip(skip).limit(perPage);
-        const totalUsers = await Account.countDocuments({ role: 'user' });
-        const totalPages = Math.ceil(totalUsers / perPage);
+        const admins = await Account.find({ role: 'admin' }).skip(skip).limit(perPage);
 
-        renderAdminPage(req, res, 'AUser', { users, currentPage: page, totalPages });
+        const totalUsers = await Account.countDocuments({ role: 'user' });
+        const totalAdmins = await Account.countDocuments({ role: 'admin' });
+
+        const totalPagesUsers = Math.ceil(totalUsers / perPage);
+        const totalPagesAdmins = Math.ceil(totalAdmins / perPage);
+
+        if (req.xhr) {
+            // Respond with JSON for AJAX requests
+            res.json({
+                users,
+                admins,
+                currentPage: page,
+                totalPagesUsers,
+                totalPagesAdmins
+            });
+        } else {
+            // Render the full page for initial requests
+            renderAdminPage(req, res, 'AUser', {
+                users,
+                admins,
+                currentPage: page,
+                totalPagesUsers,
+                totalPagesAdmins
+            });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -57,7 +81,21 @@ router.get('/products', isAdmin, async (req, res) => {
         const totalProducts = await Product.countDocuments({});
         const totalPages = Math.ceil(totalProducts / perPage);
 
-        renderAdminPage(req, res, 'AProduct', { products, currentPage: page, totalPages });
+        if (req.xhr) {
+            // Respond with JSON for AJAX requests
+            res.json({
+                products,
+                currentPage: page,
+                totalPages
+            });
+        } else {
+            // Render the full page for initial requests
+            renderAdminPage(req, res, 'AProduct', {
+                products,
+                currentPage: page,
+                totalPages
+            });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');

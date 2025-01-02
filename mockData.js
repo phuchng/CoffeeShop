@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Product, Tag } = require('./models/Product'); 
+const { Product, Tag } = require('./models/Product');
 const Account = require('./models/Account');
 const bcrypt = require('bcrypt');
 require('dotenv').config({ path: '.env' });
@@ -251,7 +251,28 @@ const tagsData = [
     }
 ]
 
-async function addProductsAndAdmin() {
+const usersData = [];
+for (let i = 1; i <= 20; i++) {
+    const user = {
+        first_name: `User${i}`,
+        last_name: `Test${i}`,
+        email: `user${i}@example.com`,
+        password: `password${i}`, // This will be hashed later
+        role: 'user',
+        address: {
+            first_name: `AddressFName${i}`,
+            last_name: `AddressLName${i}`,
+            company: `Company${i}`,
+            address: `${i} Main St`,
+            apartment: `Apt ${i}`,
+            phone: `555-123-${1000 + i}`,
+            isDefault: i === 1, // Make the first user's address default
+        }
+    };
+    usersData.push(user);
+}
+
+async function addMockData() {
     try {
         // Add Tags
         await Tag.deleteMany({});
@@ -262,11 +283,20 @@ async function addProductsAndAdmin() {
         await Product.deleteMany({});
         await Product.insertMany(productsData);
         console.log('Products added successfully!');
-  
+
+        // Hash passwords and add users
+        await Account.deleteMany({});
+        for (const user of usersData) {
+            const hashedPassword = await bcrypt.hash(user.password, 10);
+            const newUser = new Account({ ...user, password: hashedPassword });
+            await newUser.save();
+        }
+        console.log('Users added successfully!');
+
         // Add Admin Account
         const existingAdmin = await Account.findOne({ email: 'admin@gmail.com' });
         if (!existingAdmin) {
-            const hashedPassword = await bcrypt.hash('1234', 10);
+            const hashedPassword = await bcrypt.hash('password1234', 10);
             const adminAccount = new Account({
                 first_name: 'Admin',
                 last_name: 'User',
@@ -286,4 +316,4 @@ async function addProductsAndAdmin() {
     }
 }
 
-addProductsAndAdmin();
+addMockData();
