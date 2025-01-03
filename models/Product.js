@@ -1,67 +1,66 @@
-// File: models\Product.js
-
 const mongoose = require('mongoose');
 
 const ProductSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  image: String, // URL or path to the image
-  description: String,
-  price: Number,
-  category: { type: String, enum: ['Coffee', 'Tea', 'Food', 'Juice'] },
-  servingOptions: [String],
-  grind: { type: String, enum: ['Whole Bean', 'Ground'] },
-  roast: { type: String, enum: ['Light', 'Medium', 'Dark'] },
-  origin: String,
-  ratings: {
-    averageRating: {
-      type: Number,
-      default: 0
-    },
-    totalRatings: {
-      type: Number,
-      default: 0
-    },
-    allRatings: [
-      {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Account'
+    name: { type: String, required: true },
+    image: String, // URL or path to the main image
+    images: [String], // Array of URLs or paths to the images
+    description: String,
+    price: Number,
+    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' }, // Reference to Category model
+    servingOptions: [String],
+    grind: { type: String, enum: ['Whole Bean', 'Ground'] },
+    roast: { type: String, enum: ['Light', 'Medium', 'Dark'] },
+    origin: String,
+    ratings: {
+        averageRating: {
+            type: Number,
+            default: 0
         },
-        rating: {
-          type: Number,
-          min: 1,
-          max: 5
+        totalRatings: {
+            type: Number,
+            default: 0
         },
-        review: {
-          type: String
-        }
-      }
-    ]
-  },
-  ingredients: [String],
-  sales: { type: Number, default: 0 },
-  tag: { type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }
+        allRatings: [
+            {
+                user: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Account'
+                },
+                rating: {
+                    type: Number,
+                    min: 1,
+                    max: 5
+                },
+                review: {
+                    type: String
+                }
+            }
+        ]
+    },
+    ingredients: [String],
+    sales: { type: Number, default: 0 },
+    tag: { type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }
 }, { timestamps: true });
 
 const TagScheme = new mongoose.Schema({
-  tag: { type: String, required: true },
-  category: { type: String, enum: ['Coffee', 'Tea', 'Food', 'Juice'] },
+    tag: { type: String, required: true },
+    category: { type: String, enum: ['Coffee', 'Tea', 'Food', 'Juice'] },
 })
 
 ProductSchema.methods.updateRatings = function () {
-  const totalRatings = this.ratings.allRatings.length;
-  const averageRating = totalRatings 
-    ? this.ratings.allRatings.reduce((sum, rating) => sum + rating.rating, 0) / totalRatings 
-    : 0;
+    const totalRatings = this.ratings.allRatings.length;
+    const averageRating = totalRatings
+        ? this.ratings.allRatings.reduce((sum, rating) => sum + rating.rating, 0) / totalRatings
+        : 0;
 
-  this.ratings.totalRatings = totalRatings;
-  this.ratings.averageRating = averageRating.toFixed(2); // Keep it to 2 decimal places
+    this.ratings.totalRatings = totalRatings;
+    this.ratings.averageRating = averageRating.toFixed(2); // Keep it to 2 decimal places
 };
 
 const Product = mongoose.model('Product', ProductSchema);
 const Tag = mongoose.model('Tag', TagScheme);
 
 module.exports = {
-  Product,
-  Tag
+    Product,
+    Tag
 };

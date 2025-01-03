@@ -4,6 +4,9 @@ const { Product, Tag } = require('../models/Product');
 const Account = require('../models/Account');
 const { isAdmin } = require('../middleware/authentication');
 const bcrypt = require('bcrypt');
+const Category = require('../models/Category');
+const multer = require('multer');
+const path = require('path');
 
 // Function to render admin pages with AJAX support
 function renderAdminPage(req, res, page, options = {}) {
@@ -15,6 +18,18 @@ function renderAdminPage(req, res, page, options = {}) {
         res.render(`Admin/${page}`, { ...options, layout: 'layouts/layoutAdmin' });
     }
 }
+
+// Multer configuration for file uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/assets/images/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
 
 // Dashboard
 router.get('/dashboard', isAdmin, async (req, res) => {
@@ -106,7 +121,8 @@ router.get('/products', isAdmin, async (req, res) => {
 router.get('/products/add', isAdmin, async (req, res) => {
     try {
         const tags = await Tag.find({});
-        renderAdminPage(req, res, 'AAddProduct', { tags });
+        const categories = await Category.find({});
+        renderAdminPage(req, res, 'AAddProduct', { tags, categories });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -114,9 +130,12 @@ router.get('/products/add', isAdmin, async (req, res) => {
 });
 
 // Add Product - POST
-router.post('/products/add', isAdmin, async (req, res) => {
+router.post('/products/add', isAdmin, upload.array('images', 5), async (req, res) => {
     try {
         const { name, price, description, category, tag, servingOptions, grind, roast, origin, ingredients } = req.body;
+
+        const imagePaths = req.files.map(file => file.filename);
+        const firstImagePath = imagePaths.length > 0 ? imagePaths[0] : null;
 
         const newProduct = new Product({
             name,
@@ -128,8 +147,9 @@ router.post('/products/add', isAdmin, async (req, res) => {
             grind,
             roast,
             origin,
-            ingredients: ingredients.split(',')
-            // image: req.file.filename // Assuming you are using multer for file uploads
+            ingredients: ingredients.split(','),
+            image: firstImagePath,
+            images: imagePaths
         });
 
         await newProduct.save();
@@ -146,10 +166,11 @@ router.get('/products/update/:id', isAdmin, async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         const tags = await Tag.find({});
+        const categories = await Category.find({});
         if (!product) {
             return res.status(404).send('Product not found');
         }
-        renderAdminPage(req, res, 'AUpdateProduct', { product, tags });
+        renderAdminPage(req, res, 'AUpdateProduct', { product, tags, categories });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -157,9 +178,21 @@ router.get('/products/update/:id', isAdmin, async (req, res) => {
 });
 
 // Update Product - POST
-router.post('/products/update/:id', isAdmin, async (req, res) => {
+router.post('/products/update/:id', isAdmin, upload.array('images', 5), async (req, res) => {
     try {
         const { name, price, description, category, tag, servingOptions, grind, roast, origin, ingredients } = req.body;
+        const currentProduct = await Product.findById(req.params.id);
+
+        // Handle new image uploads
+        let newImagePaths = [];
+        if (req.files && req.files.length > 0) {
+            newImagePaths = req.files.map(file => file.filename);
+        }
+
+        // Combine with existing images if any
+        const updatedImagePaths = currentProduct.images.concat(newImagePaths);
+        const firstImagePath = updatedImagePaths.length > 0 ? updatedImagePaths[0] : null;
+
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
             name,
             price,
@@ -170,8 +203,9 @@ router.post('/products/update/:id', isAdmin, async (req, res) => {
             grind,
             roast,
             origin,
-            ingredients: ingredients.split(',')
-            // image: req.file ? req.file.filename : currentImage
+            ingredients: ingredients.split(','),
+            image: firstImagePath,
+            images: updatedImagePaths
         }, { new: true });
 
         if (!updatedProduct) {
@@ -278,6 +312,53 @@ router.post('/create-admin', isAdmin, async (req, res) => {
 
         await newAdmin.save();
         res.json({ message: 'Admin created successfully!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Manage Categories - GET
+router.get('/categories', isAdmin, async (req, res) => {
+    try {
+        const categories = await Category.find({});
+        renderAdminPage(req, res, 'ACategories', { categories });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Add Category - POST
+router.post('/categories/add', isAdmin, async (req, res) => {
+    try {
+        const { name, description } = req.body;
+        const newCategory = new Category({ name, description });
+        await newCategory.save();
+        res.redirect('/admin/categories');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Update Category - POST
+router.post('/categories/update/:id', isAdmin, async (req, res) => {
+    try {
+        const { name, description } = req.body;
+        await Category.findByIdAndUpdate(req.params.id, { name, description });
+        res.redirect('/admin/categories');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Delete Category - POST
+router.post('/categories/delete/:id', isAdmin, async (req, res) => {
+    try {
+        await Category.findByIdAndDelete(req.params.id);
+        res.redirect('/admin/categories');
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');

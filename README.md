@@ -78,7 +78,6 @@ Alternatively, host it locally by following the instructions below.
 6. **Access the application:**
     -   Open your web browser and go to `http://localhost:2000` (or the port specified in your configuration).
 
-
 ## Usage
 
 -   **Guest Users:**
@@ -138,7 +137,7 @@ Alternatively, host it locally by following the instructions below.
 -   [x] Social Sign-up/Sign-In (Google or Facebook)
 -   [x] Login to the website
 -   [x] Authorize website features
--   [ ] Forgot password by email
+-   [x] Forgot password by email
 
 ### 4. Features for Logged-in Users
 
@@ -162,20 +161,20 @@ Alternatively, host it locally by following the instructions below.
     -   [x] AJAX paging account list
 -   [x] View account details
 -   [ ] Ban/unban an account
--   [ ] Manage product categories, manufacturer
+-   [x] Manage product categories, manufacturer
 -   [x] View product list
     -   [ ] Filter product by name, category, manufacturer
     -   [ ] Sort product by creation time, price, total purchase
     -   [x] AJAX paging product list
 -   [x] Create a new product
-    -   [ ] Upload multiple product photos
+    -   [x] Upload multiple product photos
     -   [x] Add product to a specific category, manufacturer, ...
-    -   [ ] Specify product status
+    -   [x] Specify product status
     -   [x] Verify user input
 -   [x] Update a product
-    -   [ ] Add, and remove product photos
+    -   [x] Add, and remove product photos
     -   [x] Change product category, manufacturer, ...
-    -   [ ] Update product status
+    -   [x] Update product status
     -   [x] Verify user input
 -   [ ] Customer's orders
     -   [ ] View list of orders sorted by order creation time

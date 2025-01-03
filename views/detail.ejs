@@ -9,10 +9,13 @@
         </div>
         <div class="detailProduct">
             <div class="imageSample">
-                <img src="/assets/images/<%= product.image %>" width="400" height="400" alt="">
-                <div>
-                    <img src="/assets/images/<%= product.image %>" width="47" height="47"alt="">
-                    <img src="/assets/images/<%= product.image %>" width="47" height="47" alt="">
+                <div class="main-image">
+                    <img id="mainImage" src="/assets/images/<%= product.images[0] %>" width="400" height="400" alt="<%= product.name %>">
+                </div>
+                <div class="thumbnail-gallery">
+                    <% product.images.forEach(image => { %>
+                        <img src="/assets/images/<%= image %>" width="47" height="47" alt="<%= product.name %>" class="thumbnail" data-image="<%= image %>">
+                    <% }); %>
                 </div>
             </div>
             <div class="infoProduct">
@@ -146,6 +149,20 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    // Function to update the main image
+    function updateMainImage(imageUrl) {
+        $('#mainImage').attr('src', imageUrl);
+    }
+
+    // Set the first image as the default main image
+    updateMainImage('/assets/images/<%= product.images[0] %>');
+
+    // Handle thumbnail clicks
+    $('.thumbnail').click(function() {
+        const imageUrl = $(this).data('image');
+        updateMainImage('/assets/images/' + imageUrl);
+    });
+
     var optionSelect = "<%= product.servingOptions[0] %>"; // Initialize with the first serving option
 
     document.querySelectorAll('.option-span').forEach(span => {
