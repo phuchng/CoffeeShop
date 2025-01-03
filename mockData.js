@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Product, Tag } = require('./models/Product');
 const Account = require('./models/Account');
 const Cart = require('./models/Cart')
+const Category = require('./models/Category');
 const bcrypt = require('bcrypt');
 require('dotenv').config({ path: '.env' });
 
@@ -14,9 +15,10 @@ const productsData = [
     {
         name: 'Ethiopian Yirgacheffe',
         image: 'menu-1.jpg',
+        images: ['menu-1.jpg', 'menu-2.jpg', 'menu-3.jpg'],
         description: 'Bright, floral, and citrusy coffee from Ethiopia.',
         price: 18,
-        category: 'Coffee',
+        category: '666300959459785498000021',
         servingOptions: ['12 oz', '1 lb', '5 lb'],
         grind: 'Whole Bean',
         roast: 'Light',
@@ -63,9 +65,10 @@ const productsData = [
     {
         name: 'Sumatra Mandheling',
         image: 'menu-2.jpg',
+        images: ['menu-2.jpg', 'menu-3.jpg', 'menu-4.jpg'],
         description: 'Earthy, full-bodied coffee with a smooth finish.',
         price: 16,
-        category: 'Coffee',
+        category: '666300959459785498000021',
         servingOptions: ['12 oz', '1 lb', '5 lb'],
         grind: 'Ground',
         roast: 'Dark',
@@ -92,9 +95,10 @@ const productsData = [
     {
         name: 'Colombian Supremo',
         image: 'menu-3.jpg',
+        images: ['menu-3.jpg', 'menu-4.jpg', 'menu-1.jpg'],
         description: 'Balanced and aromatic coffee with notes of caramel and nuts.',
         price: 14,
-        category: 'Coffee',
+        category: '666300959459785498000021',
         servingOptions: ['12 oz', '1 lb', '5 lb'],
         grind: 'Whole Bean',
         roast: 'Medium',
@@ -116,9 +120,10 @@ const productsData = [
     {
         name: 'Guatemalan Antigua',
         image: 'menu-4.jpg',
+        images: ['menu-4.jpg', 'menu-1.jpg', 'menu-2.jpg'],
         description: 'Complex coffee with chocolate and spice undertones.',
         price: 15,
-        category: 'Coffee',
+        category: '666300959459785498000021',
         servingOptions: ['12 oz', '1 lb', '5 lb'],
         grind: 'Ground',
         roast: 'Medium',
@@ -140,9 +145,10 @@ const productsData = [
     {
         name: 'Brazilian Santos',
         image: 'menu-1.jpg',
+        images: ['menu-1.jpg', 'menu-2.jpg', 'menu-3.jpg'],
         description: 'Mild and nutty coffee, perfect for everyday drinking.',
         price: 12,
-        category: 'Coffee',
+        category: '666300959459785498000021',
         servingOptions: ['12 oz', '1 lb', '5 lb'],
         grind: 'Whole Bean',
         roast: 'Light',
@@ -166,9 +172,10 @@ const productsData = [
     {
         name: 'Earl Grey',
         image: 'drink-5.jpg',
+        images: ['drink-5.jpg', 'drink-6.jpg', 'drink-7.jpg'],
         description: 'Classic black tea infused with bergamot oil.',
         price: 8,
-        category: 'Tea',
+        category: '666300959459785498000022',
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Black Tea', 'Bergamot Oil'],
         sales: 80,
@@ -182,9 +189,10 @@ const productsData = [
     {
         name: 'Green Tea Sencha',
         image: 'drink-7.jpg',
+        images: ['drink-7.jpg', 'drink-8.jpg', 'drink-9.jpg'],
         description: 'Refreshing Japanese green tea with a vegetal flavor.',
         price: 10,
-        category: 'Tea',
+        category: '666300959459785498000022',
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Green Tea'],
         sales: 90,
@@ -198,9 +206,10 @@ const productsData = [
     {
         name: 'Chamomile Tea',
         image: 'drink-4.jpg',
+        images: ['drink-4.jpg', 'drink-5.jpg', 'drink-6.jpg'],
         description: 'Soothing herbal tea made from dried chamomile flowers.',
         price: 7,
-        category: 'Tea',
+        category: '666300959459785498000022',
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Chamomile Flowers'],
         sales: 60,
@@ -214,9 +223,10 @@ const productsData = [
     {
         name: 'Peppermint Tea',
         image: 'drink-8.jpg',
+        images: ['drink-8.jpg', 'drink-9.jpg', 'drink-7.jpg'],
         description: 'Invigorating herbal tea with a cool, minty taste.',
         price: 7,
-        category: 'Tea',
+        category: '666300959459785498000022',
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Peppermint Leaves'],
         sales: 70,
@@ -230,9 +240,10 @@ const productsData = [
     {
         name: 'Rooibos Tea',
         image: 'drink-9.jpg',
+        images: ['drink-9.jpg', 'drink-8.jpg', 'drink-7.jpg'],
         description: 'Naturally caffeine-free tea with a slightly sweet, nutty flavor.',
         price: 9,
-        category: 'Tea',
+        category: '666300959459785498000022',
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Rooibos'],
         sales: 50,
@@ -248,9 +259,10 @@ const productsData = [
     {
         name: 'Chocolate Croissant',
         image: 'dessert-6.jpg',
+        images: ['dessert-6.jpg', 'dessert-5.jpg', 'dessert-4.jpg'],
         description: 'Flaky pastry filled with rich, dark chocolate.',
         price: 4,
-        category: 'Food',
+        category: '666300959459785498000023',
         sales: 120,
         tag: '6662f8929459785498777777',
         ratings: {
@@ -262,9 +274,10 @@ const productsData = [
     {
         name: 'Blueberry Muffin',
         image: 'dessert-4.jpg',
+        images: ['dessert-4.jpg', 'dessert-3.jpg', 'dessert-2.jpg'],
         description: 'Moist muffin bursting with fresh blueberries.',
         price: 3.5,
-        category: 'Food',
+        category: '666300959459785498000023',
         sales: 100,
         tag: '6662f8929459785498777777',
         ratings: {
@@ -276,9 +289,10 @@ const productsData = [
     {
         name: 'Almond Biscotti',
         image: 'dessert-5.jpg',
+        images: ['dessert-5.jpg', 'dessert-4.jpg', 'dessert-3.jpg'],
         description: 'Crunchy Italian cookie, perfect for dipping in coffee.',
         price: 2.5,
-        category: 'Food',
+        category: '666300959459785498000023',
         sales: 80,
         tag: '6662f8929459785498777777',
         ratings: {
@@ -290,9 +304,10 @@ const productsData = [
     {
         name: 'Spinach and Feta Quiche',
         image: 'dessert-3.jpg',
+        images: ['dessert-3.jpg', 'dessert-2.jpg', 'dessert-1.jpg'],
         description: 'Savory pastry filled with spinach, feta cheese, and eggs.',
         price: 5,
-        category: 'Food',
+        category: '666300959459785498000023',
         sales: 60,
         tag: '6662f8929459785498777777',
         ratings: {
@@ -304,9 +319,10 @@ const productsData = [
     {
         name: 'Fruit Tart',
         image: 'dessert-1.jpg',
+        images: ['dessert-1.jpg', 'dessert-2.jpg', 'dessert-3.jpg'],
         description: 'Sweet pastry crust filled with fresh seasonal fruits and custard.',
         price: 6,
-        category: 'Food',
+        category: '666300959459785498000023',
         sales: 70,
         tag: '6662f8929459785498777777',
         ratings: {
@@ -320,9 +336,10 @@ const productsData = [
     {
         name: 'Fresh Orange Juice',
         image: 'drink-1.jpg',
+        images: ['drink-1.jpg', 'drink-2.jpg', 'drink-3.jpg'],
         description: '100% pure, freshly squeezed orange juice.',
         price: 5,
-        category: 'Juice',
+        category: '666300959459785498000024',
         sales: 150,
         tag: '6662f8929459785498666666',
         ratings: {
@@ -334,9 +351,10 @@ const productsData = [
     {
         name: 'Green Detox Smoothie',
         image: 'drink-7.jpg',
+        images: ['drink-7.jpg', 'drink-8.jpg', 'drink-9.jpg'],
         description: 'Blend of spinach, kale, cucumber, green apple, and lemon.',
         price: 7,
-        category: 'Juice',
+        category: '666300959459785498000024',
         sales: 120,
         tag: '6662f8929459785498666666',
         ratings: {
@@ -348,9 +366,10 @@ const productsData = [
     {
         name: 'Carrot Ginger Juice',
         image: 'drink-8.jpg',
+        images: ['drink-8.jpg', 'drink-9.jpg', 'drink-7.jpg'],
         description: 'Invigorating mix of fresh carrot juice with a hint of ginger.',
         price: 6,
-        category: 'Juice',
+        category: '666300959459785498000024',
         sales: 90,
         tag: '6662f8929459785498666666',
         ratings: {
@@ -362,9 +381,10 @@ const productsData = [
     {
         name: 'Berry Blast Smoothie',
         image: 'drink-9.jpg',
+        images: ['drink-9.jpg', 'drink-8.jpg', 'drink-7.jpg'],
         description: 'Mix of strawberries, blueberries, raspberries, and banana.',
         price: 7,
-        category: 'Juice',
+        category: '666300959459785498000024',
         sales: 110,
         tag: '6662f8929459785498666666',
         ratings: {
@@ -376,9 +396,10 @@ const productsData = [
     {
         name: 'Tropical Mango Smoothie',
         image: 'drink-1.jpg',
+        images: ['drink-1.jpg', 'drink-2.jpg', 'drink-3.jpg'],
         description: 'Creamy blend of mango, pineapple, and coconut milk.',
         price: 7,
-        category: 'Juice',
+        category: '666300959459785498000024',
         sales: 100,
         tag: '6662f8929459785498666666',
         ratings: {
@@ -412,6 +433,29 @@ const tagsData = [
     }
 ]
 
+const categoriesData = [
+    {
+        _id: '666300959459785498000021',
+        name: 'Coffee',
+        description: 'Ground and whole bean coffee from around the world.'
+    },
+    {
+        _id: '666300959459785498000022',
+        name: 'Tea',
+        description: 'Loose leaf and bagged teas.'
+    },
+    {
+        _id: '666300959459785498000023',
+        name: 'Food',
+        description: 'Pastries, sandwiches, and other food items.'
+    },
+    {
+        _id: '666300959459785498000024',
+        name: 'Juice',
+        description: 'Freshly squeezed juices and smoothies.'
+    }
+];
+
 const usersData = [];
 for (let i = 1; i <= 20; i++) {
     const user = {
@@ -442,6 +486,11 @@ async function addMockData() {
         await Tag.insertMany(tagsData);
         console.log('Tags added successfully!');
 
+        // Add Categories
+        await Category.deleteMany({});
+        await Category.insertMany(categoriesData);
+        console.log('Categories added successfully!');
+
         // Add Products
         await Product.deleteMany({});
         await Product.insertMany(productsData);
@@ -463,6 +512,8 @@ async function addMockData() {
             await newUser.save();
         }
         console.log('Users added successfully!');
+        console.log('Users email: user1@example.com, ..., user20@example.com');
+        console.log('Users password: password1, ..., password20');
 
         // Add Admin Account
         const existingAdmin = await Account.findOne({ email: 'admin@gmail.com' });
@@ -473,10 +524,13 @@ async function addMockData() {
                 last_name: 'User',
                 email: 'admin@gmail.com',
                 password: hashedPassword,
-                role: 'admin'
+                role: 'admin',
+                isActivated: true
             });
             await adminAccount.save();
             console.log('Admin account added successfully!');
+            console.log('Admin account email: admin@gmail.com');
+            console.log('Admin account password: password1234');
         } else {
             console.log('Admin account already exists.');
         }

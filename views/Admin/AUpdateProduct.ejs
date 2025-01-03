@@ -2,7 +2,7 @@
     Update Product
 </h1>
 <div id="message"></div>
-<form id="updateProductForm">
+<form id="updateProductForm" enctype="multipart/form-data">
     <div style="display: flex;">
         <div class="box-content-addproduct-form">
             <h3 class="box-content-addproduct-form--header">Product Name</h3>
@@ -20,10 +20,11 @@
     <div class="box-content-addproduct-form">
         <h3 class="box-content-addproduct-form--header">Category</h3>
         <select name="category">
-            <option value="Coffee" <%=product.category === 'Coffee' ? 'selected' : '' %>>Coffee</option>
-            <option value="Tea" <%=product.category === 'Tea' ? 'selected' : '' %>>Tea</option>
-            <option value="Food" <%=product.category === 'Food' ? 'selected' : '' %>>Food</option>
-            <option value="Juice" <%=product.category === 'Juice' ? 'selected' : '' %>>Juice</option>
+            <% categories.forEach(category => { %>
+                <option value="<%= category._id %>" <%= product.category.toString() === category._id.toString() ? 'selected' : '' %>>
+                    <%= category.name %>
+                </option>
+            <% }); %>
         </select>
     </div>
     <div class="box-content-addproduct-form">
@@ -65,6 +66,23 @@
         <input type="text" name="ingredients" placeholder="e.g., Ingredient 1, Ingredient 2"
             value="<%= product.ingredients.join(', ') %>">
     </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Current Images</h3>
+        <% if (product.images && product.images.length > 0) { %>
+            <% product.images.forEach(image => { %>
+                <div class="current-image">
+                    <img src="/assets/images/<%= image %>" alt="Product Image" style="max-width: 200px; max-height: 200px;">
+                    <button type="button" class="remove-image" data-image="<%= image %>">Remove</button>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No images available for this product.</p>
+        <% } %>
+    </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Add New Images</h3>
+        <input type="file" name="images" multiple>
+    </div>
     <div class="box-content-addproduct--button">
         <button type="submit" class="detail-create">UPDATE PRODUCT</button>
     </div>
@@ -72,21 +90,48 @@
 
 <script>
     $(document).ready(function () {
+        // Handle form submission
         $('#updateProductForm').submit(function (event) {
             event.preventDefault();
             const productId = '<%= product._id %>';
+            var formData = new FormData(this);
 
             $.ajax({
                 url: '/admin/products/update/' + productId,
                 method: 'POST',
-                data: $(this).serialize(),
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (response) {
                     $('#message').html('<p class="success-message">' + response.message + '</p>');
+                    // Optionally refresh the product details or redirect
                 },
                 error: function (error) {
                     $('#message').html('<p class="error-message">' + error.responseJSON.error + '</p>');
                 }
             });
+        });
+
+        // Handle image removal
+        $('.remove-image').click(function () {
+            const imageName = $(this).data('image');
+            const productId = '<%= product._id %>';
+
+            if (confirm('Are you sure you want to remove this image?')) {
+                $.ajax({
+                    url: `/admin/products/remove-image/${productId}`,
+                    method: 'POST',
+                    data: { image: imageName },
+                    success: function (response) {
+                        // Remove the image element from the DOM
+                        $(`.remove-image[data-image="${imageName}"]`).parent().remove();
+                        $('#message').html('<p class="success-message">' + response.message + '</p>');
+                    },
+                    error: function (error) {
+                        $('#message').html('<p class="error-message">' + error.responseJSON.error + '</p>');
+                    }
+                });
+            }
         });
     });
 </script>

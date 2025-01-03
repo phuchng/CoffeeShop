@@ -2,7 +2,7 @@
     Add Product
 </h1>
 <div id="message"></div>
-<form id="addProductForm">
+<form id="addProductForm" enctype="multipart/form-data">
     <div style="display: flex;">
         <div class="box-content-addproduct-form">
             <h3 class="box-content-addproduct-form--header">Product Name</h3>
@@ -20,10 +20,11 @@
     <div class="box-content-addproduct-form">
         <h3 class="box-content-addproduct-form--header">Category</h3>
         <select name="category">
-            <option value="Coffee">Coffee</option>
-            <option value="Tea">Tea</option>
-            <option value="Food">Food</option>
-            <option value="Juice">Juice</option>
+            <% categories.forEach(category => { %>
+                <option value="<%= category._id %>">
+                    <%= category.name %>
+                </option>
+            <% }); %>
         </select>
     </div>
     <div class="box-content-addproduct-form">
@@ -63,6 +64,10 @@
         <h3 class="box-content-addproduct-form--header">Ingredients (comma-separated)</h3>
         <input type="text" name="ingredients" placeholder="e.g., Ingredient 1, Ingredient 2">
     </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Images</h3>
+        <input type="file" name="images" multiple required>
+    </div>
     <div class="box-content-addproduct--button">
         <button type="submit" class="detail-create">CREATE PRODUCT</button>
     </div>
@@ -73,10 +78,14 @@
         $('#addProductForm').submit(function (event) {
             event.preventDefault(); // Prevent default form submission
 
+            var formData = new FormData(this);
+
             $.ajax({
                 url: '/admin/products/add',
                 method: 'POST',
-                data: $(this).serialize(), // Serialize form data
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (response) {
                     // Display success message
                     $('#message').html('<p class="success-message">' + response.message + '</p>');

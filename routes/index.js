@@ -5,13 +5,13 @@ var { isAdmin } = require('../middleware/authentication');
 
 /* GET users listing. */
 
-router.get('/', async function (req, res)  {
+router.get('/', async function (req, res) {
     const productExample = await Product.find({}).limit(6);
 
     const topRatedProducts = await Product.find()
-    .sort({ 'ratings.averageRating': -1 })
-    .limit(5)
-    .exec();
+        .sort({ 'ratings.averageRating': -1 })
+        .limit(5)
+        .exec();
 
     return res.render('homepage', { productExample: productExample, topRated: topRatedProducts });
 });

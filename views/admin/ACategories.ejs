@@ -1,0 +1,86 @@
+<h1>Manage Categories</h1>
+
+<div id="message"></div>
+
+<!-- Form for Adding New Category -->
+<h2>Add New Category</h2>
+<form id="addCategoryForm" action="/admin/categories/add" method="POST">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"></textarea>
+    <button type="submit">Add Category</button>
+</form>
+
+<!-- List of Existing Categories -->
+<h2>Existing Categories</h2>
+<ul id="category-list">
+    <% categories.forEach(category => { %>
+        <li>
+            <span id="category-name-<%= category._id %>"><%= category.name %></span> - 
+            <span id="category-description-<%= category._id %>"><%= category.description %></span>
+            <button class="edit-category" data-id="<%= category._id %>">Edit</button>
+            <form action="/admin/categories/delete/<%= category._id %>" method="POST" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+            <!-- Form for Updating Category -->
+            <form action="/admin/categories/update/<%= category._id %>" method="POST" class="update-form" id="update-form-<%= category._id %>" style="display:none;">
+                <input type="text" name="name" value="<%= category.name %>" required>
+                <textarea name="description"><%= category.description %></textarea>
+                <button type="submit">Update</button>
+                <button type="button" class="cancel-update" data-id="<%= category._id %>">Cancel</button>
+            </form>
+        </li>
+    <% }); %>
+</ul>
+
+<script>
+    $(document).ready(function() {
+        // Handle category addition
+        $('#addCategoryForm').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/admin/categories/add',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#message').html('<p>Category added successfully!</p>');
+                    // Optionally refresh the category list or add the new category to the list
+                },
+                error: function(err) {
+                    $('#message').html('<p>Error adding category.</p>');
+                }
+            });
+        });
+
+        // Handle category editing
+        $('.edit-category').click(function() {
+            const categoryId = $(this).data('id');
+            $('#update-form-' + categoryId).show();
+        });
+
+        // Handle canceling category update
+        $('.cancel-update').click(function() {
+            const categoryId = $(this).data('id');
+            $('#update-form-' + categoryId).hide();
+        });
+
+        // Handle category update
+        $('.update-form').submit(function(e) {
+            e.preventDefault();
+            const form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                method: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    $('#message').html('<p>Category updated successfully!</p>');
+                    // Optionally refresh the category list or update the edited category in the list
+                },
+                error: function(err) {
+                    $('#message').html('<p>Error updating category.</p>');
+                }
+            });
+        });
+    });
+</script>
