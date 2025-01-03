@@ -69,6 +69,7 @@ app.use('/profile', profileRouter);
 app.use('/admin', adminRouter);
 app.use('/cart', cartRouter);
 app.use('/auth', authRouter);
+app.use('/resend-email', resendEmailRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

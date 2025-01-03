@@ -146,10 +146,10 @@ Alternatively, host it locally by following the instructions below.
     -   [x] Verify user input
     -   [ ] Update the user's avatar
     -   [x] Update password (The user must input old password to update new password)
--   [ ] Checkout and payment
+-   [x] Checkout and payment
     -   [x] Bind the shopping cart to the user when login
-    -   [ ] Input shipping details
-    -   [ ] Process payment
+    -   [x] Input shipping details
+    -   [x] Process payment
     -   [ ] View order list and status
     -   [ ] View order details
 

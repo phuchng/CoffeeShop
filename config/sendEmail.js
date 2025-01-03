@@ -1,6 +1,6 @@
 
 const nodemailer = require("nodemailer");
-const sendVerificationEmail = (email, verificationLink) => {
+const sendVerificationEmail = (email, message) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -13,10 +13,7 @@ const sendVerificationEmail = (email, verificationLink) => {
       from: process.env.GMAIL_USER,
       to: email,
       subject: "Email Verification",
-      html: `
-        <p>Thank you for registering. Please verify your email by clicking the link below: </p>
-        <a href="${verificationLink}">${verificationLink}</a>
-      `,
+      html: message,
     };
   
     transporter.sendMail(mailOptions, (err, info) => {

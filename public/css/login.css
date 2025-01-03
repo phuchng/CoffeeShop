@@ -61,3 +61,12 @@
 .register_link:hover {
     color: #0056b3;
 }
+
+.forgot_link {
+    color: #222222;
+    text-decoration: none;
+    outline: none !important;
+}
+.forgot_link:hover {
+    color: #0cc43a;
+}

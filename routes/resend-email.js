@@ -23,13 +23,17 @@ router.post('/', async (req, res) => {
         const crypto = require('crypto');
         const token = crypto.randomBytes(32).toString('hex');
         const verificationLink = `https://coffee-shop-4rpa.onrender.com/verify-email?token=${token}`;
+        const message = `
+        <p>Thank you for registering. Please verify your email by clicking the link below: </p>
+        <a href="${verificationLink}">${verificationLink}</a>
+    `
         const expirationTime = Date.now() + 6 * 60 * 1000;
 
         user.token = token;
         user.expirationTime = expirationTime;
 
         await user.save();
-        sendVerificationEmail(email, verificationLink);
+        sendVerificationEmail(email, message);
 
         req.flash('success_msg', 'Verification email sent! Please check inbox to complete.');
         return res.redirect('/login');
@@ -40,3 +44,5 @@ router.post('/', async (req, res) => {
     res.redirect('/login');
   }
 })
+
+module.exports = router;
