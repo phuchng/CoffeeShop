@@ -1,5 +1,3 @@
-// File: routes\index.js
-
 var express = require('express');
 var { Product } = require('../models/Product')
 var router = express.Router();
@@ -125,7 +123,6 @@ router.delete('/product/:id/rate', async function (req, res, next) {
     }
 });
 
-
 router.get('/products', async function (req, res, next) {
     let query = {};
     let sortOption = {};
@@ -210,6 +207,26 @@ router.get('/products', async function (req, res, next) {
             totalPages: totalPages
         });
     }
+});
+
+// Contact Page Route
+router.get('/contact', function (req, res, next) {
+    res.render('contact', { title: 'Contact' });
+});
+
+// About Page Route
+router.get('/about', function (req, res, next) {
+    res.render('about', { title: 'About' });
+});
+
+// Blog Page Route
+router.get('/blog', function (req, res, next) {
+    res.render('blog', { title: 'Blog' });
+});
+
+// Profile Page Route
+router.get('/profile', function (req, res, next) {
+    res.render('profile', { title: 'Profile' });
 });
 
 module.exports = router;

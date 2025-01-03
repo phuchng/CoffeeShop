@@ -25,7 +25,7 @@
 
                         <div class="filter-group">
                             <h4>Price Range</h4>
-                            <% ['0-10', '10-20', '20+'].forEach(range => { %>
+                            <% ['0-10', '10-20', '20-50'].forEach(range => { %>
                                 <label>
                                     <input type="radio" name="priceRange" value="<%= range %>" <%= (selectedPriceRange === range ? 'checked' : '') %>> <%= range %>
                                 </label>
@@ -86,7 +86,7 @@ $(document).ready(function() {
         productList.empty(); // Clear existing products
 
         if (data.products.length === 0) {
-            productList.append('<p>No products found.</p>');
+            productList.append('<p style="text-align: center; width: 100%">No products found.</p>');
             return;
         }
 
@@ -97,7 +97,7 @@ $(document).ready(function() {
             }
             const productItem = `
                 <li class="product">
-                    <a href="/product/${product._id}" class="img" style="width: 100%; height: 170px; overflow: hidden; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px">><img src="/assets/images/${product.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="" class="image"></a>
+                    <a href="/product/${product._id}" class="img" style="display: block; width: 100%; height: 170px; overflow: hidden; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px">><img src="/assets/images/${product.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="" class="image"></a>
                     <span class="cost">$${product.price}</span>
                     <div class="eval">
                         ${stars}
@@ -134,8 +134,8 @@ $(document).ready(function() {
     }
 
     function getFilters() {
-        const formData = new FormData(filterForm[0]); // Get form data
-        return new URLSearchParams(formData).toString(); // Convert to query string
+        const formData = new FormData(filterForm[0]);
+        return new URLSearchParams(formData).toString();
     }
 
     function fetchProducts(page = 1) {
@@ -153,9 +153,10 @@ $(document).ready(function() {
         });
     }
 
-    // Event listeners for filter changes
-    filterForm.on('change', 'input, select', function() {
-        fetchProducts(); // Fetch products for the first page when filters change
+    // Event listener for filter form submission
+    filterForm.on('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        fetchProducts(1); // Fetch products for the first page when form is submitted
     });
 
     // Event listener for pagination clicks
