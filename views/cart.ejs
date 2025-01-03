@@ -5,9 +5,9 @@
             <div class="boxSub">
                 <div class="texSub">
                     <span>Subtotal</span>
-                    <span class="costSub">$<%= cart.totalPrice %></span>
+                    <span class="costSub">$<%= totalPrice %></span>
                 </div>
-                <button>
+                <button class="checkout">
                     <i class="fa-solid fa-cart-shopping"></i>
                     CHECKOUT
                 </button>
@@ -19,7 +19,7 @@
                     <% cartItems.forEach(item => { %>
                         <li class="itemCart">
                             <div class="boxInfoProductC">
-                                <img src="/img/<%= item.image %>" alt="<%= item.name %>" width="120px" height="120px">
+                                <img src="/assets/images/<%= item.image %>" alt="<%= item.name %>" width="120px" height="120px">
                                 <div class="InfoProduct">
                                     <h3><%= item.name %></h3>
                                     <span><strong>Serving Option:</strong> <%= item.servingOption %></span>
@@ -32,7 +32,7 @@
                                     <span class="qtt"><%= item.quantity %></span>
                                 </div>
                                 <span class="costC">$<%= item.totalCost %></span>
-                                <span class="x" data-id="<%= item.product._id %>" data-option="<%= item.servingOption %>">x</span>
+                                <button class="x" data-id="<%= item.id %>" data-option="<%= item.servingOption %>">x</button>
                             </div>
                         </li>
                     <% }) %>
@@ -47,7 +47,7 @@
                 <span>Subtotal</span>
                 <span class="InfoCost">$<%= totalPrice %></span>
             </div>
-            <button>
+            <button class="checkout">
                 <i class="fa-solid fa-cart-shopping"></i> CHECKOUT
             </button>
             <a href="" style="display: block; text-decoration: none; color: #A7661B; cursor: pointer; font-size: 15px; text-align: center; margin-top: 10px;">Continue shopping ></a>
@@ -58,14 +58,15 @@
 <script>
     document.querySelectorAll('.x').forEach((remove_span) => {
         remove_span.addEventListener('click', async () => {
-            const productId = remove_span.dataset.id;
+            const productID = remove_span.dataset.id;
             const servingOption = remove_span.dataset.option;
-
+            console.log(productID);
+            console.log(servingOption)
             try{
                 const response = await fetch('/cart/remove-item', {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ productId: productId, servingOption: servingOption })
+                    body: JSON.stringify({ productID: productID, servingOption: servingOption })
                 });
 
                 if (response.ok) {
@@ -75,7 +76,9 @@
                     
                     remove_span.closest('.itemCart').remove();
                     const totalPrice = document.querySelector('.InfoCost');
-                    totalPrice.innerText = `${newTotalPrice}`;
+                    const costSub = document.querySelector('.costSub');
+                    totalPrice.innerText = `$${newTotalPrice}`;
+                    costSub.innerText = `$${newTotalPrice}`;
                     alert(data.message);
                 }
 
@@ -88,5 +91,8 @@
                 alert('An error occurred. Please try again.');
             }
         })
+    })
+    document.querySelectorAll('.checkout').forEach((checkout) => {
+
     })
 </script>

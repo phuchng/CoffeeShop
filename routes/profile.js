@@ -1,61 +1,19 @@
-var express = require('express');
-var account = require('../models/Account');
-var passport = require('passport');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const Account = require('../models/Account');
+const { isAuthenticated } = require('../middleware/authentication');
 
-var { isAuthenticated } = require('../middleware/authentication')
+function renderProfilePage(req, res, page, options = {}) {
+    if (req.xhr) {
+        res.render(`${page}`, { ...options, layout: false }); // No layout for AJAX
+    } else {
+        res.render(`${page}`, { ...options, layout: 'layouts/layoutProfile' }); // Use profile layout
+    }
+}
+// Function to render admin pages with AJAX support
+router.get('/', isAuthenticated, (req, res) => {
+    renderProfilePage(req, res, 'profile', { user: req.user })
 
-router.get('/', isAuthenticated, async (req, res) => {
-    res.render('profile', { layout: 'layoutProfile' });
 });
 
-router.post('/change-name', isAuthenticated, async(req, res) => {
-    const { first_name, last_name } = req.body;
-
-    if (!first_name || !last_name) {
-        return res.status(400).json({ error: 'Name cannot be empty' });
-    }
-
-    const userID = req.user.id;
-
-    account.findByIdAndUpdate(userID, { first_name: first_name, last_name: last_name }, { new: true })
-    .then((updatedUser) => {
-        res.status(200).json({ message: 'Name updated successfully', user: updatedUser });
-    })
-    .catch((err) => {
-        console.error(err);
-        res.status(500).json({ error: 'Failed to update name' });
-    });
-})
-
-router.post('/change-address', isAuthenticated, async(req, res) => {
-    const { first_name, last_name, company, address, apartment, phone } = req.body;
-
-    if (!first_name || !last_name) {
-        return res.status(400).json({ error: 'Name cannot be empty' });
-    }
-
-    const addressUpdate = {
-        first_name,
-        last_name,
-        address,
-        phone,
-        isDefault: isDefault || false,
-    };
-
-    if (company) addressUpdate.company = company;
-    if (apartment) addressUpdate.apartment = apartment;
-
-    const userID = req.user.id;
-
-    account.findByIdAndUpdate(userID, { address: addressUpdate }, { new: true })
-    .then((updatedUser) => {
-        res.status(200).json({ message: 'Address updated successfully', user: updatedUser });
-    })
-    .catch((err) => {
-        console.error(err);
-        res.status(500).json({ error: 'Failed to update address' });
-    });
-})
-
-module.exports = router;
+module.exports = router

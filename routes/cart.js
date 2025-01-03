@@ -11,19 +11,47 @@ const Order = require('../models/Order');
 router.get('/', isAuthenticated, async (req, res, next) => {
     const userID = req.user.id;
 
-    const cart = await Cart.findOne({ account: userID }).populate('products.product');
+    const cart = await Cart.findOne({ account: userID });
 
-    const cartItems = cart.products.map((item) => ({
-        name: item.product.name,
-        image: item.product.image,
-        price: item.product.price,
-        quantity: item.quantity,
-        servingOption: item.servingOption,
-        totalCost: (item.product.price * item.quantity).toFixed(2),
-    }));
+    if (!cart){
+        const newCart = new Cart({ account: userID });
+        await newCart.save();
+        const cartItems = []
+        return res.render('cart', { layout: 'layouts/layoutProfile', cartItems: cartItems, totalPrice: 0 });
+    }
 
-    return res.render('cart', { layout: 'layoutProfile', cartItems: cartItems, totalPrice: cart.totalPrice })
+    if (!cart.products){
+        const cartItems = []
+        return res.render('cart', { layout: 'layouts/layoutProfile', cartItems: cartItems, totalPrice: 0 });
+    }
+
+    const cartItems = await Promise.all(cart.products.map(async (item) => {
+        try {
+            // Fetch the product by its ID
+            const product = await Product.findById(item.product);
+            
+            if (!product) {
+                throw new Error(`Product not found with ID: ${item.product}`);
+            }
+            // Return cart item with product details
+            return {
+                id: product._id,
+                name: product.name,
+                image: product.image,
+                price: product.price,
+                quantity: item.quantity,
+                servingOption: item.servingOption,
+                totalCost: (product.price * item.quantity).toFixed(2),
+            };
+        } catch (error) {
+            console.error('Error fetching product:', error);
+            return null; // In case of error, return null
+        }
+    }))
+
+    return res.render('cart', { layout: 'layouts/layoutProfile', cartItems: cartItems, totalPrice: cart.totalPrice });
 })
+
 
 router.post('/add-cart', isAuthenticated, async (req, res, next) => {
     const { productID, quantity, servingOption } = req.body;
@@ -45,6 +73,9 @@ router.post('/add-cart', isAuthenticated, async (req, res, next) => {
             cart.products.push({ product: productID, quantity, servingOption });
         }
 
+        const productFound = await Product.findById(productID);
+        const price = productFound.price;
+        cart.totalPrice += price * parseInt(quantity);
         await cart.save();
         res.json({ success: true, message: 'Product added to cart successfully!' });
     }
@@ -55,7 +86,7 @@ router.post('/add-cart', isAuthenticated, async (req, res, next) => {
 })
 
 router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
-    const { productId, servingOption } = req.body;
+    const { productID, servingOption } = req.body;
 
     const accountID = req.user.id;
 
@@ -68,7 +99,7 @@ router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
 
         const initialSize = cart.products.length;
 
-        cart.products = cart.products.filter(item => item.product.toString() !== productId || item.servingOption !== servingOption);
+        cart.products = cart.products.filter(item => item.product.toString() !== productID || item.servingOption !== servingOption);
 
         if (initialSize === cart.products.length) {
             return res.status(404).json({ success: false, message: 'Product not found in cart.' });

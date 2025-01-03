@@ -50,10 +50,11 @@ app.use(fetchMenu);
 // view engine setup
 
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+
 
 app.use(expressLayouts);
 app.set('layout', 'layouts/layout');
+app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -65,11 +66,11 @@ app.use('/', indexRouter);
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
-app.use('/profile', profileRouter);
 app.use('/admin', adminRouter);
 app.use('/cart', cartRouter);
 app.use('/auth', authRouter);
 app.use('/resend-email', resendEmailRouter)
+app.use('/profile', profileRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

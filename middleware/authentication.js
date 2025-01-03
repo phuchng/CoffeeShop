@@ -1,7 +1,9 @@
 function isAuthenticated(req, res, next) {
+    
     if (req.isAuthenticated()) {
         return next();
     }
+    req.flash('error_msg', 'You must be logged in first!')
     res.redirect('/login'); // Redirect to the login page if not authenticated
 }
 

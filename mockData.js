@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Product, Tag } = require('./models/Product');
 const Account = require('./models/Account');
+const Cart = require('./models/Cart')
 const bcrypt = require('bcrypt');
 require('dotenv').config({ path: '.env' });
 
@@ -428,7 +429,8 @@ for (let i = 1; i <= 20; i++) {
             apartment: `Apt ${i}`,
             phone: `555-123-${1000 + i}`,
             isDefault: i === 1, // Make the first user's address default
-        }
+        },
+        isVerified: true
     };
     usersData.push(user);
 }
@@ -478,6 +480,8 @@ async function addMockData() {
         } else {
             console.log('Admin account already exists.');
         }
+
+        await Cart.deleteMany({});
     } catch (error) {
         console.error('Error adding data:', error);
     } finally {
