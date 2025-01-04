@@ -1,0 +1,103 @@
+<div class="box-content-user"></div>
+    <h1 class="box-content-user--header">Manage Users</h1>
+
+    <!-- Filter Form -->
+    <form action="/admin/users" method="GET" class="filter-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="<%= nameFilter || '' %>">
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" value="<%= emailFilter || '' %>">
+
+        <label for="sortBy">Sort By:</label>
+        <select id="sortBy" name="sortBy">
+            <option value="">None</option>
+            <option value="name" <%= sortBy === 'name' ? 'selected' : '' %>>Name</option>
+            <option value="email" <%= sortBy === 'email' ? 'selected' : '' %>>Email</option>
+            <option value="registration" <%= sortBy === 'registration' ? 'selected' : '' %>>Registration Date</option>
+            <option value="role" <%= sortBy === 'role' ? 'selected' : '' %>>Role</option>
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <div id="message"></div>
+
+    <ul class="box-content-user--list">
+        <% users.forEach(user => { %>
+            <li class="box-content-user--item">
+                <div class="box-content-user--item-content">
+                    <span class="box-content-user--item-email"><%= user.email %></span>
+                    <span class="box-content-user--item-role"><%= user.role %></span>
+                </div>
+                <div class="user-actions">
+                    <button class="ban-button" data-id="<%= user._id %>" data-status="<%= user.isBanned ? 'unban' : 'ban' %>">
+                        <%= user.isBanned ? 'Unban' : 'Ban' %>
+                    </button>
+                    <select class="change-role-select" data-id="<%= user._id %>">
+                        <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
+                        <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                    </select>
+                </div>
+            </li>
+        <% }); %>
+    </ul>
+
+    <!-- Pagination -->
+    <div class="box-content-user--pagination">
+        <% if (currentPage > 1) { %>
+            <a href="?page=<%= currentPage - 1 %>">Previous</a>
+        <% } %>
+        <span>Page <%= currentPage %> of <%= totalPages %></span>
+        <% if (currentPage < totalPages) { %>
+            <a href="?page=<%= currentPage + 1 %>">Next</a>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Handle user ban/unban
+        $('.ban-button').click(function() {
+            const userId = $(this).data('id');
+            const action = $(this).data('status');
+
+            $.ajax({
+                url: `/admin/users/ban/${userId}`,
+                method: 'POST',
+                data: { action: action },
+                success: function(response) {
+                    $('#message').html(`<p class="success-message">${response.message}</p>`);
+                    // Update button text and data-status
+                    const button = $(`.ban-button[data-id="${userId}"]`);
+                    if (action === 'ban') {
+                        button.text('Unban').data('status', 'unban');
+                    } else {
+                        button.text('Ban').data('status', 'ban');
+                    }
+                },
+                error: function(error) {
+                    $('#message').html(`<p class="error-message">${error.responseJSON.error}</p>`);
+                }
+            });
+        });
+
+        // Handle user role change
+        $('.change-role-select').change(function() {
+            const userId = $(this).data('id');
+            const newRole = $(this).val();
+
+            $.ajax({
+                url: `/admin/users/change-role/${userId}`,
+                method: 'POST',
+                data: { role: newRole },
+                success: function(response) {
+                    $('#message').html(`<p class="success-message">${response.message}</p>`);
+                },
+                error: function(error) {
+                    $('#message').html(`<p class="error-message">${error.responseJSON.error}</p>`);
+                }
+            });
+        });
+    });
+</script>
