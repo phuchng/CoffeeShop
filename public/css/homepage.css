@@ -322,7 +322,7 @@
     position: absolute;
 }
 .box-block--background1 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(/img/background1.jpg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(/public/img/background1.jpg);
     height: 300px;
     width: 588px;
     background-size: 100% 100%;
@@ -330,7 +330,7 @@
     background-position: center;
 }
 .box-block--background2 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(/img/background2.jpg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(/public/img/background2.jpg);
     height: 300px;
     width: 588px;
     background-size: 100% 100%;
