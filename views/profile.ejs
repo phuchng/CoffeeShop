@@ -3,36 +3,29 @@
         <h1>Profile</h1>
         <div class="BoxInfoName">
             <div class="infoName">
-                <span id="displayName"><%= user.first_name %> <%= user.last_name %></span> <!-- SỬA ĐƯỢC-->
-                <i class="fa-solid fa-pencil editName" id="editNameButton"></i>
+                <span>name</span> <!-- SỬA ĐƯỢC-->
+                <i class="fa-solid fa-pencil editName"></i>
             </div>
             <div class="infoGmail">
                 <span style="display: block; color:#707070;margin-bottom: 5px">Email</span>
-                <span><%= user.email %></span> <!--GMAIL KHÔNG SỬA ĐƯỢC-->
+                <span>com2109nhanle@gmail.com</span> <!--GMAIL KHÔNG SỬA ĐƯỢC-->
             </div>
         </div>
         <div class="boxInfoAddress">
             <div class="infoAddress">
-                <span>Address</span> 
+                <span>Addresses</span> 
+                <span style="color:rgb(23, 115, 176); cursor: pointer;" class="addAddress">+  Add</span>
             </div>
             <ul class="listAddress">
                 <li class="itemAddress">
-                    <span>Name: <%= user.address.first_name %> <%= user.address.last_name %></span>
-                    <span>Company: <% if (user.address.company) { %>
-                        <%= user.address.company %>
-                    <% } else { %>
-                        None
-                    <% } %></span>
-                    <span>Address: <%= user.address.address %></span>
-                    <span>Apartment: <% if (user.address.apartment) { %>
-                        <%= user.address.apartment %>
-                    <% } else { %>
-                        None
-                    <% } %></span>
-                    <span>Phone: <%= user.address.phone %></span>
+                    <span style="color:#707070;">Defaut Address</span>
+                    <span>Name: Le Phan Thanh Nhan</span>
+                    <span>Company: None</span>
+                    <span>Address: Ho Chi Minh City</span>
+                    <span>Apartment: C3-13</span>
+                    <span>Phone: 123456789</span>
                     <i class="fa-solid fa-pencil editAddress"></i>
                 </li>
             </ul>
         </div>
     </div>
-</div>
