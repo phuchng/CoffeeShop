@@ -1,38 +1,57 @@
-<h1>Manage Categories</h1>
+<div>
+    <h1 class="box-categories--header">Manage Categories</h1>
 
-<div id="message"></div>
+    <div id="message"></div>
 
 <!-- Form for Adding New Category -->
-<h2>Add New Category</h2>
-<form id="addCategoryForm" action="/admin/categories/add" method="POST">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
-    <label for="description">Description:</label>
-    <textarea id="description" name="description"></textarea>
-    <button type="submit">Add Category</button>
-</form>
+    <h2 class="box-categories--header">Add New Category</h2>
+    <form id="addCategoryForm" action="/admin/categories/add" method="POST" class="box-categories--form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+    </form>
+    <form id="addCategoryForm" action="/admin/categories/add" method="POST" class="box-categories--form">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
 
-<!-- List of Existing Categories -->
-<h2>Existing Categories</h2>
-<ul id="category-list">
-    <% categories.forEach(category => { %>
-        <li>
-            <span id="category-name-<%= category._id %>"><%= category.name %></span> - 
-            <span id="category-description-<%= category._id %>"><%= category.description %></span>
-            <button class="edit-category" data-id="<%= category._id %>">Edit</button>
-            <form action="/admin/categories/delete/<%= category._id %>" method="POST" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
-            <!-- Form for Updating Category -->
-            <form action="/admin/categories/update/<%= category._id %>" method="POST" class="update-form" id="update-form-<%= category._id %>" style="display:none;">
-                <input type="text" name="name" value="<%= category.name %>" required>
-                <textarea name="description"><%= category.description %></textarea>
-                <button type="submit">Update</button>
-                <button type="button" class="cancel-update" data-id="<%= category._id %>">Cancel</button>
-            </form>
-        </li>
-    <% }); %>
-</ul>
+    </form>
+    <button type="submit" class="box-categories--form--button">Add Category</button>
+    <!-- List of Existing Categories -->
+    <h2 class="box-categories--header">Existing Categories</h2>
+    <ul id="category-list" class="box-category-list">
+        <% categories.forEach(category => { %>
+            <li class="box-category-item">
+                <div class="box1-category-item">
+                    <div>
+                        <span id="category-name-<%= category._id %>"><%= category.name %></span> - 
+                        <span id="category-description-<%= category._id %>"><%= category.description %></span>
+                    </div>
+                    <div>
+                        <button class="edit-category" data-id="<%= category._id %>">Edit</button>
+                        <form action="/admin/categories/delete/<%= category._id %>" method="POST" style="display:inline;">
+                            <button type="submit" class="delete-category">Delete</button>
+                        </form>
+                    </div>                
+                </div>
+                
+                <!-- Form for Updating Category -->
+                <form action="/admin/categories/update/<%= category._id %>" method="POST" class="update-form" id="update-form-<%= category._id %>" style="display:none;">
+                    <div class="update-form--box">
+                        <label for="" style="margin-right: 5px;">Name: </label>
+                        <input type="text" name="name" value="<%= category.name %>" style="margin-right: 20px;" required>
+                        <label for="" style="margin-right: 5px;">Description:</label>
+                        <textarea name="description" style="width: 400px; "><%= category.description %></textarea>
+                    </div>
+                    
+                    <div style="margin-top: 10px;">
+                        <button type="submit" class="edit-category">Update</button>
+                        <button type="button" class="cancel-update delete-category" data-id="<%= category._id %>">Cancel</button>
+                    </div>
+                    
+                </form>
+            </li>
+        <% }); %>
+    </ul>
+</div>
 
 <script>
     $(document).ready(function() {

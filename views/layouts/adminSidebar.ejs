@@ -28,8 +28,9 @@
                 Add New Products
             </a>
         </li>
-        <li class="box-sidebar--item"></li>
+        <li class="box-sidebar--item">
             <a href="/admin/categories" class="box-sidebar--item-link">
+                <i class="fa-solid fa-bars"></i>
                 Categories
             </a>
         </li>
@@ -47,9 +48,8 @@
             </a>
         </li>
         <li class="box-sidebar--item">
-            <form action="/logout" method="POST" style="display: inline; margin-left: 25px;">
-                <button type="submit" class="box-sidebar--item-link"
-                    style="background: none; border: none; color: inherit; cursor: pointer; font: inherit; padding: 0;">Logout</button>
+            <form action="/logout" method="POST">
+                <button type="submit" class="box-sidebar--item--button">Logout</button>
             </form>
         </li>
     </ul>

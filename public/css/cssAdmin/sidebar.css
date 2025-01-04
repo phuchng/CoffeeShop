@@ -54,6 +54,11 @@
 .box-sidebar--item-link i {
     margin-right: 10px;
 }
+.box-sidebar--item--button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+}
 .box-content-button {
     border: 1px solid #E91E63;
     color: #E91E63;
