@@ -58,10 +58,10 @@
         </div>
         <h2 style="text-align: center; margin: 40px 0 20px 0; color:rgb(112, 96, 77);">Top-Rated Drink Shop</h2>
         <div class="box">
-            <div class="box-item">
                 <% if (topRated && topRated.length > 0) { %>
                     <% topRated.forEach(product => { %>
-                        <img src="/img/<%= product.image %>" class="box-item--image">
+                    <div class="box-item">
+                        <img src="assets/img/<%= product.image %>" class="box-item--image">
                         <span class="box-item--name"><%= product.name %></span>
                         <div class="box-item--eval">
                             <div style="color:#FFB829">
@@ -72,6 +72,7 @@
                             <span style="margin: 5px 0;"><%= product.ratings.totalRatings %> Reviews</span>
                         </div>
                         <span class="box-item--cost">from $<%= product.price %></span>
+                    </div>
                     <% }); %> 
                 <% } else { %>
                     <p>No top-rated product available at the moment.</p>

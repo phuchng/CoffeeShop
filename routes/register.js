@@ -25,14 +25,13 @@ router.post('/', async function(req, res, next){
         }   
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const verificationLink = `https://coffee-shop-4rpa.onrender.com/verify-email?token=${token}`;
+        const token = crypto.randomBytes(32).toString("hex");
+        const verificationLink = `localhost:2000/verify-email?token=${token}`;
        const message = `
             <p>Thank you for registering. Please verify your email by clicking the link below: </p>
             <a href="${verificationLink}">${verificationLink}</a>
         `
-        const token = crypto.randomBytes(32).toString("hex");
-        const expirationTime = Date.now() + 6 * 60 * 1000;
-        const newAccount = new Account({ first_name: first_name, last_name: last_name, password: hashedPassword, email: email, isVerified: false, token: token, expirationTime: expirationTime })
+        const newAccount = new Account({ first_name: first_name, last_name: last_name, password: hashedPassword, email: email, isVerified: false, token: token })
 
         await newAccount.save();
         sendVerificationEmail(email, message);

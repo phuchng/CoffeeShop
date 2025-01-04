@@ -23,7 +23,6 @@ const AccountSchema = new mongoose.Schema({
     },
     isVerified: { type: Boolean, default: false },
     token: String,
-    expirationTime: Date
 });
 
 AccountSchema.virtual('id').get(function () {

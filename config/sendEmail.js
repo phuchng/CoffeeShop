@@ -1,5 +1,7 @@
 
 const nodemailer = require("nodemailer");
+
+require('dotenv').config({ path: '.env' });
 const sendVerificationEmail = (email, message) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",

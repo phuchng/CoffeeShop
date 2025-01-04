@@ -46,3 +46,5 @@ router.post('/', async(req, res) => {
         return res.redirect('/forgot-password');
     }
 })
+
+module.exports = router;

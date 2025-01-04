@@ -32,7 +32,6 @@ router.post('/', async function (req, res, next){
     req.logIn(user, (err) => {
       if (err) return next(err);
 
-      if (!user)
       // Redirect based on user role
       if (user.role === 'admin') {
         return res.redirect('/admin/dashboard');

@@ -27,26 +27,6 @@ const CartSchema = new mongoose.Schema({
 
 })
 
-CartSchema.pre('save', async function (next) {
-    const cart = this;
-
-    let totalPrice = 0;
-    let totalProducts = 0;
-
-    for (const item of cart.products) {
-        const product = await Product.findById(item.product);
-        if (product) {
-          totalPrice += product.price * item.quantity;
-          totalProducts += item.quantity;
-        }
-      }
-
-    cart.totalPrice = totalPrice;
-    cart.totalProducts = totalProducts;
-
-    next();
-})
-
 const Cart = mongoose.model('Cart', CartSchema);
 
 module.exports = Cart;

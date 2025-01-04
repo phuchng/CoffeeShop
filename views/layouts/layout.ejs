@@ -36,9 +36,12 @@
                     <input type="text" name="search" placeholder="What are you looking for?">
                     <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </form>
+
+                <% if (isAuthenticated) { %>
                 <div class="cart">
-                    <i class="fa-solid fa-cart-shopping"></i>
+                    <a href="/cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
+                <% } %>
             </div>
 
             <div class="box">
@@ -118,7 +121,7 @@
                             </div>
                         </div>
                     </li>
-                    <li class="bold menuItemList"><a href="/products/" class="highlight cItem">Juice</a>
+                    <li class="bold menuItemList"><a href="/products?category=juice" class="highlight cItem">Juice</a>
                         <div class="temp">
                             <div class="menuItem">
                                 <% for (let juiceCategory of categories.juice) { %>
