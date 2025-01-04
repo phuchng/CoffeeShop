@@ -1,0 +1,37 @@
+.orderList {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+.orderItem-box1 {
+    display: flex;
+   align-items: center;
+}
+.orderItem-box {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.orderItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff;
+    margin-bottom: 5px;
+}
+.orderItem-box-name {
+    text-decoration: none;
+    color: #4C4D4E;
+    font-weight: 700;
+    font-size: 16px;
+}
+.orderItem-box-quatity {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #7a7474;
+} 
+.orderItem-box-name:hover {
+    color:rgb(85, 112, 163);
+    text-decoration: underline;
+}
