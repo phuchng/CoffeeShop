@@ -39,13 +39,7 @@ const ProductSchema = new mongoose.Schema({
     },
     ingredients: [String],
     sales: { type: Number, default: 0 },
-    tag: { type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }
 }, { timestamps: true });
-
-const TagScheme = new mongoose.Schema({
-    tag: { type: String, required: true },
-    category: { type: String, enum: ['Coffee', 'Tea', 'Food', 'Juice'] },
-})
 
 ProductSchema.methods.updateRatings = function () {
     const totalRatings = this.ratings.allRatings.length;
@@ -58,9 +52,7 @@ ProductSchema.methods.updateRatings = function () {
 };
 
 const Product = mongoose.model('Product', ProductSchema);
-const Tag = mongoose.model('Tag', TagScheme);
 
 module.exports = {
-    Product,
-    Tag
+    Product
 };

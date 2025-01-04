@@ -4,19 +4,22 @@ var Category = require('../models/Category');
 var router = express.Router();
 var { isAdmin } = require('../middleware/authentication');
 
-/* GET users listing. */
-
+/* GET home page. */
 router.get('/', async function (req, res) {
     const productExample = await Product.find({}).limit(6);
 
     const topRatedProducts = await Product.find()
         .sort({ 'ratings.averageRating': -1 })
-        .limit(4)
+        .limit(5)
         .exec();
 
-    return res.render('homepage', { productExample: productExample, topRated: topRatedProducts });
+    res.render('homepage', {
+        productExample: productExample,
+        topRated: topRatedProducts
+    });
 });
 
+/* GET product detail page. */
 router.get('/product/:id', async function (req, res, next) {
     const productID = req.params.id;
     const productList = await Product.find({}).limit(4);
@@ -57,6 +60,7 @@ router.get('/product/:id', async function (req, res, next) {
     }
 });
 
+/* POST rate a product */
 router.post('/product/:id/rate', async function (req, res, next) {
     if (!req.isAuthenticated()) {
         return res.status(401).json({ error: 'You must be logged in to rate a product.' });
@@ -93,6 +97,7 @@ router.post('/product/:id/rate', async function (req, res, next) {
     }
 });
 
+/* DELETE a product rating */
 router.delete('/product/:id/rate', async function (req, res, next) {
     if (!req.isAuthenticated()) {
         return res.status(401).json({ error: 'You must be logged in to delete a rating.' });
@@ -124,32 +129,47 @@ router.delete('/product/:id/rate', async function (req, res, next) {
     }
 });
 
+/* GET product listing page */
 router.get('/products', async function (req, res, next) {
     let query = {};
     let sortOption = {};
     const searchTerm = req.query.search;
-    const page = parseInt(req.query.page) || 1; // Get page number from query, default to 1
-    const perPage = 8; // Products per page
-    const skip = (page - 1) * perPage; // Calculate the number of products to skip
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 8;
+    const skip = (page - 1) * perPage;
 
     // Search query
     if (searchTerm) {
-
-
         query.$or = [
             { name: { $regex: searchTerm, $options: 'i' } },
             { description: { $regex: searchTerm, $options: 'i' } },
-            { category: { $regex: searchTerm, $options: 'i' } }
         ];
     }
 
     // Filter by category
     if (req.query.category) {
-        const categoryFind = await Category.findOne({ name: req.query.category })
-        if (categoryFind) {
-            query.category = categoryFind._id; // Use the _id directly
-        } else {
-            query.category = null; // Optional: Handle cases where the category is not found
+        try {
+            const category = await Category.findOne({ name: req.query.category });
+            if (category) {
+                query.category = category._id;
+            } else {
+                console.log('Category not found:', req.query.category);
+                return res.render('products', {
+                    title: 'Search Results',
+                    search: searchTerm,
+                    products: [],
+                    selectedCategory: req.query.category || [],
+                    selectedPriceRange: req.query.priceRange || '',
+                    selectedGrind: req.query.grind || [],
+                    selectedRoast: req.query.roast || [],
+                    selectedSort: req.query.sort || '',
+                    currentPage: page,
+                    totalPages: 0
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching category:', error);
+            return res.status(500).send('Internal Server Error');
         }
     }
 
@@ -184,36 +204,41 @@ router.get('/products', async function (req, res, next) {
         }
     }
 
-    const products = await Product.find(query).sort(sortOption).skip(skip).limit(perPage);
-    const totalProducts = await Product.countDocuments(query); // Count total products matching the query
-    const totalPages = Math.ceil(totalProducts / perPage); // Calculate total pages
+    try {
+        const products = await Product.find(query).sort(sortOption).skip(skip).limit(perPage);
+        const totalProducts = await Product.countDocuments(query);
+        const totalPages = Math.ceil(totalProducts / perPage);
 
-    if (req.xhr) {
-        // AJAX request: Send only JSON data
-        res.json({
-            products: products,
-            selectedCategory: req.query.category || [],
-            selectedPriceRange: req.query.priceRange || '',
-            selectedGrind: req.query.grind || [],
-            selectedRoast: req.query.roast || [],
-            selectedSort: req.query.sort || '',
-            currentPage: page,
-            totalPages: totalPages
-        });
-    } else {
-        // Regular request: Render the full EJS template
-        res.render('products', {
-            title: 'Search Results',
-            search: searchTerm,
-            products: products,
-            selectedCategory: req.query.category || [],
-            selectedPriceRange: req.query.priceRange || '',
-            selectedGrind: req.query.grind || [],
-            selectedRoast: req.query.roast || [],
-            selectedSort: req.query.sort || '',
-            currentPage: page,
-            totalPages: totalPages
-        });
+        if (req.xhr) {
+            // AJAX request: Send only JSON data
+            res.json({
+                products: products,
+                selectedCategory: req.query.category || [],
+                selectedPriceRange: req.query.priceRange || '',
+                selectedGrind: req.query.grind || [],
+                selectedRoast: req.query.roast || [],
+                selectedSort: req.query.sort || '',
+                currentPage: page,
+                totalPages: totalPages
+            });
+        } else {
+            // Regular request: Render the full EJS template
+            res.render('products', {
+                title: 'Search Results',
+                search: searchTerm,
+                products: products,
+                selectedCategory: req.query.category || [],
+                selectedPriceRange: req.query.priceRange || '',
+                selectedGrind: req.query.grind || [],
+                selectedRoast: req.query.roast || [],
+                selectedSort: req.query.sort || '',
+                currentPage: page,
+                totalPages: totalPages
+            });
+        }
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        res.status(500).send('Internal Server Error');
     }
 });
 

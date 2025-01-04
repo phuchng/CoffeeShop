@@ -287,8 +287,9 @@ router.get('/categories', isAdmin, async (req, res) => {
 // Add Category - POST
 router.post('/categories/add', isAdmin, async (req, res) => {
     try {
-        const { name, description } = req.body;
-        const newCategory = new Category({ name, description });
+        const { name, description, subcategories } = req.body;
+        const subcategoriesArray = subcategories ? subcategories.split(',').map(s => s.trim()) : [];
+        const newCategory = new Category({ name, description, subcategories: subcategoriesArray });
         await newCategory.save();
         res.redirect('/admin/categories');
     } catch (err) {
@@ -300,8 +301,9 @@ router.post('/categories/add', isAdmin, async (req, res) => {
 // Update Category - POST
 router.post('/categories/update/:id', isAdmin, async (req, res) => {
     try {
-        const { name, description } = req.body;
-        await Category.findByIdAndUpdate(req.params.id, { name, description });
+        const { name, description, subcategories } = req.body;
+        const subcategoriesArray = subcategories ? subcategories.split(',').map(s => s.trim()) : [];
+        await Category.findByIdAndUpdate(req.params.id, { name, description, subcategories: subcategoriesArray });
         res.redirect('/admin/categories');
     } catch (err) {
         console.error(err);

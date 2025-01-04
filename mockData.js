@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Product, Tag } = require('./models/Product');
+const { Product } = require('./models/Product');
 const Account = require('./models/Account');
 const Cart = require('./models/Cart')
 const Category = require('./models/Category');
@@ -24,7 +24,6 @@ const productsData = [
         roast: 'Light',
         origin: 'Ethiopia',
         sales: 150,
-        tag: '6662f8929459785498999999',
         ratings: {
             averageRating: 4.5,
             totalRatings: 6,
@@ -74,7 +73,6 @@ const productsData = [
         roast: 'Dark',
         origin: 'Indonesia',
         sales: 120,
-        tag: '6662f8929459785498999999',
         ratings: {
             averageRating: 4,
             totalRatings: 2,
@@ -104,7 +102,6 @@ const productsData = [
         roast: 'Medium',
         origin: 'Colombia',
         sales: 200,
-        tag: '6662f8929459785498999999',
         ratings: {
             averageRating: 5,
             totalRatings: 1,
@@ -129,7 +126,6 @@ const productsData = [
         roast: 'Medium',
         origin: 'Guatemala',
         sales: 100,
-        tag: '6662f8929459785498999999',
         ratings: {
             averageRating: 3,
             totalRatings: 1,
@@ -154,7 +150,6 @@ const productsData = [
         roast: 'Light',
         origin: 'Brazil',
         sales: 180,
-        tag: '6662f8929459785498999999',
         ratings: {
             averageRating: 4,
             totalRatings: 1,
@@ -179,7 +174,6 @@ const productsData = [
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Black Tea', 'Bergamot Oil'],
         sales: 80,
-        tag: '6662f8929459785498888888',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -196,7 +190,6 @@ const productsData = [
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Green Tea'],
         sales: 90,
-        tag: '6662f8929459785498888888',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -213,7 +206,6 @@ const productsData = [
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Chamomile Flowers'],
         sales: 60,
-        tag: '6662f8929459785498888888',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -230,7 +222,6 @@ const productsData = [
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Peppermint Leaves'],
         sales: 70,
-        tag: '6662f8929459785498888888',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -247,7 +238,6 @@ const productsData = [
         servingOptions: ['Loose Leaf', 'Tea Bags'],
         ingredients: ['Rooibos'],
         sales: 50,
-        tag: '6662f8929459785498888888',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -264,7 +254,6 @@ const productsData = [
         price: 4,
         category: '666300959459785498000023',
         sales: 120,
-        tag: '6662f8929459785498777777',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -279,7 +268,6 @@ const productsData = [
         price: 3.5,
         category: '666300959459785498000023',
         sales: 100,
-        tag: '6662f8929459785498777777',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -294,7 +282,6 @@ const productsData = [
         price: 2.5,
         category: '666300959459785498000023',
         sales: 80,
-        tag: '6662f8929459785498777777',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -309,7 +296,6 @@ const productsData = [
         price: 5,
         category: '666300959459785498000023',
         sales: 60,
-        tag: '6662f8929459785498777777',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -324,7 +310,6 @@ const productsData = [
         price: 6,
         category: '666300959459785498000023',
         sales: 70,
-        tag: '6662f8929459785498777777',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -341,7 +326,6 @@ const productsData = [
         price: 5,
         category: '666300959459785498000024',
         sales: 150,
-        tag: '6662f8929459785498666666',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -356,7 +340,6 @@ const productsData = [
         price: 7,
         category: '666300959459785498000024',
         sales: 120,
-        tag: '6662f8929459785498666666',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -371,7 +354,6 @@ const productsData = [
         price: 6,
         category: '666300959459785498000024',
         sales: 90,
-        tag: '6662f8929459785498666666',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -386,7 +368,6 @@ const productsData = [
         price: 7,
         category: '666300959459785498000024',
         sales: 110,
-        tag: '6662f8929459785498666666',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -401,7 +382,6 @@ const productsData = [
         price: 7,
         category: '666300959459785498000024',
         sales: 100,
-        tag: '6662f8929459785498666666',
         ratings: {
             averageRating: 0,
             totalRatings: 0,
@@ -410,49 +390,30 @@ const productsData = [
     }
 ];
 
-const tagsData = [
-    {
-        _id: '6662f8929459785498999999',
-        tag: 'Coffee',
-        category: 'Coffee'
-    },
-    {
-        _id: '6662f8929459785498888888',
-        tag: 'Tea',
-        category: 'Tea'
-    },
-    {
-        _id: '6662f8929459785498777777',
-        tag: 'Food',
-        category: 'Food'
-    },
-    {
-        _id: '6662f8929459785498666666',
-        tag: 'Juice',
-        category: 'Juice'
-    }
-]
-
 const categoriesData = [
     {
         _id: '666300959459785498000021',
         name: 'Coffee',
-        description: 'Ground and whole bean coffee from around the world.'
+        description: 'Ground and whole bean coffee from around the world.',
+        subcategories: ['Ethiopian Yirgacheffe', 'Sumatra Mandheling', 'Colombian Supremo', 'Guatemalan Antigua', 'Brazilian Santos']
     },
     {
         _id: '666300959459785498000022',
         name: 'Tea',
-        description: 'Loose leaf and bagged teas.'
+        description: 'Loose leaf and bagged teas.',
+        subcategories: ['Earl Grey', 'Green Tea Sencha', 'Chamomile Tea', 'Peppermint Tea', 'Rooibos Tea']
     },
     {
         _id: '666300959459785498000023',
         name: 'Food',
-        description: 'Pastries, sandwiches, and other food items.'
+        description: 'Pastries, sandwiches, and other food items.',
+        subcategories: ['Chocolate Croissant', 'Blueberry Muffin', 'Almond Biscotti', 'Spinach and Feta Quiche', 'Fruit Tart']
     },
     {
         _id: '666300959459785498000024',
         name: 'Juice',
-        description: 'Freshly squeezed juices and smoothies.'
+        description: 'Freshly squeezed juices and smoothies.',
+        subcategories: ['Fresh Orange Juice', 'Green Detox Smoothie', 'Carrot Ginger Juice', 'Berry Blast Smoothie', 'Tropical Mango Smoothie']
     }
 ];
 
@@ -481,11 +442,6 @@ for (let i = 1; i <= 20; i++) {
 
 async function addMockData() {
     try {
-        // Add Tags
-        await Tag.deleteMany({});
-        await Tag.insertMany(tagsData);
-        console.log('Tags added successfully!');
-
         // Add Categories
         await Category.deleteMany({});
         await Category.insertMany(categoriesData);

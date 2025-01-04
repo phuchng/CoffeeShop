@@ -24,6 +24,8 @@ var orderRouter = require('./routes/order')
 var profileRouter = require('./routes/profile')
 var app = express();
 
+var fetchCategories = require('./middleware/menu');
+app.use(fetchCategories);
 
 // Initialize Passport.js
 require('./config/passport')(passport);
