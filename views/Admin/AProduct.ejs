@@ -2,7 +2,7 @@
     <h1 class="box-content-product--header">Manage Products</h1>
 
     <!-- Filter Form -->
-    <form action="/admin/products" method="GET" class="filter-form">
+    <form action="/admin/products" method="GET" class="filter-form" id="product-filter-form">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="<%= nameFilter || '' %>">
 
@@ -29,27 +29,89 @@
 
     <div id="message"></div>
 
-    <ul class="box-content-product--list">
-        <% products.forEach(product => { %>
-            <li class="box-content-product--item">
-                <div class="box-content-product--item-name">
-                    <img src="/assets/images/<%= product.image %>" width="50" height="50" alt="<%= product.name %>">
-                    <a href="/admin/products/<%= product._id %>"><%= product.name %></a>
-                </div>
-                <span class="box-content-product--item-cost">$<%= product.price %></span>
-                <span class="box-content-product--item-date"><%= product.createdAt.toLocaleDateString() %></span>
-            </li>
-        <% }); %>
+    <ul class="box-content-product--list" id="product-list">
+        <!-- Product items will be loaded here -->
     </ul>
 
     <!-- Pagination -->
-    <div class="box-content-product--pagination">
-        <% if (currentPage > 1) { %>
-            <a href="?page=<%= currentPage - 1 %>">Previous</a>
-        <% } %>
-        <span>Page <%= currentPage %> of <%= totalPages %></span>
-        <% if (currentPage < totalPages) { %>
-            <a href="?page=<%= currentPage + 1 %>">Next</a>
-        <% } %>
+    <div class="box-content-product--pagination" id="product-pagination">
+        <!-- Pagination links will be here -->
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        // Function to update the product list with AJAX response
+        function updateProductList(products) {
+            const productList = $('#product-list');
+            productList.empty();
+
+            products.forEach(product => {
+                const listItem = `
+                    <li class="box-content-product--item">
+                        <div class="box-content-product--item-name">
+                            <img src="/assets/images/${product.image}" width="50" height="50" alt="${product.name}">
+                            <a href="/admin/products/${product._id}">${product.name}</a>
+                        </div>
+                        <span class="box-content-product--item-cost">$${product.price}</span>
+                        <span class="box-content-product--item-date">${new Date(product.createdAt).toLocaleDateString()}</span>
+                    </li>
+                `;
+                productList.append(listItem);
+            });
+        }
+
+        // Function to update pagination links
+        function updatePagination(currentPage, totalPages) {
+            const pagination = $('#product-pagination');
+            pagination.empty();
+
+            if (currentPage > 1) {
+                pagination.append(`<a href="#" data-page="${currentPage - 1}">Previous</a>`);
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                pagination.append(`<a href="#" data-page="${i}" ${i === currentPage ? 'class="active"' : ''}>${i}</a>`);
+            }
+
+            if (currentPage < totalPages) {
+                pagination.append(`<a href="#" data-page="${currentPage + 1}">Next</a>`);
+            }
+        }
+
+        // Function to fetch products via AJAX
+        function fetchProducts(page = 1) {
+            const nameFilter = $('#name').val();
+            const categoryFilter = $('#category').val();
+            const sortBy = $('#sortBy').val();
+
+            $.ajax({
+                url: `/admin/products?page=${page}&name=${nameFilter}&category=${categoryFilter}&sortBy=${sortBy}`,
+                method: 'GET',
+                success: function (data) {
+                    updateProductList(data.products);
+                    updatePagination(data.currentPage, data.totalPages);
+                },
+                error: function (error) {
+                    console.error("Error fetching products:", error);
+                }
+            });
+        }
+
+        // Initial fetch on page load
+        fetchProducts();
+
+        // Handle filter form submission
+        $('#product-filter-form').submit(function (event) {
+            event.preventDefault();
+            fetchProducts(1); // Fetch first page with new filters
+        });
+
+        // Handle pagination link clicks
+        $('#product-pagination').on('click', 'a', function (event) {
+            event.preventDefault();
+            const page = $(this).data('page');
+            fetchProducts(page);
+        });
+    });
+</script>

@@ -366,25 +366,36 @@ router.get('/users', isAdmin, async (req, res) => {
         const totalUsers = await Account.countDocuments(query);
         const totalPages = Math.ceil(totalUsers / perPage);
 
-        renderAdminPage(req, res, 'AUser', {
-            users,
-            currentPage: page,
-            totalPages,
-            nameFilter: req.query.name,
-            emailFilter: req.query.email,
-            sortBy: req.query.sortBy
-        });
+        if (req.xhr) {
+            // AJAX request: Send only JSON data
+            res.json({
+                users,
+                currentPage: page,
+                totalPages,
+            });
+        } else {
+            // Initial page load: Render the full EJS template
+            renderAdminPage(req, res, 'AUser', {
+                users,
+                currentPage: page,
+                totalPages,
+                nameFilter: req.query.name,
+                emailFilter: req.query.email,
+                sortBy: req.query.sortBy
+            });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
     }
 });
 
+
 // Ban/Unban User - POST
 router.post('/users/ban/:id', isAdmin, async (req, res) => {
     try {
         const userId = req.params.id;
-
+        const action = req.body.action;
         // Prevent admin from banning themselves
         if (req.user.id === userId) {
             return res.status(400).json({ error: "Admin cannot ban themselves." });
@@ -395,9 +406,13 @@ router.post('/users/ban/:id', isAdmin, async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        user.isBanned = !user.isBanned;
-        await user.save();
+        if (action === 'ban') {
+            user.isBanned = true;
+        } else if (action === 'unban') {
+            user.isBanned = false;
+        }
 
+        await user.save();
         res.json({ message: `User ${user.isBanned ? 'banned' : 'unbanned'} successfully` });
     } catch (err) {
         console.error(err);
@@ -471,15 +486,25 @@ router.get('/products', isAdmin, async (req, res) => {
 
         const categories = await Category.find({}); // Fetch all categories
 
-        renderAdminPage(req, res, 'AProduct', {
-            products,
-            categories,
-            currentPage: page,
-            totalPages,
-            nameFilter: req.query.name,
-            categoryFilter: req.query.category,
-            sortBy: req.query.sortBy
-        });
+        if (req.xhr) {
+            // AJAX request: Send only JSON data
+            res.json({
+                products,
+                currentPage: page,
+                totalPages,
+            });
+        } else {
+            // Initial page load: Render the full EJS template
+            renderAdminPage(req, res, 'AProduct', {
+                products,
+                categories,
+                currentPage: page,
+                totalPages,
+                nameFilter: req.query.name,
+                categoryFilter: req.query.category,
+                sortBy: req.query.sortBy
+            });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');

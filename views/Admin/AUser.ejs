@@ -1,8 +1,8 @@
-<div class="box-content-user"></div>
+<div class="box-content-user">
     <h1 class="box-content-user--header">Manage Users</h1>
 
     <!-- Filter Form -->
-    <form action="/admin/users" method="GET" class="filter-form">
+    <form action="/admin/users" method="GET" class="filter-form" id="user-filter-form">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="<%= nameFilter || '' %>">
 
@@ -23,65 +23,97 @@
 
     <div id="message"></div>
 
-    <ul class="box-content-user--list">
-        <% users.forEach(user => { %>
-            <li class="box-content-user--item">
-                <div class="box-content-user--item-content">
-                    <span class="box-content-user--item-email"><%= user.email %></span>
-                    <span class="box-content-user--item-role"><%= user.role %></span>
-                </div>
-                <div class="user-actions">
-                    <button class="ban-button" data-id="<%= user._id %>" data-status="<%= user.isBanned ? 'unban' : 'ban' %>">
-                        <%= user.isBanned ? 'Unban' : 'Ban' %>
-                    </button>
-                    <select class="change-role-select" data-id="<%= user._id %>">
-                        <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
-                        <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
-                    </select>
-                </div>
-            </li>
-        <% }); %>
+    <ul class="box-content-user--list" id="user-list">
+        <!-- User items will be loaded here -->
     </ul>
 
     <!-- Pagination -->
-    <div class="box-content-user--pagination">
-        <% if (currentPage > 1) { %>
-            <a href="?page=<%= currentPage - 1 %>">Previous</a>
-        <% } %>
-        <span>Page <%= currentPage %> of <%= totalPages %></span>
-        <% if (currentPage < totalPages) { %>
-            <a href="?page=<%= currentPage + 1 %>">Next</a>
-        <% } %>
+    <div class="box-content-user--pagination" id="user-pagination">
+        <!-- Pagination links will be here -->
     </div>
 </div>
 
 <script>
-    $(document).ready(function() {
-        // Handle user ban/unban
-        $('.ban-button').click(function() {
-            const userId = $(this).data('id');
-            const action = $(this).data('status');
+    $(document).ready(function () {
+        // Function to update the user list with AJAX response
+        function updateUserList(users) {
+            const userList = $('#user-list');
+            userList.empty();
+
+            users.forEach(user => {
+                const listItem = `
+                    <li class="box-content-user--item">
+                        <div class="box-content-user--item-content">
+                            <span class="box-content-user--item-email">${user.email}</span>
+                            <span class="box-content-user--item-role">${user.role}</span>
+                        </div>
+                        <div class="user-actions">
+                            <button class="ban-button" data-id="${user._id}" data-status="${user.isBanned ? 'unban' : 'ban'}">
+                                ${user.isBanned ? 'Unban' : 'Ban'}
+                            </button>
+                            <select class="change-role-select" data-id="${user._id}">
+                                <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
+                                <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                            </select>
+                        </div>
+                    </li>
+                `;
+                userList.append(listItem);
+            });
+        }
+
+        // Function to update pagination links
+        function updatePagination(currentPage, totalPages) {
+            const pagination = $('#user-pagination');
+            pagination.empty();
+
+            if (currentPage > 1) {
+                pagination.append(`<a href="#" data-page="${currentPage - 1}">Previous</a>`);
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                pagination.append(`<a href="#" data-page="${i}" ${i === currentPage ? 'class="active"' : ''}>${i}</a>`);
+            }
+
+            if (currentPage < totalPages) {
+                pagination.append(`<a href="#" data-page="${currentPage + 1}">Next</a>`);
+            }
+        }
+
+        // Function to fetch users via AJAX
+        function fetchUsers(page = 1) {
+            const nameFilter = $('#name').val();
+            const emailFilter = $('#email').val();
+            const sortBy = $('#sortBy').val();
 
             $.ajax({
-                url: `/admin/users/ban/${userId}`,
-                method: 'POST',
-                data: { action: action },
-                success: function(response) {
-                    $('#message').html(`<p class="success-message">${response.message}</p>`);
-                    // Update button text and data-status
-                    const button = $(`.ban-button[data-id="${userId}"]`);
-                    if (action === 'ban') {
-                        button.text('Unban').data('status', 'unban');
-                    } else {
-                        button.text('Ban').data('status', 'ban');
-                    }
+                url: `/admin/users?page=${page}&name=${nameFilter}&email=${emailFilter}&sortBy=${sortBy}`,
+                method: 'GET',
+                success: function (data) {
+                    updateUserList(data.users);
+                    updatePagination(data.currentPage, data.totalPages);
                 },
-                error: function(error) {
-                    $('#message').html(`<p class="error-message">${error.responseJSON.error}</p>`);
+                error: function (error) {
+                    console.error("Error fetching users:", error);
                 }
             });
+        }
+
+        // Initial fetch on page load
+        fetchUsers();
+
+        // Handle filter form submission
+        $('#user-filter-form').submit(function (event) {
+            event.preventDefault();
+            fetchUsers(1); // Fetch first page with new filters
         });
 
+        // Handle pagination link clicks
+        $('#user-pagination').on('click', 'a', function (event) {
+            event.preventDefault();
+            const page = $(this).data('page');
+            fetchUsers(page);
+        });
         // Handle user role change
         $('.change-role-select').change(function() {
             const userId = $(this).data('id');
@@ -95,6 +127,33 @@
                     $('#message').html(`<p class="success-message">${response.message}</p>`);
                 },
                 error: function(error) {
+                    $('#message').html(`<p class="error-message">${error.responseJSON.error}</p>`);
+                }
+            });
+        });
+        // Handle user ban/unban
+        $('#user-list').on('click', '.ban-button', function (event) {
+            event.preventDefault();
+            const userId = $(this).data('id');
+            const action = $(this).data('status');
+
+            $.ajax({
+                url: `/admin/users/ban/${userId}`,
+                method: 'POST',
+                data: { action: action },
+                success: function (response) {
+                    $('#message').html(`<p class="success-message">${response.message}</p>`);
+                    // Update button text and data-status
+                    const button = $(`.ban-button[data-id="${userId}"]`);
+                    if (action === 'ban') {
+                        button.text('Unban').data('status', 'unban');
+                        button.removeClass('ban-button').addClass('unban-button');
+                    } else {
+                        button.text('Ban').data('status', 'ban');
+                        button.removeClass('unban-button').addClass('ban-button');
+                    }
+                },
+                error: function (error) {
                     $('#message').html(`<p class="error-message">${error.responseJSON.error}</p>`);
                 }
             });

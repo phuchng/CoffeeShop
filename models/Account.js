@@ -22,10 +22,11 @@ const AccountSchema = new mongoose.Schema({
         phone: String,
     },
     isVerified: { type: Boolean, default: false },
+    isBanned: { type: Boolean, default: false },
     token: String,
     expirationTime: Date,
     avatar: { type: String, default: 'default_avatar.png' },
-});
+}, { timestamps: true });
 
 AccountSchema.virtual('id').get(function () {
     return this._id.toHexString();
