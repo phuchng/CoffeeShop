@@ -1,5 +1,6 @@
 var express = require('express');
-var { Product } = require('../models/Product')
+var { Product } = require('../models/Product');
+var Category = require('../models/Category');
 var router = express.Router();
 var { isAdmin } = require('../middleware/authentication');
 
@@ -133,6 +134,8 @@ router.get('/products', async function (req, res, next) {
 
     // Search query
     if (searchTerm) {
+
+
         query.$or = [
             { name: { $regex: searchTerm, $options: 'i' } },
             { description: { $regex: searchTerm, $options: 'i' } },
@@ -142,7 +145,12 @@ router.get('/products', async function (req, res, next) {
 
     // Filter by category
     if (req.query.category) {
-        query.category = { $in: Array.isArray(req.query.category) ? req.query.category : [req.query.category] };
+        const categoryFind = await Category.findOne({ name: req.query.category })
+        if (categoryFind) {
+            query.category = categoryFind._id; // Use the _id directly
+        } else {
+            query.category = null; // Optional: Handle cases where the category is not found
+        }
     }
 
     // Filter by price range
