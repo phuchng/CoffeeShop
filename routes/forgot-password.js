@@ -28,7 +28,7 @@ router.post('/', async(req, res) => {
 
         await user.save();
 
-        const resetLink = `http://localhost:2000/reset-password?token=${token}`;
+        const resetLink = process.env.HOST_URL + `/reset-password?token=${token}`;
 
         const message = `
         <p>To successfully change your password, please verify your email by clicking the link below: </p>

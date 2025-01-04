@@ -12,7 +12,7 @@ services:
       - SESSION_SECRET=uiodsjfkjnkr
       - GOOGLE_CLIENT_ID=1054842495994-jig9irip1b5oprfgreg1077j2ucl5ffp.apps.googleusercontent.
       - GOOGLE_CLIENT_SECRET=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
-      - GOOGLE_CALLBACK_URL=http://localhost:2000/auth/google/callback
+      - HOST_URL = http://localhost:2000
     volumes:
       - .:/app
       - /app/node_modules

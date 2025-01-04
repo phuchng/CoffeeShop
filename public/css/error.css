@@ -39,5 +39,5 @@
 }
 .glow-btn:active {
     box-shadow: 0 2px 10px #415c97;
-    transform: scale(0.95); /* Thu nhỏ khi click */
+    transform: scale(0.95); /* thu nho khi click */
 }

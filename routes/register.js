@@ -26,7 +26,7 @@ router.post('/', async function(req, res, next){
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const token = crypto.randomBytes(32).toString("hex");
-        const verificationLink = `http://localhost:2000/verify-email?token=${token}`;
+        const verificationLink = process.env.HOST_URL + `/verify-email?token=${token}`;
        const message = `
          <html>
             <body>

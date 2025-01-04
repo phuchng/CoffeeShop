@@ -460,8 +460,8 @@ const usersData = [];
 for (let i = 1; i <= 20; i++) {
     const user = {
         _id: `6663009594597854980000${String(i).padStart(2, '0')}`,
-        first_name: `User${i}`,
-        last_name: `Test${i}`,
+        first_name: `Coffee`,
+        last_name: `Drinker ${i}`,
         email: `user${i}@example.com`,
         password: `password${i}`, // This will be hashed later
         role: 'user',

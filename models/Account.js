@@ -11,7 +11,7 @@ const AccountSchema = new mongoose.Schema({
         accessToken: String,
         refreshToken: String,
     },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' }, 
+    role: { type: String, enum: ['user', 'admin'], default: 'user' },
     address:
     {
         first_name: String,
@@ -23,6 +23,8 @@ const AccountSchema = new mongoose.Schema({
     },
     isVerified: { type: Boolean, default: false },
     token: String,
+    expirationTime: Date,
+    avatar: { type: String, default: 'default_avatar.png' },
 });
 
 AccountSchema.virtual('id').get(function () {

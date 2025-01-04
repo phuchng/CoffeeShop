@@ -52,7 +52,6 @@ app.use(fetchMenu);
 
 app.set('views', path.join(__dirname, 'views'));
 
-
 app.use(expressLayouts);
 app.set('layout', 'layouts/layout');
 app.set('view engine', 'ejs');
@@ -73,6 +72,7 @@ app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
 app.use('/verify-email', verifyRoute);
 app.use('/forgot-password', forgotPassword)
+app.use('/reset-password', resetRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
