@@ -11,103 +11,104 @@ const Order = require('../models/Order');
 router.get('/', isAuthenticated, async (req, res, next) => {
     const userID = req.user.id;
 
-    const cart = await Cart.findOne({ account: userID });
+    try {
+        const cart = await Cart.findOne({ account: userID });
 
-    if (!cart){
-        const newCart = new Cart({ account: userID });
-        await newCart.save();
-        const cartItems = []
-        return res.render('cart', { cartItems: cartItems, totalPrice: 0 });
-    }
-
-    if (!cart.products){
-        const cartItems = []
-        return res.render('cart', { cartItems: cartItems, totalPrice: 0 });
-    }
-
-    const cartItems = await Promise.all(cart.products.map(async (item) => {
-        try {
-            // Fetch the product by its ID
-            const product = await Product.findById(item.product);
-            
-            if (!product) {
-                throw new Error(`Product not found with ID: ${item.product}`);
-            }
-            // Return cart item with product details
-            return {
-                id: product._id,
-                name: product.name,
-                image: product.image,
-                price: product.price,
-                quantity: item.quantity,
-                servingOption: item.servingOption,
-                totalCost: (product.price * item.quantity).toFixed(2),
-            };
-        } catch (error) {
-            console.error('Error fetching product:', error);
-            return null; // In case of error, return null
+        if (!cart) {
+            const newCart = new Cart({ account: userID });
+            await newCart.save();
+            return res.render('cart', { cartItems: [], totalPrice: 0 });
         }
-    }))
 
-    return res.render('cart', { cartItems: cartItems, totalPrice: cart.totalPrice });
-})
+        if (!cart.products || cart.products.length === 0) {
+            return res.render('cart', { cartItems: [], totalPrice: 0 });
+        }
 
+        const cartItems = await Promise.all(cart.products.map(async (item) => {
+            try {
+                const product = await Product.findById(item.product);
+                if (!product) {
+                    throw new Error(`Product not found with ID: ${item.product}`);
+                }
+                return {
+                    id: product._id,
+                    name: product.name,
+                    image: product.image,
+                    price: product.price,
+                    quantity: item.quantity,
+                    servingOption: item.servingOption,
+                    totalCost: (product.price * item.quantity).toFixed(2),
+                };
+            } catch (error) {
+                console.error('Error fetching product:', error);
+                return null;
+            }
+        }));
+
+        // Filter out any null values in case of errors
+        const validCartItems = cartItems.filter(item => item !== null);
+
+        return res.render('cart', { cartItems: validCartItems, totalPrice: cart.totalPrice });
+    } catch (error) {
+        console.error('Error fetching cart:', error);
+        return res.status(500).render('error', { message: 'Error fetching cart', error: error });
+    }
+});
 
 router.post('/add-cart', isAuthenticated, async (req, res, next) => {
     const { productID, quantity, servingOption } = req.body;
-
     const accountID = req.user.id;
 
-    try{
+    try {
         const cart = await Cart.findOne({ account: accountID }) || new Cart({ account: accountID });
 
         const existingItem = cart.products.find(
             (item) => item.product.toString() === productID && item.servingOption === servingOption
         );
 
-        if (existingItem){
-            existingItem.quantity += quantity;
-        }
-
-        else{
-            cart.products.push({ product: productID, quantity, servingOption });
+        if (existingItem) {
+            existingItem.quantity += parseInt(quantity); // Ensure quantity is a number
+        } else {
+            cart.products.push({ product: productID, quantity: parseInt(quantity), servingOption });
         }
 
         const productFound = await Product.findById(productID);
-        const price = productFound.price;
-        cart.totalPrice += price * parseInt(quantity);
-        cart.totalItems += quantity;
+        if (!productFound) {
+            return res.status(404).json({ success: false, message: 'Product not found.' });
+        }
+
+        cart.totalPrice += productFound.price * parseInt(quantity);
+        cart.totalItems += parseInt(quantity); // Ensure quantity is a number
         await cart.save();
         res.json({ success: true, message: 'Product added to cart successfully!' });
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Error adding product to cart:', error);
         res.status(500).json({ success: false, message: 'Failed to add product to cart.' });
     }
-})
+});
 
 router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
     const { productID, servingOption } = req.body;
-
     const accountID = req.user.id;
 
-    try{
+    try {
         const cart = await Cart.findOne({ account: accountID });
 
         if (!cart) {
             return res.status(404).json({ success: false, message: 'Cart not found.' });
         }
 
-        const initialSize = cart.products.length;
+        const productIndex = cart.products.findIndex(item => item.product.toString() === productID && item.servingOption === servingOption);
 
-        cart.products = cart.products.filter(item => item.product.toString() !== productID || item.servingOption !== servingOption);
-
-        if (initialSize === cart.products.length) {
+        if (productIndex === -1) {
             return res.status(404).json({ success: false, message: 'Product not found in cart.' });
         }
 
-        let totalPrice = 0;
+        // Remove the product from the cart
+        cart.products.splice(productIndex, 1);
 
+        // Recalculate total price
+        let totalPrice = 0;
         for (const item of cart.products) {
             const product = await Product.findById(item.product);
             if (product) {
@@ -119,23 +120,23 @@ router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
         await cart.save();
 
         res.status(200).json({ success: true, message: 'Product removed from cart.', newTotalPrice: totalPrice });
+    } catch (error) {
+        console.error('Error removing product from cart:', error);
+        res.status(500).json({ success: false, message: 'Failed to remove product from cart.' });
     }
-    catch (error) {
-        console.error('Error adding product to cart:', error);
-        res.status(500).json({ success: false, message: 'Failed to remove product from6 cart.' });
-    }
-})
+});
 
 router.post('/order', isAuthenticated, async (req, res, next) => {
     const orderDate = Date.now();
     const shipTime = orderDate + 24 * 60 * 60 * 1000;
     const accountID = req.user.id;
+
     try {
-        // Retrieve the user's cart
         const cart = await Cart.findOne({ account: accountID }).populate('products.product');
         const user = await Account.findById(accountID);
-        if (!cart || cart.products.length === 0){
-            return res.status(400).json({ error: 'Cart is Empty!'})
+
+        if (!cart || cart.products.length === 0) {
+            return res.status(400).json({ error: 'Cart is empty!' });
         }
 
         const newOrder = new Order({
@@ -146,7 +147,7 @@ router.post('/order', isAuthenticated, async (req, res, next) => {
             address: user.address,
             totalPrice: cart.totalPrice,
             totalItems: cart.totalItems
-        })
+        });
 
         await newOrder.save();
 
@@ -160,7 +161,7 @@ router.post('/order', isAuthenticated, async (req, res, next) => {
     } catch (error) {
         console.error('Error submitting order:', error);
         res.status(500).json({ success: false, message: 'Failed to submit order.' });
-      }
-})
+    }
+});
 
 module.exports = router;

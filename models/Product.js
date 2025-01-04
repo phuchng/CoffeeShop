@@ -39,6 +39,7 @@ const ProductSchema = new mongoose.Schema({
     },
     ingredients: [String],
     sales: { type: Number, default: 0 },
+    status: { type: String, enum: ['On stock', 'Out of stock', 'Suspended'], default: 'On stock' }
 }, { timestamps: true });
 
 ProductSchema.methods.updateRatings = function () {

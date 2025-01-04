@@ -28,16 +28,6 @@
         </select>
     </div>
     <div class="box-content-addproduct-form">
-        <h3 class="box-content-addproduct-form--header">Tag</h3>
-        <select name="tag">
-            <% tags.forEach(tag => { %>
-                <option value="<%= tag._id %>" <%=product.tag.toString() === tag._id.toString() ? 'selected' : '' %>>
-                    <%= tag.tag %> (<%= tag.category %>)
-                </option>
-                <% }); %>
-        </select>
-    </div>
-    <div class="box-content-addproduct-form">
         <h3 class="box-content-addproduct-form--header">Serving Options (comma-separated)</h3>
         <input type="text" name="servingOptions" placeholder="e.g., 12 oz, 1 lb, 5 lb"
             value="<%= product.servingOptions.join(', ') %>">
@@ -65,6 +55,14 @@
         <h3 class="box-content-addproduct-form--header">Ingredients (comma-separated)</h3>
         <input type="text" name="ingredients" placeholder="e.g., Ingredient 1, Ingredient 2"
             value="<%= product.ingredients.join(', ') %>">
+    </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Status</h3>
+        <select name="status">
+            <option value="On stock" <%= product.status === 'On stock' ? 'selected' : '' %>>On Stock</option>
+            <option value="Out of stock" <%= product.status === 'Out of stock' ? 'selected' : '' %>>Out of Stock</option>
+            <option value="Suspended" <%= product.status === 'Suspended' ? 'selected' : '' %>>Suspended</option>
+        </select>
     </div>
     <div class="box-content-addproduct-form">
         <h3 class="box-content-addproduct-form--header">Current Images</h3>

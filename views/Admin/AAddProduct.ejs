@@ -28,16 +28,6 @@
         </select>
     </div>
     <div class="box-content-addproduct-form">
-        <h3 class="box-content-addproduct-form--header">Tag</h3>
-        <select name="tag">
-            <% tags.forEach(tag => { %>
-                <option value="<%= tag._id %>">
-                    <%= tag.tag %> (<%= tag.category %>)
-                </option>
-                <% }); %>
-        </select>
-    </div>
-    <div class="box-content-addproduct-form">
         <h3 class="box-content-addproduct-form--header">Serving Options (comma-separated)</h3>
         <input type="text" name="servingOptions" placeholder="e.g., 12 oz, 1 lb, 5 lb">
     </div>
@@ -63,6 +53,14 @@
     <div class="box-content-addproduct-form">
         <h3 class="box-content-addproduct-form--header">Ingredients (comma-separated)</h3>
         <input type="text" name="ingredients" placeholder="e.g., Ingredient 1, Ingredient 2">
+    </div>
+    <div class="box-content-addproduct-form">
+        <h3 class="box-content-addproduct-form--header">Status</h3>
+        <select name="status">
+            <option value="On stock">On Stock</option>
+            <option value="Out of stock">Out of Stock</option>
+            <option value="Suspended">Suspended</option>
+        </select>
     </div>
     <div class="box-content-addproduct-form">
         <h3 class="box-content-addproduct-form--header">Images</h3>

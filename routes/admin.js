@@ -46,9 +46,9 @@ router.get('/dashboard', isAdmin, async (req, res) => {
 // Add Product - GET
 router.get('/products/add', isAdmin, async (req, res) => {
     try {
-        const tags = await Tag.find({});
+        //const tags = await Tag.find({}); // Remove Tag reference
         const categories = await Category.find({});
-        renderAdminPage(req, res, 'AAddProduct', { tags, categories });
+        renderAdminPage(req, res, 'AAddProduct', { categories }); // Remove tags
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -58,7 +58,7 @@ router.get('/products/add', isAdmin, async (req, res) => {
 // Add Product - POST
 router.post('/products/add', isAdmin, upload.array('images', 5), async (req, res) => {
     try {
-        const { name, price, description, category, tag, servingOptions, grind, roast, origin, ingredients, status } = req.body;
+        const { name, price, description, category, servingOptions, grind, roast, origin, ingredients, status } = req.body;
 
         const imagePaths = req.files.map(file => file.filename);
         const firstImagePath = imagePaths.length > 0 ? imagePaths[0] : null;
@@ -68,7 +68,6 @@ router.post('/products/add', isAdmin, upload.array('images', 5), async (req, res
             price,
             description,
             category,
-            tag,
             servingOptions: servingOptions.split(','),
             grind,
             roast,
@@ -76,7 +75,7 @@ router.post('/products/add', isAdmin, upload.array('images', 5), async (req, res
             ingredients: ingredients.split(','),
             image: firstImagePath,
             images: imagePaths,
-            status
+            status: status || 'On stock' // Default to 'On stock' if not provided
         });
 
         await newProduct.save();
@@ -92,12 +91,11 @@ router.post('/products/add', isAdmin, upload.array('images', 5), async (req, res
 router.get('/products/update/:id', isAdmin, async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
-        const tags = await Tag.find({});
         const categories = await Category.find({});
         if (!product) {
             return res.status(404).send('Product not found');
         }
-        renderAdminPage(req, res, 'AUpdateProduct', { product, tags, categories });
+        renderAdminPage(req, res, 'AUpdateProduct', { product, categories }); 
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -107,7 +105,7 @@ router.get('/products/update/:id', isAdmin, async (req, res) => {
 // Update Product - POST
 router.post('/products/update/:id', isAdmin, upload.array('images', 5), async (req, res) => {
     try {
-        const { name, price, description, category, tag, servingOptions, grind, roast, origin, ingredients, status } = req.body;
+        const { name, price, description, category, servingOptions, grind, roast, origin, ingredients, status } = req.body;
         const currentProduct = await Product.findById(req.params.id);
 
         // Handle new image uploads
@@ -125,7 +123,6 @@ router.post('/products/update/:id', isAdmin, upload.array('images', 5), async (r
             price,
             description,
             category,
-            tag,
             servingOptions: servingOptions.split(','),
             grind,
             roast,
