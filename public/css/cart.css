@@ -4,7 +4,7 @@
     justify-content: space-between;
     margin-top: 30px;
 }
-.subtotal h1 {
+.subtotal-header {
     color: #70604d;
     font-size: 24.5px;
 }
@@ -17,7 +17,7 @@
     color: #70604d;
     font-size: 14px;
 }
-.texSub span {
+.texSub-span {
     display: block;
     text-align: right;
 }
@@ -64,17 +64,17 @@
     flex-direction: column;
     margin-left: 20px;
 }
-.InfoProductC h3 {
+.InfoProductC-header {
     margin: 0 0 10px 0;
     color: rgb(112, 96, 77);
     font-size: 16px;
 }
-.InfoProductC span {
+.InfoProductC-span {
     color:#935858;
     font-size: 13.5px;
     line-height: 18.1126px;
 }
-.InfoProductC strong {
+.InfoProductC-span strong {
     color: rgb(89,89,89);
     font-weight: 500;
 }
@@ -113,7 +113,7 @@
     justify-content: space-between;
     margin-bottom: 30px;
 }
-.boxInfoCheckout span {
+.boxInfoCheckout--header {
     color:#935858;
     font-size: 30px;
 }

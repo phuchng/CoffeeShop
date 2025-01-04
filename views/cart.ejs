@@ -1,13 +1,13 @@
 <div class="container">
     <div class="grid">
         <div class="subtotal">
-            <h1>Your Cart</h1>
+            <h1 class="subtotal-header">Your Cart</h1>
             <div class="boxSub">
                 <div class="texSub">
-                    <span>Subtotal</span>
+                    <span class="texSub-span">Subtotal</span>
                     <span class="costSub">$<%= totalPrice %></span>
                 </div>
-                <button class="checkout">
+                <button class="checkout1">
                     <i class="fa-solid fa-cart-shopping"></i>
                     CHECKOUT
                 </button>
@@ -20,15 +20,15 @@
                         <li class="itemCart">
                             <div class="boxInfoProductC">
                                 <img src="/assets/images/<%= item.image %>" alt="<%= item.name %>" width="120px" height="120px">
-                                <div class="InfoProduct">
-                                    <h3><%= item.name %></h3>
-                                    <span><strong>Serving Option:</strong> <%= item.servingOption %></span>
-                                    <span><strong>Price:</strong> $<%= item.price %></span>
+                                <div class="InfoProductC">
+                                    <h3 class="InfoProductC-header"><%= item.name %></h3>
+                                    <span class="InfoProductC-span"><strong>Serving Option:</strong> <%= item.servingOption %></span>
+                                    <span class="InfoProductC-span"><strong>Price:</strong> $<%= item.price %></span>
                                 </div>
                             </div>
                             <div class="boxInfoCostC">
                                 <div class="BoxQuantity">
-                                    <span>Quantity</span>
+                                    <span >Quantity</span>
                                     <span class="qtt"><%= item.quantity %></span>
                                 </div>
                                 <span class="costC">$<%= item.totalCost %></span>
@@ -44,7 +44,7 @@
         </div>
         <div class="checkout1">
             <div class="boxInfoCheckout">
-                <span>Subtotal</span>
+                <span class="boxInfoCheckout--header">Subtotal</span>
                 <span class="InfoCost">$<%= totalPrice %></span>
             </div>
             <button class="checkout">
