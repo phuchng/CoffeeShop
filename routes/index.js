@@ -11,7 +11,7 @@ router.get('/', async function (req, res) {
 
     const topRatedProducts = await Product.find()
         .sort({ 'ratings.averageRating': -1 })
-        .limit(5)
+        .limit(4)
         .exec();
 
     return res.render('homepage', { productExample: productExample, topRated: topRatedProducts });

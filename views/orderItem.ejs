@@ -1,70 +1,58 @@
 <div class="containerP">
     <div class="grid">
-        <h1 style="color:#1773B0">Đơn hàng AM Coffee</h1>
+        <h1 style="color:#1773B0">AM Coffee Order Info</h1>
         <div class="boxIndoCustomer">
             <h3 class="boxIndoCustomer--header">
                 Order Info:
             </h3>
-            <span>Name: Le Phan Thanh Nhan</span>
-            <span>Company: None</span>
-            <span>Address: Ho Chi Minh City</span>
-            <span>Apartment: C3-13</span>
-            <span>Phone: 123456789</span>
-            <span>Ngày giao dự kiến: 2025-01-03</span>
+            <span>Name: <%= order.address.first_name %> <%= order.address.last_name %></span>
+            <span>Company: <% if (order.address.company) { %>
+                <%= order.address.company %>
+            <% } else { %>
+                None
+            <% } %></span>
+            <span>Address: <%= order.address.address %></span>
+            <span>Apartment: <% if (order.address.company) { %>
+                <%= order.address.apartment %>
+            <% } else { %>
+                None
+            <% } %></span>
+            <span>Phone: <%= order.address.phone %></span>
+            <span>Pending Date: <%= order.shipTime %></span>
+
         </div>
         <div class="boxListCart-orderItem">
             <ul class="listCart-orderItem">
-                <li class="itemCart-orderItem">
-                    <div class="boxInfoProductC-orderItem">
-                        <img src="product.png" alt="" width="120px" height="120px">
-                        <div class="InfoProductC-orderItem">
-                            <h3>Costa Rica Reserve Coffee</h3>
-                            <span><strong>Reg/Decaf:</strong> Regular</span>
-                            <span><strong>Coffee Grind:</strong> Whole Bean</span>
-                            <span><strong>Bag Size:</strong> 1LB</span>
-                            <span><strong>Price:</strong> $13.00</span>
-                            <span><strong>SKU:</strong> COSRICRESEWHOLE BEAN</span>
-                        </div>
-                    </div>
-                    <div class="boxInfoCostC-orderItem">
-                        <div class="BoxQuantity-orderItem">
-                            <span>Quantity</span>
-                            <span class="qtt-orderItem">1</span>
-                        </div>
-                        <span class="costC-orderItem">$13.00</span>
-                    </div>
-                </li>
-                <li class="itemCart-orderItem">
-                    <div class="boxInfoProductC-orderItem">
-                        <img src="product.png" alt="" width="120px" height="120px">
-                        <div class="InfoProductC-orderItem">
-                            <h3>Costa Rica Reserve Coffee</h3>
-                            <span><strong>Reg/Decaf:</strong> Regular</span>
-                            <span><strong>Coffee Grind:</strong> Whole Bean</span>
-                            <span><strong>Bag Size:</strong> 1LB</span>
-                            <span><strong>Price:</strong> $13.00</span>
-                            <span><strong>SKU:</strong> COSRICRESEWHOLE BEAN</span>
-                        </div>
-                    </div>
-                    <div class="boxInfoCostC-orderItem">
-                        <div class="BoxQuantity-orderItem">
-                            <span>Quantity</span>
-                            <span class="qtt-orderItem">1</span>
-                        </div>
-                        <span class="costC-orderItem">$13.00</span>
-                    </div>
-                </li>
+                    <% products.forEach(product => { %>
+                        <li class="itemCart-orderItem">
+                            <div class="boxInfoProductC-orderItem">
+                                <img src="/assets/images/<%= product.image %>" alt="" width="120px" height="120px">
+                                <div class="InfoProductC-orderItem">
+                                    <h3><%= product.name %></h3>
+                                    <% if (product.servingOption) { %>
+                                        <span><strong>Serving Option:</strong> <%= product.servingOption %></span>
+                                    <% } %>
+                                    <span><strong>Price:</strong> $<%= product.price %></span>
+                                </div>
+                            </div>
+
+                            <div class="boxInfoCostC-orderItem">
+                                <div class="BoxQuantity-orderItem">
+                                    <span>Quantity</span>
+                                    <span class="qtt-orderItem"><%= product.quantity %></span>
+                                </div>
+                                <span class="costC-orderItem">$<%= product.totalCost %></span>
+                            </div>
+                        </li>
+                    <% }) %>
             </ul>
         </div>
         <div class="checkout-orderItem">
             <div class="boxInfoCheckout-orderItem">
                 <span>Subtotal</span>
-                <span class="InfoCost-orderItem">$13.00</span>
+                <span class="InfoCost-orderItem">$<%= order.totalPrice %></span>
             </div>
-            <button>
-                <i class="fa-solid fa-cart-shopping"></i> CANCEL
-            </button>
-            <a href="" style="display: block; text-decoration: none; color: #A7661B; cursor: pointer; font-size: 15px; text-align: center; margin-top: 10px;">Return ></a>
+            <a href="/order" style="display: block; text-decoration: none; color: #A7661B; cursor: pointer; font-size: 15px; text-align: center; margin-top: 10px;">Return ></a>
         </div>
     </div>
 </div>

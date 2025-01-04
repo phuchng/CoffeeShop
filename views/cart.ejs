@@ -22,7 +22,9 @@
                                 <img src="/assets/images/<%= item.image %>" alt="<%= item.name %>" width="120px" height="120px">
                                 <div class="InfoProduct">
                                     <h3><%= item.name %></h3>
-                                    <span><strong>Serving Option:</strong> <%= item.servingOption %></span>
+                                    <% if (item.servingOption) { %>
+                                        <span><strong>Serving Option:</strong> <%= item.servingOption %></span>
+                                    <% }
                                     <span><strong>Price:</strong> $<%= item.price %></span>
                                 </div>
                             </div>
@@ -94,7 +96,28 @@
     })
     document.querySelectorAll('.checkout').forEach((checkout) => {
         checkout.addEventListener('click', async () => {
-            
+            try{
+                const response = await fetch('/cart/order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+
+                const result = await response.json();
+
+                if (response.ok){
+                    window.location.href = '/order';
+                    alert(result.message);
+                }
+
+                else{
+                    alert(`Error: ${result.error}`);
+                }
+            }
+
+            catch (err){
+                console.error('Error:', err);
+                alert('An error occurred. Please try again.');
+            }
         })
     })
 </script>

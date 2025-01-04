@@ -15,15 +15,15 @@ var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
-var profileRouter = require('./routes/profile');
 var forgotPassword = require('./routes/forgot-password')
 var verifyRoute = require('./routes/verify-email')
 var resetRoute = require('./routes/reset-password')
 var cartRouter = require('./routes/cart');
 var authRouter = require('./routes/auth');
+var orderRouter = require('./routes/order')
+var profileRouter = require('./routes/profile')
 var app = express();
 
-var fetchMenu = require('./middleware/menu');
 
 // Initialize Passport.js
 require('./config/passport')(passport);
@@ -47,7 +47,6 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use(fetchMenu);
 // view engine setup
 
 app.set('views', path.join(__dirname, 'views'));
@@ -67,12 +66,13 @@ app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
 app.use('/admin', adminRouter);
+app.use('/profile', profileRouter);
 app.use('/cart', cartRouter);
 app.use('/auth', authRouter);
-app.use('/profile', profileRouter);
 app.use('/verify-email', verifyRoute);
-app.use('/forgot-password', forgotPassword)
+app.use('/forgot-password', forgotPassword);
 app.use('/reset-password', resetRoute);
+app.use('/order', orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

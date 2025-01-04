@@ -17,12 +17,12 @@ router.get('/', isAuthenticated, async (req, res, next) => {
         const newCart = new Cart({ account: userID });
         await newCart.save();
         const cartItems = []
-        return res.render('cart', { layout: 'layouts/layoutProfile', cartItems: cartItems, totalPrice: 0 });
+        return res.render('cart', { cartItems: cartItems, totalPrice: 0 });
     }
 
     if (!cart.products){
         const cartItems = []
-        return res.render('cart', { layout: 'layouts/layoutProfile', cartItems: cartItems, totalPrice: 0 });
+        return res.render('cart', { cartItems: cartItems, totalPrice: 0 });
     }
 
     const cartItems = await Promise.all(cart.products.map(async (item) => {
@@ -49,7 +49,7 @@ router.get('/', isAuthenticated, async (req, res, next) => {
         }
     }))
 
-    return res.render('cart', { layout: 'layouts/layoutProfile', cartItems: cartItems, totalPrice: cart.totalPrice });
+    return res.render('cart', { cartItems: cartItems, totalPrice: cart.totalPrice });
 })
 
 
@@ -76,6 +76,7 @@ router.post('/add-cart', isAuthenticated, async (req, res, next) => {
         const productFound = await Product.findById(productID);
         const price = productFound.price;
         cart.totalPrice += price * parseInt(quantity);
+        cart.totalItems += quantity;
         await cart.save();
         res.json({ success: true, message: 'Product added to cart successfully!' });
     }
@@ -126,27 +127,25 @@ router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
 })
 
 router.post('/order', isAuthenticated, async (req, res, next) => {
-    const { address, shipTime, specialInstruction } = req.body;
-    if (!address || !shipTime){
-        return res.status(400).json({ error: 'Address or Ship Time is Missing!'})
-    }
-
+    const orderDate = Date.now();
+    const shipTime = orderDate + 24 * 60 * 60 * 1000;
     const accountID = req.user.id;
     try {
         // Retrieve the user's cart
         const cart = await Cart.findOne({ account: accountID }).populate('products.product');
-
+        const user = await Account.findById(accountID);
         if (!cart || cart.products.length === 0){
             return res.status(400).json({ error: 'Cart is Empty!'})
         }
 
         const newOrder = new Order({
             account: accountID,
-            products: cart.products,
-            totalPrice: cart.totalPrice,
-            orderDate: new Date(),
+            orderDate: orderDate,
             shipTime: shipTime,
-            specialInstruction: specialInstruction || null
+            products: cart.products,
+            address: user.address,
+            totalPrice: cart.totalPrice,
+            totalItems: cart.totalItems
         })
 
         await newOrder.save();
@@ -154,6 +153,7 @@ router.post('/order', isAuthenticated, async (req, res, next) => {
         // Clear the user's cart after order submission
         cart.products = [];
         cart.totalPrice = 0;
+        cart.totalItems = 0;
         await cart.save();
 
         res.status(200).json({ success: true, message: 'Order submitted successfully.' });

@@ -1,76 +1,93 @@
 <div class="containerP">
     <div class="grid">
         <h1 style="color:#1773B0">ORDER LIST</h1>
-        <ul class="orderList">
-            <li class="orderItem">
-                <div class="orderItem-box1">
-                    <img src="product.png" width="54" height="54" style="object-fit: cover;" alt="">
-                    <div class="orderItem-box">
-                        <a href="" class="orderItem-box-name">Đơn hàng  AM Coffee</a>
-                        <span class="orderItem-box-quatity">2 phần</span>
-                    </div>
-                </div>
-                
-                <div class="orderItem-box">
-                    <span class="orderItem-box-date">2025-01-03</span>
-                </div>
-            </li>
-            <li class="orderItem">
-                <div class="orderItem-box1">
-                    <img src="product.png" width="54" height="54" style="object-fit: cover;" alt="">
-                    <div class="orderItem-box">
-                        <a href="" class="orderItem-box-name">Đơn hàng  AM Coffee</a>
-                        <span class="orderItem-box-quatity">2 phần</span>
-                    </div>
-                </div>
-                
-                <div class="orderItem-box">
-                    <span class="orderItem-box-date">2025-01-03</span>
-                </div>
-            </li>
-            <li class="orderItem">
-                <div class="orderItem-box1">
-                    <img src="product.png" width="54" height="54" style="object-fit: cover;" alt="">
-                    <div class="orderItem-box">
-                        <a href="" class="orderItem-box-name">Đơn hàng  AM Coffee</a>
-                        <span class="orderItem-box-quatity">2 phần</span>
-                    </div>
-                </div>
-                
-                <div class="orderItem-box">
-                    <span class="orderItem-box-date">2025-01-03</span>
-                </div>
-            </li>
-            <li class="orderItem">
-                <div class="orderItem-box1">
-                    <img src="product.png" width="54" height="54" style="object-fit: cover;" alt="">
-                    <div class="orderItem-box">
-                        <a href="" class="orderItem-box-name">Đơn hàng  AM Coffee</a>
-                        <span class="orderItem-box-quatity">2 phần</span>
-                    </div>
-                </div>
-                
-                <div class="orderItem-box">
-                    <span class="orderItem-box-date">2025-01-03</span>
-                </div>
-            </li><li class="orderItem">
-                <div class="orderItem-box1">
-                    <img src="product.png" width="54" height="54" style="object-fit: cover;" alt="">
-                    <div class="orderItem-box">
-                        <a href="" class="orderItem-box-name">Đơn hàng  AM Coffee</a>
-                        <span class="orderItem-box-quatity">2 phần</span>
-                    </div>
-                </div>
-                
-                <div class="orderItem-box">
-                    <span class="orderItem-box-date">2025-01-03</span>
-                </div>
-            </li>
+        <ul class="orderList" id="orderList">
+
         </ul>
-        <div class="box-pattion" style="text-align: center;">
-            <button>Pre</button>
-            <span>1/3</span>
-            <button>Next</button>
+        <div class="pagination box-pattion" id="pagination" style="text-align: center;">
+
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        const orderList = $('#orderList'); 
+        const pagination = $('#pagination');
+    
+        function updateOrders(data) {
+            orderList.empty(); // Clear existing products
+    
+            if (data.orders.length === 0) {
+                productList.append('<p style="text-align: center; width: 100%">No products found.</p>');
+                return;
+            }
+    
+            data.orders.forEach(order => {
+                const productItem = `
+            <li class="orderItem">
+                <div class="orderItem-box1">
+                    <img src="/assets/images/product.png" width="54" height="54" style="object-fit: cover;" alt="">
+                    <div class="orderItem-box">
+                        <a href="/order/orderDetail/${order.id}" class="orderItem-box-name">Order AM Coffee</a>
+                        <span class="orderItem-box-quatity">Quantity: ${order.totalItems}</span>
+                    </div>
+                </div>
+                
+                <div class="orderItem-box">
+                    <span class="orderItem-box-date">${order.orderDate}</span>
+                </div>
+            </li>
+                `;
+                orderList.append(productItem);
+            });
+            updatePagination(data.currentPage, data.totalPages);
+        }
+    
+        function updatePagination(currentPage, totalPages) {
+            pagination.empty();
+            if (totalPages <= 1) return;
+    
+            // Previous button
+            if (currentPage > 1) {
+                pagination.append(`<a href="#" data-page="${currentPage - 1}">Previous</a>`);
+            }
+    
+            // Page number links
+            for (let i = 1; i <= totalPages; i++) {
+                pagination.append(`<a href="#" data-page="${i}" ${i === currentPage ? 'class="active"' : ''}>${i}</a>`);
+            }
+    
+            // Next button
+            if (currentPage < totalPages) {
+                pagination.append(`<a href="#" data-page="${currentPage + 1}">Next</a>`);
+            }
+        }
+    
+    
+        function fetchOrders(page = 1) {
+            $.ajax({
+                url: `/order?page=${page}`,
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    updateOrders(data);
+                },
+                error: function(error) {
+                    console.error("Error fetching products:", error);
+                }
+            });
+        }
+    
+        // Event listener for filter form submission
+        // Event listener for pagination clicks
+        pagination.on('click', 'a', function(e) {
+            e.preventDefault();
+            const page = $(this).data('page');
+            fetchOrders(page);
+        });
+    
+        // Initial fetch on page load
+        fetchOrders();
+    });
+</script>

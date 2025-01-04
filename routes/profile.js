@@ -1,19 +1,20 @@
-const express = require('express');
-const router = express.Router();
-const Account = require('../models/Account');
-const { isAuthenticated } = require('../middleware/authentication');
+var express = require('express');
+var router = express.Router();
 
-function renderProfilePage(req, res, page, options = {}) {
-    if (req.xhr) {
-        res.render(`${page}`, { ...options, layout: false }); // No layout for AJAX
-    } else {
-        res.render(`${page}`, { ...options, layout: 'layouts/layoutProfile' }); // Use profile layout
+function isAuthenticated(req, res, next) {
+    console.log('isAuthenticated middleware running'); // Add a debug log
+    if (req.isAuthenticated()) {
+      return next();
     }
-}
-// Function to render admin pages with AJAX support
-router.get('/', isAuthenticated, (req, res) => {
-    renderProfilePage(req, res, 'profile', { user: req.user })
+    console.log('User not authenticated, redirecting...');
+    res.redirect('/login');
+  }
 
-});
+  router.get('/', (req, res, next) => {
+    console.log('Route hit');
+    res.render('profile', { title: 'Profile', user: req.user });
+  });
+  
+  module.exports = router;
 
-module.exports = router
+module.exports = router;

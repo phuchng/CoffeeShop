@@ -25,6 +25,12 @@ const CartSchema = new mongoose.Schema({
         default: 0
     },
 
+    totalItems: {
+        type: Number,
+        required: true,
+        default: 0
+    }
+
 })
 
 const Cart = mongoose.model('Cart', CartSchema);

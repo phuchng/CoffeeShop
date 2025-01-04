@@ -22,9 +22,7 @@ router.post('/', async function (req, res, next){
 
     if (!user.isVerified) {
       // User is not verified: Set a custom flag or data in the session
-      req.session.resendEmail = {
-        email: user.email,
-      };
+      req.flash('error_msg', 'Unverified Email! Check your inbox again!');
       return res.redirect('/login'); // Redirect to login, and the frontend will detect the unverified status
     }
 
