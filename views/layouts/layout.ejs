@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="/css/about.css">
     <link rel="stylesheet" href="/css/contact.css">
     <link rel="stylesheet" href="/css/blog.css">
-    <link rel="stylesheet" href="/css/profile.css">
+     <link rel="stylesheet" href="/css/profile.css">
     <link rel="stylesheet" href="/css/cart.css">
     <link rel="stylesheet" href="/CPassword.css">
     <link rel="stylesheet" href="/css/error.css">
@@ -57,12 +57,93 @@
                     <li class="bold menuItemList" style="width: 80px;"><a href="/products" class="highlight cItem">Shop</a>
                     </li>
                     <li class="bold menuItemList" style="width: 80px;"><a href="/products?category=Coffee" class="highlight cItem">Coffee</a>
+                        <div class="temp">
+                            <div class="menuItem">
+                                <% for (let coffeeCategory of categories.coffee) { %>
+                                    <div class="menuItemCol">
+                                        <h1><%= coffeeCategory.tag  %></h1>
+                                        <% for (let product of coffeeCategory.products) { %>
+                                            <a href="/product/<%= product._id %>"><%= product.name %></a>
+                                        <% } %>
+                                    </div>
+                                <% } %>
+                                <div class="imgItem">
+                                    <a href="/products?category=Coffee"><img src="/img/product.png" alt=""
+                                            style="width: 100%; margin: 10px 15px; border-radius: 5px;"></a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     <li class="bold menuItemList" style="width: 80px;"><a href="/products?category=Tea" class="highlight cItem">Tea</a>
+                        <div class="temp">
+                            <div class="menuItem">
+                                <% for (let teaCategory of categories.tea) { %>
+                                    <div class="menuItem+Col">
+                                        <h1><%= teaCategory.tag  %></h1>
+                                        <% for (let product of teaCategory.products) { %>
+                                            <a href="/product/<%= product._id %>"><%= product.name %></a>
+                                        <% } %>
+                                    </div>
+                                <% } %>
+                                <div class="imgItem">
+                                    <a href=""><img src="/img/product.png" alt=""
+                                            style="width: 100%; margin: 10px 15px; border-radius: 5px;"></a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     <li class="bold menuItemList" style="width: 80px;"><a href="/products?category=Food" class="highlight cItem">Food</a>
+                        <div class="temp">
+                            <div class="menuItem">
+                                <div class="menuItemCol">
+                                    <h1>CAKES</h1>
+                                    <a href="">Chocolate Cake</a>
+                                    <a href="">Vanilla Cake </a>
+                                    <a href="">Red Velvet Cake</a>
+                                    <a href="">Cheesecake</a>
+                                    <a href="">Carrot Cake</a>
+                                    <a href="">Coffee Cake</a>
+                                </div>
+                                <div class="menuItemCol">
+                                    <h1>PASTRIES</h1>
+                                    <a href="">Croissant</a>
+                                    <a href="">Danish Pastry</a>
+                                    <a href="">Cinnamon Rolls</a>
+                                    <a href="">Muffins</a>
+                                    <a href="">Scones </a>
+                                </div>
+                                <div class="menuItemCol">
+                                    <h1>SNACKS</h1>
+                                    <a href="">Toasted Sandwiches</a>
+                                    <a href="">Bagels</a>
+                                    <a href="">Fresh Fruit Cups</a>
+                                    <a href="">Granola Bars</a>
+                                    <a href="">Biscotti</a>
+                                </div>
+                                <div class="imgItem">
+                                    <a href=""><img src="/img/product.png" alt=""
+                                            style="width: 100%; margin: 10px 15px; border-radius: 5px;"></a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     <li class="bold menuItemList"><a href="/products?category=juice" class="highlight cItem">Juice</a>
+                        <div class="temp">
+                            <div class="menuItem">
+                                <% for (let juiceCategory of categories.juice) { %>
+                                    <div class="menuItem+Col">
+                                        <h1><%= juiceCategory.tag  %></h1>
+                                        <% for (let product of juiceCategory.products) { %>
+                                            <a href="/product/<%= product._id %>"><%= product.name %></a>
+                                        <% } %>
+                                    </div>
+                                <% } %>
+                                <div class="imgItem">
+                                    <a href=""><img src="/img/product.png" alt=""
+                                            style="width: 100%; margin: 10px 15px; border-radius: 5px;"></a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                 </ul>
                 <ul class="menuList">
