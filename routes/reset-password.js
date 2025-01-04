@@ -34,6 +34,20 @@ router.post('/', async(req, res, next) => {
             req.flash("error_msg", "Invalid or expired token.");
             return res.redirect("/forgot-password");
         }
+
+        if (newPassword !== passwordConfirm){
+            req.flash("error_msg", "Password is invalid!")
+            return res.redirect("/reset-password")
+        }
+
+        user.password = await bcrypt.hash(password, 10);
+        user.token = null;
+
+        await user.save();
+
+        req.flash('success_msg', 'Reset Password successfully!')
+
+        res.redirect('/login');
     }
 
     catch(error)
@@ -42,3 +56,5 @@ router.post('/', async(req, res, next) => {
         return res.status(500).send('<script>alert("Registration failed: Internal Server Error"); window.location.href = "/reset-password";</script>');
     }
 })
+
+module.exports = router;

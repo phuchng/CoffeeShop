@@ -16,8 +16,9 @@ var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var logoutRouter = require('./routes/logout');
 var profileRouter = require('./routes/profile');
-var resendEmailRouter = require('./routes/resend-email');
-
+var forgotPassword = require('./routes/forgot-password')
+var verifyRoute = require('./routes/verify-email')
+var resetRoute = require('./routes/reset-password')
 var cartRouter = require('./routes/cart');
 var authRouter = require('./routes/auth');
 var app = express();
@@ -69,8 +70,9 @@ app.use('/logout', logoutRouter);
 app.use('/admin', adminRouter);
 app.use('/cart', cartRouter);
 app.use('/auth', authRouter);
-app.use('/resend-email', resendEmailRouter)
 app.use('/profile', profileRouter);
+app.use('/verify-email', verifyRoute);
+app.use('/forgot-password', forgotPassword)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

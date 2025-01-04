@@ -26,16 +26,21 @@ router.post('/', async function(req, res, next){
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const token = crypto.randomBytes(32).toString("hex");
-        const verificationLink = `localhost:2000/verify-email?token=${token}`;
+        const verificationLink = `http://localhost:2000/verify-email?token=${token}`;
        const message = `
-            <p>Thank you for registering. Please verify your email by clicking the link below: </p>
-            <a href="${verificationLink}">${verificationLink}</a>
+         <html>
+            <body>
+                <p>Thank you for registering. Please verify your email by clicking the link below: </p>
+                <a href="${verificationLink}">Click here now!</a>
+            </body>
+        </html>
         `
         const newAccount = new Account({ first_name: first_name, last_name: last_name, password: hashedPassword, email: email, isVerified: false, token: token })
 
         await newAccount.save();
         sendVerificationEmail(email, message);
-        return res.send('<script>alert("Registration complete!"); window.location.href = "/login";</script>');
+        req.flash('success_msg', "Registration complete! Don't forget to verify your account!");
+        res.redirect('/login')
     }
     catch(error)
     {

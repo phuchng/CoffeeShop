@@ -14,14 +14,8 @@ router.get('/', async(req, res) => {
             return res.redirect('/login');
         }
 
-        if (user.expirationTime < Date.now()){
-            req.flash('error_msg', 'Token has expired.');
-            return res.redirect('/login');
-        }
-
         user.isVerified = true;
         user.token = null;
-        user.expirationTime = null;
 
         await user.save();
 
@@ -32,3 +26,5 @@ router.get('/', async(req, res) => {
         res.status(500).send("An error occurred during verification.");
     }
 })
+
+module.exports = router;
