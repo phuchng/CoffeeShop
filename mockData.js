@@ -516,20 +516,20 @@ async function addMockData() {
         console.log('Users password: password1, ..., password20');
 
         // Add Admin Account
-        const existingAdmin = await Account.findOne({ email: 'admin@gmail.com' });
+        const existingAdmin = await Account.findOne({ email: 'admin@example.com' });
         if (!existingAdmin) {
             const hashedPassword = await bcrypt.hash('password1234', 10);
             const adminAccount = new Account({
                 first_name: 'Admin',
                 last_name: 'User',
-                email: 'admin@gmail.com',
+                email: 'admin@example.com',
                 password: hashedPassword,
                 role: 'admin',
-                isActivated: true
+                isVerified: true
             });
             await adminAccount.save();
             console.log('Admin account added successfully!');
-            console.log('Admin account email: admin@gmail.com');
+            console.log('Admin account email: admin@example.com');
             console.log('Admin account password: password1234');
         } else {
             console.log('Admin account already exists.');

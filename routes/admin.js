@@ -261,7 +261,8 @@ router.post('/create-admin', isAdmin, async (req, res) => {
             last_name: 'User',
             email,
             password: hashedPassword,
-            role: 'admin'
+            role: 'admin',
+            isVerified: true
         });
 
         await newAdmin.save();

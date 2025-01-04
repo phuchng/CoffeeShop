@@ -51,10 +51,9 @@
                             <button class="ban-button" data-id="${user._id}" data-status="${user.isBanned ? 'unban' : 'ban'}">
                                 ${user.isBanned ? 'Unban' : 'Ban'}
                             </button>
-                            <select class="change-role-select" data-id="${user._id}">
-                                <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
-                                <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
-                            </select>
+                            <button class="change-role-button" data-id="${user._id}" data-role="${user.role}">
+                                Change Role to ${user.role === 'admin' ? 'User' : 'Admin'}
+                            </button>
                         </div>
                     </li>
                 `;
@@ -115,18 +114,27 @@
             fetchUsers(page);
         });
         // Handle user role change
-        $('.change-role-select').change(function() {
+        $('#user-list').on('click', '.change-role-button', function (event) {
+            event.preventDefault();
             const userId = $(this).data('id');
-            const newRole = $(this).val();
+            const currentRole = $(this).data('role');
+            const newRole = currentRole === 'admin' ? 'user' : 'admin';
 
             $.ajax({
                 url: `/admin/users/change-role/${userId}`,
                 method: 'POST',
                 data: { role: newRole },
-                success: function(response) {
+                success: function (response) {
                     $('#message').html(`<p class="success-message">${response.message}</p>`);
+                    // Update button text and data-role attribute
+                    const button = $(`.change-role-button[data-id="${userId}"]`);
+                    button.text(`Change Role to ${newRole === 'admin' ? 'User' : 'Admin'}`);
+                    button.data('role', newRole);
+
+                    // Update the displayed role in the user list
+                    $(`.box-content-user--item-email:contains(${userId})`).next('.box-content-user--item-role').text(newRole);
                 },
-                error: function(error) {
+                error: function (error) {
                     $('#message').html(`<p class="error-message">${error.responseJSON.error}</p>`);
                 }
             });

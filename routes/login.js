@@ -19,12 +19,17 @@ router.post('/', async function (req, res, next){
       req.flash('error_msg', info.message); // info.message contains the error from the strategy
       return res.redirect('/login');
     }
+    if (user.isBanned) {
+      req.flash('error_msg', 'Your account has been banned.');
+      return res.redirect('/login');
+  }
 
     if (!user.isVerified) {
       // User is not verified: Set a custom flag or data in the session
       req.session.resendEmail = {
         email: user.email,
       };
+      req.flash('error_msg', 'Your account has not been verified. Email has been sent to you.');
       return res.redirect('/login'); // Redirect to login, and the frontend will detect the unverified status
     }
 
