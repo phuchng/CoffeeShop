@@ -7,7 +7,7 @@ var sendVerificationEmail = require('../config/sendEmail')
 const crypto = require("crypto");
 
 router.get('/', async(req, res) => {
-    res.render('password', { title: 'Forgot Password?' })
+    res.render('forgot-password', { title: 'Forgot Password?' })
 })
 
 router.post('/', async(req, res) => {
@@ -28,7 +28,7 @@ router.post('/', async(req, res) => {
 
         await user.save();
 
-        const resetLink = `https://coffee-shop-4rpa.onrender.com/reset-password?token=${token}`;
+        const resetLink = `http://localhost:2000/reset-password?token=${token}`;
 
         const message = `
         <p>To successfully change your password, please verify your email by clicking the link below: </p>
