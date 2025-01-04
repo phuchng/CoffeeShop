@@ -27,6 +27,7 @@ body {
 }
 .userSet {
     position: relative;
+    z-index: 100;
 }
 
 .userSet .icon {
