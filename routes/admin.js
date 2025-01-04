@@ -43,80 +43,6 @@ router.get('/dashboard', isAdmin, async (req, res) => {
     }
 });
 
-// User Management
-router.get('/users', isAdmin, async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const perPage = 5;
-        const skip = (page - 1) * perPage;
-
-        // Fetch users and admins separately
-        const users = await Account.find({ role: 'user' }).skip(skip).limit(perPage);
-        const admins = await Account.find({ role: 'admin' }).skip(skip).limit(perPage);
-
-        const totalUsers = await Account.countDocuments({ role: 'user' });
-        const totalAdmins = await Account.countDocuments({ role: 'admin' });
-
-        const totalPagesUsers = Math.ceil(totalUsers / perPage);
-        const totalPagesAdmins = Math.ceil(totalAdmins / perPage);
-
-        if (req.xhr) {
-            // Respond with JSON for AJAX requests
-            res.json({
-                users,
-                admins,
-                currentPage: page,
-                totalPagesUsers,
-                totalPagesAdmins
-            });
-        } else {
-            // Render the full page for initial requests
-            renderAdminPage(req, res, 'AUser', {
-                users,
-                admins,
-                currentPage: page,
-                totalPagesUsers,
-                totalPagesAdmins
-            });
-        }
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-// Product Management
-router.get('/products', isAdmin, async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const perPage = 5;
-        const skip = (page - 1) * perPage;
-
-        const products = await Product.find({}).skip(skip).limit(perPage);
-        const totalProducts = await Product.countDocuments({});
-        const totalPages = Math.ceil(totalProducts / perPage);
-
-        if (req.xhr) {
-            // Respond with JSON for AJAX requests
-            res.json({
-                products,
-                currentPage: page,
-                totalPages
-            });
-        } else {
-            // Render the full page for initial requests
-            renderAdminPage(req, res, 'AProduct', {
-                products,
-                currentPage: page,
-                totalPages
-            });
-        }
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
 // Add Product - GET
 router.get('/products/add', isAdmin, async (req, res) => {
     try {
@@ -132,7 +58,7 @@ router.get('/products/add', isAdmin, async (req, res) => {
 // Add Product - POST
 router.post('/products/add', isAdmin, upload.array('images', 5), async (req, res) => {
     try {
-        const { name, price, description, category, tag, servingOptions, grind, roast, origin, ingredients } = req.body;
+        const { name, price, description, category, tag, servingOptions, grind, roast, origin, ingredients, status } = req.body;
 
         const imagePaths = req.files.map(file => file.filename);
         const firstImagePath = imagePaths.length > 0 ? imagePaths[0] : null;
@@ -149,7 +75,8 @@ router.post('/products/add', isAdmin, upload.array('images', 5), async (req, res
             origin,
             ingredients: ingredients.split(','),
             image: firstImagePath,
-            images: imagePaths
+            images: imagePaths,
+            status
         });
 
         await newProduct.save();
@@ -180,7 +107,7 @@ router.get('/products/update/:id', isAdmin, async (req, res) => {
 // Update Product - POST
 router.post('/products/update/:id', isAdmin, upload.array('images', 5), async (req, res) => {
     try {
-        const { name, price, description, category, tag, servingOptions, grind, roast, origin, ingredients } = req.body;
+        const { name, price, description, category, tag, servingOptions, grind, roast, origin, ingredients, status } = req.body;
         const currentProduct = await Product.findById(req.params.id);
 
         // Handle new image uploads
@@ -205,7 +132,8 @@ router.post('/products/update/:id', isAdmin, upload.array('images', 5), async (r
             origin,
             ingredients: ingredients.split(','),
             image: firstImagePath,
-            images: updatedImagePaths
+            images: updatedImagePaths,
+            status
         }, { new: true });
 
         if (!updatedProduct) {
@@ -216,6 +144,32 @@ router.post('/products/update/:id', isAdmin, upload.array('images', 5), async (r
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to update product' });
+    }
+});
+
+// Remove Image from Product - POST
+router.post('/products/remove-image/:id', isAdmin, async (req, res) => {
+    try {
+        const { image } = req.body;
+        const product = await Product.findById(req.params.id);
+
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // Remove the image from the images array
+        product.images = product.images.filter(img => img !== image);
+
+        // If the removed image was the primary image, update the primary image
+        if (product.image === image) {
+            product.image = product.images.length > 0 ? product.images[0] : null;
+        }
+
+        await product.save();
+        res.json({ message: 'Image removed successfully!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to remove image' });
     }
 });
 
@@ -307,7 +261,8 @@ router.post('/create-admin', isAdmin, async (req, res) => {
             last_name: 'User',
             email,
             password: hashedPassword,
-            role: 'admin'
+            role: 'admin',
+            isVerified: true
         });
 
         await newAdmin.save();
@@ -359,6 +314,198 @@ router.post('/categories/delete/:id', isAdmin, async (req, res) => {
     try {
         await Category.findByIdAndDelete(req.params.id);
         res.redirect('/admin/categories');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Manage Users - GET
+router.get('/users', isAdmin, async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 10;
+        const skip = (page - 1) * perPage;
+
+        let query = {};
+        let sortOption = {};
+
+        // Filter by name
+        if (req.query.name) {
+            const nameRegex = new RegExp(req.query.name, 'i');
+            query.$or = [{ first_name: nameRegex }, { last_name: nameRegex }];
+        }
+
+        // Filter by email
+        if (req.query.email) {
+            query.email = new RegExp(req.query.email, 'i');
+        }
+
+        // Sort options
+        if (req.query.sortBy) {
+            switch (req.query.sortBy) {
+                case 'name':
+                    sortOption = { first_name: 1 };
+                    break;
+                case 'email':
+                    sortOption = { email: 1 };
+                    break;
+                case 'registration':
+                    sortOption = { createdAt: -1 };
+                    break;
+                case 'role':
+                    sortOption = { role: 1 };
+                    break;
+            }
+        }
+
+        const users = await Account.find(query)
+            .sort(sortOption)
+            .skip(skip)
+            .limit(perPage);
+
+        const totalUsers = await Account.countDocuments(query);
+        const totalPages = Math.ceil(totalUsers / perPage);
+
+        if (req.xhr) {
+            // AJAX request: Send only JSON data
+            res.json({
+                users,
+                currentPage: page,
+                totalPages,
+            });
+        } else {
+            // Initial page load: Render the full EJS template
+            renderAdminPage(req, res, 'AUser', {
+                users,
+                currentPage: page,
+                totalPages,
+                nameFilter: req.query.name,
+                emailFilter: req.query.email,
+                sortBy: req.query.sortBy
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+// Ban/Unban User - POST
+router.post('/users/ban/:id', isAdmin, async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const action = req.body.action;
+        // Prevent admin from banning themselves
+        if (req.user.id === userId) {
+            return res.status(400).json({ error: "Admin cannot ban themselves." });
+        }
+
+        const user = await Account.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (action === 'ban') {
+            user.isBanned = true;
+        } else if (action === 'unban') {
+            user.isBanned = false;
+        }
+
+        await user.save();
+        res.json({ message: `User ${user.isBanned ? 'banned' : 'unbanned'} successfully` });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update user status' });
+    }
+});
+
+// Change User Role - POST
+router.post('/users/change-role/:id', isAdmin, async (req, res) => {
+    try {
+        const { role } = req.body;
+        const user = await Account.findById(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        user.role = role;
+        await user.save();
+
+        res.json({ message: 'User role updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update user role' });
+    }
+});
+
+// Manage Products - GET
+router.get('/products', isAdmin, async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 10;
+        const skip = (page - 1) * perPage;
+
+        let query = {};
+        let sortOption = { createdAt: -1 }; // Default sort
+
+        // Filter by name
+        if (req.query.name) {
+            query.name = new RegExp(req.query.name, 'i');
+        }
+
+        // Filter by category
+        if (req.query.category) {
+            query.category = req.query.category;
+        }
+
+        // Sort options
+        if (req.query.sortBy) {
+            switch (req.query.sortBy) {
+                case 'name':
+                    sortOption = { name: 1 };
+                    break;
+                case 'price':
+                    sortOption = { price: 1 };
+                    break;
+                case 'createdAt':
+                    sortOption = { createdAt: -1 };
+                    break;
+            }
+        }
+
+        const products = await Product.find(query)
+            .sort(sortOption)
+            .skip(skip)
+            .limit(perPage)
+            .populate('category');
+
+        const totalProducts = await Product.countDocuments(query);
+        const totalPages = Math.ceil(totalProducts / perPage);
+
+        const categories = await Category.find({}); // Fetch all categories
+
+        if (req.xhr) {
+            // AJAX request: Send only JSON data
+            res.json({
+                products,
+                currentPage: page,
+                totalPages,
+            });
+        } else {
+            // Initial page load: Render the full EJS template
+            renderAdminPage(req, res, 'AProduct', {
+                products,
+                categories,
+                currentPage: page,
+                totalPages,
+                nameFilter: req.query.name,
+                categoryFilter: req.query.category,
+                sortBy: req.query.sortBy
+            });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');

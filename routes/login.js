@@ -19,6 +19,10 @@ router.post('/', async function (req, res, next){
       req.flash('error_msg', info.message); // info.message contains the error from the strategy
       return res.redirect('/login');
     }
+    if (user.isBanned) {
+      req.flash('error_msg', 'Your account has been banned.');
+      return res.redirect('/login');
+  }
 
     if (!user.isVerified) {
       // User is not verified: Set a custom flag or data in the session

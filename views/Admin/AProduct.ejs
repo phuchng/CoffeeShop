@@ -1,39 +1,92 @@
 <div class="box-content-product">
-    <div class="box-content-product">
-        <div class="box-content-product-temp">
-            <button id="sortButton">
-                SORT <i class="fa-solid fa-arrow-down-wide-short"></i>
-            </button>
-            <div class="box-content-product-temp-listS hidden" id="dropdownMenu">
-                <span class="box-content-product-temp-listS--item">Name</span>
-                <span class="box-content-product-temp-listS--item">Price</span>
-                <span class="box-content-product-temp-listS--item">Creation time</span>
-            </div>
-        </div>
-        <div class="box-content-product--header">
-            <span class="box-content-product--header-name">
-                Name
-            </span>
-            <span class="box-content-product--header-cost">
-                Cost
-            </span>
-            <span class="box-content-product--header-date">
-                Creation time
-            </span>
-        </div>
-        <ul class="box-content-product--list" id="product-list">
-            <!-- Products will be loaded here by AJAX -->
-        </ul>
-        <div class="box-content-product--pagination" id="pagination">
-            <!-- Pagination will be loaded here by AJAX -->
-        </div>
+    <h1 class="box-content-product--header">Manage Products</h1>
+
+    <!-- Filter Form -->
+    <form action="/admin/products" method="GET" class="filter-form" id="product-filter-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="<%= nameFilter || '' %>">
+
+        <label for="category">Category:</label>
+        <select id="category" name="category">
+            <option value="">All Categories</option>
+            <% categories.forEach(category => { %>
+                <option value="<%= category._id %>" <%= categoryFilter === category._id.toString() ? 'selected' : '' %>>
+                    <%= category.name %>
+                </option>
+            <% }); %>
+        </select>
+
+        <label for="sortBy">Sort By:</label>
+        <select id="sortBy" name="sortBy">
+            <option value="">None</option>
+            <option value="name" <%= sortBy === 'name' ? 'selected' : '' %>>Name</option>
+            <option value="price" <%= sortBy === 'price' ? 'selected' : '' %>>Price</option>
+            <option value="createdAt" <%= sortBy === 'createdAt' ? 'selected' : '' %>>Creation Date</option>
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <div id="message"></div>
+
+    <ul class="box-content-product--list" id="product-list">
+        <!-- Product items will be loaded here -->
+    </ul>
+
+    <!-- Pagination -->
+    <div class="box-content-product--pagination" id="product-pagination">
+        <!-- Pagination links will be here -->
     </div>
 </div>
+
 <script>
     $(document).ready(function () {
-        function loadProducts(page) {
+        // Function to update the product list with AJAX response
+        function updateProductList(products) {
+            const productList = $('#product-list');
+            productList.empty();
+
+            products.forEach(product => {
+                const listItem = `
+                    <li class="box-content-product--item">
+                        <div class="box-content-product--item-name">
+                            <img src="/assets/images/${product.image}" width="50" height="50" alt="${product.name}">
+                            <a href="/admin/products/${product._id}">${product.name}</a>
+                        </div>
+                        <span class="box-content-product--item-cost">$${product.price}</span>
+                        <span class="box-content-product--item-date">${new Date(product.createdAt).toLocaleDateString()}</span>
+                    </li>
+                `;
+                productList.append(listItem);
+            });
+        }
+
+        // Function to update pagination links
+        function updatePagination(currentPage, totalPages) {
+            const pagination = $('#product-pagination');
+            pagination.empty();
+
+            if (currentPage > 1) {
+                pagination.append(`<a href="#" data-page="${currentPage - 1}">Previous</a>`);
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                pagination.append(`<a href="#" data-page="${i}" ${i === currentPage ? 'class="active"' : ''}>${i}</a>`);
+            }
+
+            if (currentPage < totalPages) {
+                pagination.append(`<a href="#" data-page="${currentPage + 1}">Next</a>`);
+            }
+        }
+
+        // Function to fetch products via AJAX
+        function fetchProducts(page = 1) {
+            const nameFilter = $('#name').val();
+            const categoryFilter = $('#category').val();
+            const sortBy = $('#sortBy').val();
+
             $.ajax({
-                url: `/admin/products?page=${page}`,
+                url: `/admin/products?page=${page}&name=${nameFilter}&category=${categoryFilter}&sortBy=${sortBy}`,
                 method: 'GET',
                 success: function (data) {
                     updateProductList(data.products);
@@ -45,45 +98,20 @@
             });
         }
 
-        function updateProductList(products) {
-            const productList = $('#product-list');
-            productList.empty();
+        // Initial fetch on page load
+        fetchProducts();
 
-            products.forEach(product => {
-                const productItem = `
-                    <li class="box-content-product--item">
-                        <div class="box-content-product--item-name">
-                            <img src="/assets/images/${product.image}" height="36" width="36" alt="">
-                            <a href="/admin/products/${product._id}">${product.name}</a>
-                        </div>
-                        <span class="box-content-product--item-cost">$${product.price}</span>
-                        <span class="box-content-product--item-date">${new Date(product.createdAt).toDateString()}</span>
-                    </li>
-                `;
-                productList.append(productItem);
-            });
-        }
-
-        function updatePagination(currentPage, totalPages) {
-            const pagination = $('#pagination');
-            pagination.empty();
-
-            if (currentPage > 1) {
-                pagination.append(`<button data-page="${currentPage - 1}">PREV</button>`);
-            }
-
-            pagination.append(`<span>${currentPage}/${totalPages}</span>`);
-
-            if (currentPage < totalPages) {
-                pagination.append(`<button data-page="${currentPage + 1}">NEXT</button>`);
-            }
-        }
-
-        $('#pagination').on('click', 'button', function () {
-            const page = $(this).data('page');
-            loadProducts(page);
+        // Handle filter form submission
+        $('#product-filter-form').submit(function (event) {
+            event.preventDefault();
+            fetchProducts(1); // Fetch first page with new filters
         });
 
-        loadProducts(1); // Load initial products
+        // Handle pagination link clicks
+        $('#product-pagination').on('click', 'a', function (event) {
+            event.preventDefault();
+            const page = $(this).data('page');
+            fetchProducts(page);
+        });
     });
 </script>

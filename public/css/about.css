@@ -6,7 +6,7 @@
 .linkNavigation {
     padding: 25px 0 25px;
 }
-.linkNavigation span,.linkNavigation a {
+.linkNavigation-span,.linkNavigation-a {
     margin-right: 5px;
     text-decoration: none;
 }
@@ -16,13 +16,13 @@
     text-align: center;
     color: #70604d;
 }
-.contact-box h3{
+.contact-box .contact-box--header{
     font-size: 40px;
     font-family: Domine, serif;
     color:  rgb(112, 96, 77);
     margin: 0 0 14px 0;
 }
-.contact-box p {
+.contact-box--para {
     font-size: 18px;
     font-family: Lato, serif;
     color:  #2f2f2f;
@@ -49,7 +49,7 @@
     border-top: 1px solid #2f2f2f;
     border-bottom: 1px solid #2f2f2f;
 }
-.Certified-box p {
+.Certified-box-para {
     font-size: 16px;
 
 }

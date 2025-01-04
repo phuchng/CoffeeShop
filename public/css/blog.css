@@ -3,13 +3,7 @@
     max-width: 100%;
     margin: 0 auto;
 }
-.linkNavigation {
-    padding: 25px 0 25px;
-}
-.linkNavigation span,.linkNavigation a {
-    margin-right: 5px;
-    text-decoration: none;
-}
+
 .blog-header {
     font-size: 32px;
     margin: 22px 0;
