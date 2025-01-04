@@ -6,6 +6,7 @@ var router = express.Router();
 /* GET users listing. */
 
 router.get('/', async function(req, res, next) {
+  req.session.resendEmail = null;
   res.render('login', { title: 'Login' })
 });
 
@@ -19,13 +20,13 @@ router.post('/', async function (req, res, next){
       return res.redirect('/login');
     }
 
-    // if (!user.isVerified) {
-    //   // User is not verified: Set a custom flag or data in the session
-    //   req.session.resendEmail = {
-    //     email: user.email,
-    //   };
-    //   return res.redirect('/login'); // Redirect to login, and the frontend will detect the unverified status
-    // }
+    if (!user.isVerified) {
+      // User is not verified: Set a custom flag or data in the session
+      req.session.resendEmail = {
+        email: user.email,
+      };
+      return res.redirect('/login'); // Redirect to login, and the frontend will detect the unverified status
+    }
 
     // Success: Log the user in
     req.logIn(user, (err) => {

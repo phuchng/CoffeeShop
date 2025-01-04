@@ -200,8 +200,8 @@
 
             const result = await response.json();
             if (response.ok) {
-                alert(result.message);
                 window.location.href = '/cart';
+                alert(result.message);
             } else {
                 alert(`Error: ${result.error}`);
             }
