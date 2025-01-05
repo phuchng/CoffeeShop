@@ -16,9 +16,9 @@
                         <input type="hidden" name="search" value="<%= search || '' %>">
                         <div class="filter-group">
                             <h4>Category</h4>
-                            <% ['Coffee', 'Tea', 'Food', 'Juice'].forEach(category => { %>
+                            <% categories.forEach(category => { %>
                             <label>
-                                <input type="checkbox" name="category" value="<%= category %>" <%= (selectedCategory.includes(category) ? 'checked' : '') %>> <%= category %>
+                                <input type="checkbox" name="category" value="<%= category.name %>" <%= (selectedCategory.includes(category.name) ? 'checked' : '') %>> <%= category.name %>
                             </label>
                             <% }); %>
                         </div>
@@ -84,11 +84,6 @@ $(document).ready(function() {
 
     function updateProducts(data) {
         productList.empty(); // Clear existing products
-
-        if (data.products.length === 0) {
-            productList.append('<p style="text-align: center; width: 100%">No products found.</p>');
-            return;
-        }
 
         data.products.forEach(product => {
             let stars = '';

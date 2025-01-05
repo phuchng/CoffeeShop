@@ -147,3 +147,89 @@ saveAddressButton.addEventListener('click', async() => {
         alert('An error occurred. Please try again.');
     }
 })
+
+const updateAddressButton = document.getElementById("updateAddressButton");
+
+updateAddressButton.addEventListener('click', async () => {
+    const first_name = document.getElementById("firstNameAddressEdit").value.trim();
+    const last_name = document.getElementById("lastNameAddressEdit").value.trim();
+    const company = document.getElementById("companyAddressEdit").value.trim();
+    const address = document.getElementById("addressEdit").value.trim();
+    const apartment = document.getElementById("apartmentEdit").value.trim();
+    const phone = document.getElementById("phoneEdit").value.trim();
+
+    if (!first_name || !last_name || !address || !phone) {
+        alert('First Name, Last Name, Address or Phone Number is missing');
+        return;
+    }
+
+    try {
+        const response = await fetch('/profile/change-address', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ first_name, last_name, company, address, apartment, phone }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            alert(data.message);
+            location.reload();
+        } else {
+            const error = await response.json();
+            alert(`Error: ${error.error}`);
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        alert('An error occurred. Please try again.');
+    }
+});
+
+// Avatar Upload Handling
+const avatarInput = document.getElementById('avatar');
+const uploadForm = document.querySelector('form[action="/profile/upload-avatar"]');
+
+avatarInput.addEventListener('change', async () => {
+    const formData = new FormData(uploadForm);
+
+    try {
+        const response = await fetch('/profile/upload-avatar', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            document.querySelector('.userSet .icon').src = `/assets/images/avatars/${data.avatar}`;
+        } else {
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        // Consider logging the error to the console for debugging purposes
+    }
+});
+
+// Delete Avatar Handling
+const deleteAvatarButton = document.querySelector('.delete-avatar-button');
+
+deleteAvatarButton.addEventListener('click', async () => {
+    if (!confirm('Are you sure you want to delete your avatar?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch('/profile/delete-avatar', {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            document.querySelector('.userSet .icon').src = '/assets/images/avatars/default_avatar.png';
+        } else {
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        // Consider logging the error to the console for debugging purposes
+    }
+});

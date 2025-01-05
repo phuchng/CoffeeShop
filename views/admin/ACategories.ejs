@@ -3,18 +3,18 @@
 
     <div id="message"></div>
 
-<!-- Form for Adding New Category -->
+    <!-- Form for Adding New Category -->
     <h2 class="box-categories--header">Add New Category</h2>
     <form id="addCategoryForm" action="/admin/categories/add" method="POST" class="box-categories--form">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
-    </form>
-    <form id="addCategoryForm" action="/admin/categories/add" method="POST" class="box-categories--form">
         <label for="description">Description:</label>
         <textarea id="description" name="description"></textarea>
-
+        <label for="subcategories">Subcategories (comma-separated):</label>
+        <input type="text" id="subcategories" name="subcategories">
+        <button type="submit" class="box-categories--form--button">Add Category</button>
     </form>
-    <button type="submit" class="box-categories--form--button">Add Category</button>
+
     <!-- List of Existing Categories -->
     <h2 class="box-categories--header">Existing Categories</h2>
     <ul id="category-list" class="box-category-list">
@@ -24,6 +24,11 @@
                     <div>
                         <span id="category-name-<%= category._id %>"><%= category.name %></span> - 
                         <span id="category-description-<%= category._id %>"><%= category.description %></span>
+                        <span id="category-subcategories-<%= category._id %>">
+                            <% if (category.subcategories && category.subcategories.length > 0) { %>
+                                (Subcategories: <%= category.subcategories.join(', ') %>)
+                            <% } %>
+                        </span>
                     </div>
                     <div>
                         <button class="edit-category" data-id="<%= category._id %>">Edit</button>
@@ -40,6 +45,8 @@
                         <input type="text" name="name" value="<%= category.name %>" style="margin-right: 20px;" required>
                         <label for="" style="margin-right: 5px;">Description:</label>
                         <textarea name="description" style="width: 400px; "><%= category.description %></textarea>
+                        <label for="subcategories">Subcategories (comma-separated):</label>
+                        <input type="text" name="subcategories" value="<%= category.subcategories ? category.subcategories.join(', ') : '' %>">
                     </div>
                     
                     <div style="margin-top: 10px;">

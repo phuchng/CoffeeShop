@@ -54,8 +54,14 @@
                         <span>Quantity</span>
                         <input id="quantity" type="number" value="1" min="1">
                     </div>
-                    <button id="cartAdding">ADD TO CART</button>
-                </div>
+                    <% if (product.status === 'On stock') { %>
+                        <button id="cartAdding">ADD TO CART</button>
+                    <% } else if (product.status === 'Out of stock') { %>
+                        <button disabled>OUT OF STOCK</button>
+                    <% } else if (product.status === 'Suspended') { %>
+                        <button disabled>PRODUCT SUSPENDED</button>
+                    <% } %>
+                </div>                
             </div>
         </div>
         <div class="relatedProduct">

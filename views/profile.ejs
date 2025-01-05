@@ -1,31 +1,177 @@
 <div class="containerP">
     <div class="grid">
+        <div class="userHeader">
+            <div class="avatar-container">
+                <img src="/assets/images/avatars/<%= user.avatar %>" alt="User Avatar">
+            </div>
+            <form action="/profile/upload-avatar" method="POST" enctype="multipart/form-data" style="margin-right: 10px;">
+                <input type="file" name="avatar" id="avatar" style="display: none;" onchange="this.form.submit()">
+                <button type="button" class="change-avatar-button"
+                    onclick="document.getElementById('avatar').click();">Change Avatar</button>
+            </form>
+            <form action="/profile/delete-avatar" method="POST">
+                <button type="submit" class="delete-avatar-button">Delete Avatar</button>
+            </form>
+        </div>
         <h1>Profile</h1>
         <div class="BoxInfoName">
             <div class="infoName">
-                <span>name</span> <!-- SỬA ĐƯỢC-->
+                <span>Name</span> <!-- SỬA ĐƯỢC-->
                 <i class="fa-solid fa-pencil editName"></i>
             </div>
             <div class="infoGmail">
                 <span style="display: block; color:#707070;margin-bottom: 5px">Email</span>
-                <span>com2109nhanle@gmail.com</span> <!--GMAIL KHÔNG SỬA ĐƯỢC-->
+                <span>
+                    <%= user.email %>
+                </span> <!--GMAIL KHÔNG SỬA ĐƯỢC-->
             </div>
         </div>
         <div class="boxInfoAddress">
             <div class="infoAddress">
-                <span>Addresses</span> 
-                <span style="color:rgb(23, 115, 176); cursor: pointer;" class="addAddress">+  Add</span>
+                <span>Addresses</span>
+                <span style="color:rgb(23, 115, 176); cursor: pointer;" class="addAddress">+ Add</span>
             </div>
             <ul class="listAddress">
                 <li class="itemAddress">
                     <span style="color:#707070;">Defaut Address</span>
-                    <span>Name: Le Phan Thanh Nhan</span>
-                    <span>Company: None</span>
-                    <span>Address: Ho Chi Minh City</span>
-                    <span>Apartment: C3-13</span>
-                    <span>Phone: 123456789</span>
+                    <span>Name:
+                        <%= user.address.first_name %>
+                            <%= user.address.last_name %>
+                    </span>
+                    <span>Company:
+                        <% if (user.address.company) { %>
+                            <%= user.address.company %>
+                                <% } else { %>
+                                    None
+                                    <% } %>
+                    </span>
+                    <span>Address:
+                        <%= user.address.address %>
+                    </span>
+                    <span>Apartment:
+                        <% if (user.address.apartment) { %>
+                            <%= user.address.apartment %>
+                                <% } else { %>
+                                    None
+                                    <% } %>
+                    </span>
+                    <span>Phone:
+                        <%= user.address.phone %>
+                    </span>
                     <i class="fa-solid fa-pencil editAddress"></i>
                 </li>
             </ul>
         </div>
     </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" style="display: none;">
+    <div class="modal__overlay"></div>
+    <div class="modal__body">
+        <!-- Edit Name -->
+        <div class="boxEditName" style="display: none;">
+            <div class="headerBoxEditName">
+                <h1>Edit profile</h1>
+                <span class="closeModal">X</span>
+            </div>
+            <div class="boxForm">
+                <div class="boxFormName">
+                    <input type="text" id="first_name" placeholder="First name" value="<%= user.first_name %>"
+                        style="margin-right: 10px;">
+                    <input type="text" id="last_name" placeholder="Last name" value="<%= user.last_name %>">
+                </div>
+                <div class="boxFormEmail">
+                    <span style="display: block; color:rgb(132,132,132);">Email</span>
+                    <span style="color:rgb(132,132,132);"><%= user.email %></span>
+                </div>
+                <p class="note">Email used for login can't be changed</p>
+                <div class="buttonBox">
+                    <span
+                        style="color: #3B73B6; text-decoration: underline; font-size: 14px; margin-right: 10px; cursor: pointer;"
+                        class="cancelModal">Cancel</span>
+                    <button id="saveNameButton"
+                        style="padding: 14px; background-color: rgb(23, 115, 176); border-radius: 5px; border: none; outline: none; color: #fff; cursor: pointer;">Save</button>
+                </div>
+            </div>
+        </div>
+        <!-- Add address -->
+        <div class="boxAddAddress" style="display: none;">
+            <div class="headerBoxEditName">
+                <h1>Add address</h1>
+                <span class="closeModalAddAddress">X</span>
+            </div>
+            <div class="boxForm">
+                <div class="formCheckBox">
+                    <input type="checkbox" id="defaultAddressCheckbox">
+                    <label for="defaultAddressCheckbox">This is my default address</label>
+                </div>
+                <div class="boxFormName">
+                    <input type="text" id="firstNameAddress" placeholder="First name" style="margin-right: 10px;">
+                    <input type="text" id="lastNameAddress" placeholder="Last name">
+                </div>
+                <div class="form">
+                    <input type="text" id="companyAddress" placeholder="Company">
+                </div>
+                <div class="form">
+                    <input type="text" id="address" placeholder="Address">
+                </div>
+                <div class="form">
+                    <input type="text" id="apartment" placeholder="Apartment">
+                </div>
+                <div class="form">
+                    <input type="text" id="phone" placeholder="Phone">
+                </div>
+                <div class="buttonBox">
+                    <span
+                        style="color: #3B73B6; text-decoration: underline; font-size: 14px; margin-right: 10px; cursor: pointer;"
+                        class="cancelModalAddAddress">Cancel</span>
+                    <button id="saveAddressButton"
+                        style="padding: 14px; background-color: rgb(23, 115, 176); border-radius: 5px; border: none; outline: none; color: #fff; cursor: pointer;">Save</button>
+                </div>
+            </div>
+        </div>
+        <!-- Edit address -->
+        <div class="boxEditAddress" style="display: none;">
+            <div class="headerBoxEditName">
+                <h1>Edit address</h1>
+                <span class="closeModalEditAddress">X</span>
+            </div>
+            <div class="boxForm">
+                <div class="formCheckBox">
+                    <input type="checkbox" id="defaultAddressCheckboxEdit">
+                    <label for="defaultAddressCheckboxEdit">This is my default address</label>
+                </div>
+                <div class="boxFormName">
+                    <input type="text" id="firstNameAddressEdit" placeholder="First name"
+                        value="<%= user.address.first_name %>" style="margin-right: 10px;">
+                    <input type="text" id="lastNameAddressEdit" placeholder="Last name"
+                        value="<%= user.address.last_name %>">
+                </div>
+                <div class="form">
+                    <input type="text" id="companyAddressEdit" placeholder="Company"
+                        value="<%= user.address.company %>">
+                </div>
+                <div class="form">
+                    <input type="text" id="addressEdit" placeholder="Address" value="<%= user.address.address %>">
+                </div>
+                <div class="form">
+                    <input type="text" id="apartmentEdit" placeholder="Apartment" value="<%= user.address.apartment %>">
+                </div>
+                <div class="form">
+                    <input type="text" id="phoneEdit" placeholder="Phone" value="<%= user.address.phone %>">
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span style="color: rgb(221, 29, 29); cursor: pointer;">Delete</span>
+                    <div class="buttonBox">
+                        <span
+                            style="color: #3B73B6; text-decoration: underline; font-size: 14px; margin-right: 10px; cursor: pointer;"
+                            class="cancelModalEditAddress">Cancel</span>
+                        <button id="updateAddressButton"
+                            style="padding: 14px; background-color: rgb(23, 115, 176); border-radius: 5px; border: none; outline: none; color: #fff; cursor: pointer;">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
