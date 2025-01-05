@@ -14,10 +14,10 @@ const moment = require('moment');
 function renderAdminPage(req, res, page, options = {}) {
     if (req.xhr) {
         // For AJAX requests, send only the partial content
-        res.render(`Admin/${page}`, { ...options, layout: false });
+        res.render(`admin/${page}`, { ...options, layout: false });
     } else {
         // For regular requests, render the full layout
-        res.render(`Admin/${page}`, { ...options, layout: 'layouts/layoutAdmin' });
+        res.render(`admin/${page}`, { ...options, layout: 'layouts/layoutAdmin' });
     }
 }
 

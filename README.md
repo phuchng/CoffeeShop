@@ -184,9 +184,9 @@ Alternatively, host it locally by following the instructions below.
     -   [x] Filter order by status
     -   [x] View order details
     -   [x] Update order status
--   [ ] Reports
-    -   [ ] View revenue report in time range: day, week, month, ...
-    -   [ ] View top revenue by product in time range: day, week, month
+-   [x] Reports
+    -   [x] View revenue report in time range: day, week, month, ...
+    -   [x] View top revenue by product in time range: day, week, month
 
 ### 6. Advanced Features
 
@@ -194,6 +194,6 @@ Alternatively, host it locally by following the instructions below.
 -   [ ] Use a search engine library
 -   [ ] Use memory cache to boost website performance
 -   [ ] Analyze and track user actions
--   [ ] Show interactive chart in reports
+-   [x] Show interactive chart in reports
 -   [x] Dockerize your project
 -   [x] CI/CD
