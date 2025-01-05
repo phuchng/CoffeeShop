@@ -60,10 +60,16 @@ Alternatively, host it locally by following the instructions below.
     ```bash
     npm install
     ```
+    - If there are compability issues, run
+    ```bash
+    npm ci --unsafe-perm
+    ```
 
 3. **Populate the database (optional):**
-    -   Run `npm run seed` to add initial data to the database.
-
+    -   Run this to add initial data to the database.
+    ```bash
+    npm run seed
+    ```
 4. **Start the application:**
 
     ```bash
@@ -105,7 +111,7 @@ Alternatively, host it locally by following the instructions below.
 -   [x] Website layout (at least two layouts for customer and admin websites)
 -   [x] Website architect (Based on MVC. With a clear separation of concerns)
 -   [x] Document
--   [ ] Demo video
+-   [x] Demo video
 -   [x] Publish to public hosts
 -   [x] Development progress is recorded in Github
 
@@ -128,7 +134,7 @@ Alternatively, host it locally by following the instructions below.
 -   [x] Shopping cart
     -   [x] Add product to cart
     -   [x] View products in the cart
-    -   [ ] AJAX update the product count in the cart
+    -   [x] AJAX update the product count in the cart
     
 ### 3. Authentication and Authorization
 

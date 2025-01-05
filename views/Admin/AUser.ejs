@@ -44,7 +44,7 @@
                 const listItem = `
                     <li class="box-content-user--item">
                         <div class="box-content-user--item-content">
-                            <span class="box-content-user--item-email">${user.email}</span>
+                            <span class="box-content-user--item-email"><a href="/admin/users/${user._id}">${user.email}</a></span>
                             <span class="box-content-user--item-role">${user.role}</span>
                         </div>
                         <div class="user-actions">

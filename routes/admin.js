@@ -422,6 +422,25 @@ router.get('/users', isAdmin, async (req, res) => {
     }
 });
 
+// View User Details - GET
+router.get('/users/:id', isAdmin, async (req, res) => {
+    try {
+        const user = await Account.findById(req.params.id);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        // Fetch orders for the user
+        const orders = await Order.find({ account: user._id })
+            .populate('products.product', 'name price'); // Populate product info in orders
+
+        renderAdminPage(req, res, 'AUserDetail', { user, orders });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 // Ban/Unban User - POST
 router.post('/users/ban/:id', isAdmin, async (req, res) => {
     try {

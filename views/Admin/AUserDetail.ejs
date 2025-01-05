@@ -1,0 +1,58 @@
+<h1 class="box-content-detail--header">User Details</h1>
+
+<div class="box-content-detail-user">
+    <div class="user-info">
+        <p><strong>User ID:</strong> <%= user._id %></p>
+        <p><strong>First Name:</strong> <%= user.first_name %></p>
+        <p><strong>Last Name:</strong> <%= user.last_name %></p>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Role:</strong> <%= user.role %></p>
+        <p><strong>Status:</strong> <%= user.isBanned ? 'Banned' : 'Active' %></p>
+        <p><strong>Verified:</strong> <%= user.isVerified ? 'Yes' : 'No' %></p>
+        <p><strong>Created At:</strong> <%= new Date(user.createdAt).toLocaleString() %></p>
+        <p><strong>Updated At:</strong> <%= new Date(user.updatedAt).toLocaleString() %></p>
+    </div>
+
+    <div class="user-address">
+        <h2>Address</h2>
+        <% if (user.address) { %>
+            <p><strong>First Name:</strong> <%= user.address.first_name %></p>
+            <p><strong>Last Name:</strong> <%= user.address.last_name %></p>
+            <% if (user.address.company) { %>
+                <p><strong>Company:</strong> <%= user.address.company %></p>
+            <% } %>
+            <p><strong>Address:</strong> <%= user.address.address %></p>
+            <% if (user.address.apartment) { %>
+                <p><strong>Apartment:</strong> <%= user.address.apartment %></p>
+            <% } %>
+            <p><strong>Phone:</strong> <%= user.address.phone %></p>
+        <% } else { %>
+            <p>No address information available.</p>
+        <% } %>
+    </div>
+
+    <div class="user-orders">
+        <h2>Orders</h2>
+        <% if (orders && orders.length > 0) { %>
+            <ul>
+                <% orders.forEach(order => { %>
+                    <li>
+                        <p><strong>Order ID:</strong> <a href="/admin/orders/<%= order._id %>"><%= order._id %></a></p>
+                        <p><strong>Order Date:</strong> <%= new Date(order.orderDate).toLocaleDateString() %></p>
+                        <p><strong>Total Price:</strong> $<%= order.totalPrice.toFixed(2) %></p>
+                        <p><strong>Status:</strong> <%= order.status %></p>
+                        <ul>
+                            <% order.products.forEach(item => { %>
+                                <li>
+                                    <%= item.quantity %> x <%= item.product.name %> - $<%= (item.quantity * item.product.price).toFixed(2) %>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No order history found.</p>
+        <% } %>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+.box-content-detail-user {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.box-content-detail-user h1 {
+    font-size: 24px;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.user-info,
+.user-address,
+.user-orders {
+    margin-bottom: 30px;
+}
+
+.user-info p,
+.user-address p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.user-info p strong,
+.user-address p strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.user-orders h2 {
+    font-size: 20px;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.user-orders ul {
+    list-style: none;
+    padding: 0;
+}
+
+.user-orders li {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.user-orders li p {
+    margin-bottom: 5px;
+}
+
+.user-orders li ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.user-orders li ul li {
+    background-color: transparent;
+    border: none;
+    padding: 5px 0;
+    margin-bottom: 0;
+}
+
+.user-orders a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.user-orders a:hover {
+    text-decoration: underline;
+}
