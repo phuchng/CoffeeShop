@@ -131,21 +131,6 @@
     width: 300px;
     position: relative;
 }
-.cart::before {
-    content: "0";
-    color: #fff;
-    display: inline-block;
-    text-align: center;
-    width: 24px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: #5B7D33;
-    position: absolute;
-    right: -10px;
-    top: -18px;
-    z-index: 1;
-    cursor: pointer;
-}
 .cart:hover {
     opacity: 0.7;
 }

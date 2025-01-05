@@ -4,7 +4,7 @@
             <div class="avatar-container">
                 <img src="/assets/images/avatars/<%= user.avatar %>" alt="User Avatar">
             </div>
-            <form action="/profile/upload-avatar" method="POST" enctype="multipart/form-data">
+            <form action="/profile/upload-avatar" method="POST" enctype="multipart/form-data" style="margin-right: 10px;">
                 <input type="file" name="avatar" id="avatar" style="display: none;" onchange="this.form.submit()">
                 <button type="button" class="change-avatar-button"
                     onclick="document.getElementById('avatar').click();">Change Avatar</button>
