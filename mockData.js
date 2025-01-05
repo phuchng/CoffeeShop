@@ -14,6 +14,7 @@ mongoose.connect(mongoDB);
 const productsData = [
     // Coffee
     {
+        _id: '666300959459785498000026', // Added _id field
         name: 'Ethiopian Yirgacheffe',
         image: 'menu-1.jpg',
         images: ['menu-1.jpg', 'menu-2.jpg', 'menu-3.jpg'],
@@ -63,6 +64,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000027', // Added _id field
         name: 'Sumatra Mandheling',
         image: 'menu-2.jpg',
         images: ['menu-2.jpg', 'menu-3.jpg', 'menu-4.jpg'],
@@ -92,6 +94,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000028', // Added _id field
         name: 'Colombian Supremo',
         image: 'menu-3.jpg',
         images: ['menu-3.jpg', 'menu-4.jpg', 'menu-1.jpg'],
@@ -116,6 +119,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000029', // Added _id field
         name: 'Guatemalan Antigua',
         image: 'menu-4.jpg',
         images: ['menu-4.jpg', 'menu-1.jpg', 'menu-2.jpg'],
@@ -140,6 +144,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000030', // Added _id field
         name: 'Brazilian Santos',
         image: 'menu-1.jpg',
         images: ['menu-1.jpg', 'menu-2.jpg', 'menu-3.jpg'],
@@ -166,6 +171,7 @@ const productsData = [
 
     // Tea
     {
+        _id: '666300959459785498000031', // Added _id field
         name: 'Earl Grey',
         image: 'drink-5.jpg',
         images: ['drink-5.jpg', 'drink-6.jpg', 'drink-7.jpg'],
@@ -182,6 +188,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000032', // Added _id field
         name: 'Green Tea Sencha',
         image: 'drink-7.jpg',
         images: ['drink-7.jpg', 'drink-8.jpg', 'drink-9.jpg'],
@@ -198,6 +205,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000033', // Added _id field
         name: 'Chamomile Tea',
         image: 'drink-4.jpg',
         images: ['drink-4.jpg', 'drink-5.jpg', 'drink-6.jpg'],
@@ -214,6 +222,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000034', // Added _id field
         name: 'Peppermint Tea',
         image: 'drink-8.jpg',
         images: ['drink-8.jpg', 'drink-9.jpg', 'drink-7.jpg'],
@@ -230,6 +239,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000035', // Added _id field
         name: 'Rooibos Tea',
         image: 'drink-9.jpg',
         images: ['drink-9.jpg', 'drink-8.jpg', 'drink-7.jpg'],
@@ -248,6 +258,7 @@ const productsData = [
 
     // Food
     {
+        _id: '666300959459785498000036', // Added _id field
         name: 'Chocolate Croissant',
         image: 'dessert-6.jpg',
         images: ['dessert-6.jpg', 'dessert-5.jpg', 'dessert-4.jpg'],
@@ -263,6 +274,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000037', // Added _id field
         name: 'Blueberry Muffin',
         image: 'dessert-4.jpg',
         images: ['dessert-4.jpg', 'dessert-3.jpg', 'dessert-2.jpg'],
@@ -278,6 +290,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000038', // Added _id field
         name: 'Almond Biscotti',
         image: 'dessert-5.jpg',
         images: ['dessert-5.jpg', 'dessert-4.jpg', 'dessert-3.jpg'],
@@ -293,6 +306,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000039', // Added _id field
         name: 'Spinach and Feta Quiche',
         image: 'dessert-3.jpg',
         images: ['dessert-3.jpg', 'dessert-2.jpg', 'dessert-1.jpg'],
@@ -308,6 +322,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000040', // Added _id field
         name: 'Fruit Tart',
         image: 'dessert-1.jpg',
         images: ['dessert-1.jpg', 'dessert-2.jpg', 'dessert-3.jpg'],
@@ -325,6 +340,7 @@ const productsData = [
 
     // Juice
     {
+        _id: '666300959459785498000041', // Added _id field
         name: 'Fresh Orange Juice',
         image: 'drink-1.jpg',
         images: ['drink-1.jpg', 'drink-2.jpg', 'drink-3.jpg'],
@@ -340,6 +356,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000042', // Added _id field
         name: 'Green Detox Smoothie',
         image: 'drink-7.jpg',
         images: ['drink-7.jpg', 'drink-8.jpg', 'drink-9.jpg'],
@@ -355,6 +372,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000043', // Added _id field
         name: 'Carrot Ginger Juice',
         image: 'drink-8.jpg',
         images: ['drink-8.jpg', 'drink-9.jpg', 'drink-7.jpg'],
@@ -370,6 +388,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000044', // Added _id field
         name: 'Berry Blast Smoothie',
         image: 'drink-9.jpg',
         images: ['drink-9.jpg', 'drink-8.jpg', 'drink-7.jpg'],
@@ -385,6 +404,7 @@ const productsData = [
         }
     },
     {
+        _id: '666300959459785498000045', // Added _id field
         name: 'Tropical Mango Smoothie',
         image: 'drink-1.jpg',
         images: ['drink-1.jpg', 'drink-2.jpg', 'drink-3.jpg'],
@@ -400,6 +420,7 @@ const productsData = [
         }
     }
 ];
+
 
 const categoriesData = [
     {
@@ -459,7 +480,7 @@ const ordersData = [
             { product: '666300959459785498000027', quantity: 1, servingOption: 'M' }
         ],
         address: usersData[0].address, // Use address from Coffee Drinker 1
-        totalPrice: 19,
+        totalPrice: 52,
         totalItems: 3,
         orderDate: new Date('2025-01-04'),
         shipTime: new Date('2025-01-05'),
@@ -471,7 +492,7 @@ const ordersData = [
             { product: '666300959459785498000028', quantity: 3, servingOption: 'L' }
         ],
         address: usersData[1].address, // Use address from Coffee Drinker 2
-        totalPrice: 18,
+        totalPrice: 42,
         totalItems: 3,
         orderDate: new Date('2025-01-03'),
         shipTime: new Date('2025-01-04'),
@@ -484,7 +505,7 @@ const ordersData = [
             { product: '666300959459785498000030', quantity: 2, servingOption: 'M' }
         ],
         address: usersData[2].address, // Use address from Coffee Drinker 3
-        totalPrice: 21,
+        totalPrice: 44,
         totalItems: 3,
         orderDate: new Date('2024-12-15'),
         shipTime: new Date('2024-12-16'),
@@ -496,7 +517,7 @@ const ordersData = [
             { product: '666300959459785498000031', quantity: 4, servingOption: 'L' }
         ],
         address: usersData[3].address, // Use address from Coffee Drinker 4
-        totalPrice: 28,
+        totalPrice: 32,
         totalItems: 4,
         orderDate: new Date('2024-11-20'),
         shipTime: new Date('2024-11-21'),
@@ -510,7 +531,7 @@ const ordersData = [
             { product: '666300959459785498000034', quantity: 1, servingOption: 'L' }
         ],
         address: usersData[4].address, // Use address from Coffee Drinker 5
-        totalPrice: 13,
+        totalPrice: 23,
         totalItems: 3,
         orderDate: new Date('2024-10-10'),
         shipTime: new Date('2024-10-11'),
@@ -522,7 +543,7 @@ const ordersData = [
             { product: '666300959459785498000035', quantity: 2, servingOption: 'M' }
         ],
         address: usersData[5].address, // Use address from Coffee Drinker 6
-        totalPrice: 5,
+        totalPrice: 18,
         totalItems: 2,
         orderDate: new Date('2024-09-15'),
         shipTime: new Date('2024-09-16'),

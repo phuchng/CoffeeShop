@@ -8,7 +8,7 @@ const Category = require('../models/Category');
 const Order = require('../models/Order');
 const multer = require('multer');
 const path = require('path');
-
+const moment = require('moment');
 
 // Function to render admin pages with AJAX support
 function renderAdminPage(req, res, page, options = {}) {
@@ -38,7 +38,37 @@ router.get('/dashboard', isAdmin, async (req, res) => {
     try {
         const totalUsers = await Account.countDocuments({ role: 'user' });
         const totalProducts = await Product.countDocuments({});
-        renderAdminPage(req, res, 'ADashboard', { totalUsers, totalProducts });
+
+        // Calculate total revenue from completed orders
+        const totalRevenueData = await Order.aggregate([
+            {
+                $match: { status: 'completed' }
+            },
+            {
+                $unwind: '$products'
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'products.product',
+                    foreignField: '_id',
+                    as: 'productInfo'
+                }
+            },
+            {
+                $unwind: '$productInfo'
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalRevenue: { $sum: { $multiply: ['$products.quantity', '$productInfo.price'] } }
+                }
+            }
+        ]);
+
+        const totalRevenue = totalRevenueData.length > 0 ? totalRevenueData[0].totalRevenue : 0;
+
+        renderAdminPage(req, res, 'ADashboard', { totalUsers, totalProducts, totalRevenue });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -392,7 +422,6 @@ router.get('/users', isAdmin, async (req, res) => {
     }
 });
 
-
 // Ban/Unban User - POST
 router.post('/users/ban/:id', isAdmin, async (req, res) => {
     try {
@@ -564,14 +593,31 @@ router.get('/orders', isAdmin, async (req, res) => {
 router.get('/orders/:id', isAdmin, async (req, res) => {
     try {
         const order = await Order.findById(req.params.id)
-            .populate('account', 'first_name last_name email') // Populate user details
-            .populate('products.product');
+            .populate('account', 'first_name last_name email address') // Populate user details
+            .populate('products.product', 'name image price'); // Populate product details
 
         if (!order) {
             return res.status(404).send('Order not found');
         }
 
-        renderAdminPage(req, res, 'AOrderDetail', { order });
+        // Format the order date for display
+        const orderDate = order.orderDate.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+
+        // Format the ship time for display
+        const shipTime = order.shipTime.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+
+        // Render the order details page
+        renderAdminPage(req, res, 'AOrderDetail', { order, orderDate, shipTime });
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
@@ -592,6 +638,137 @@ router.post('/orders/update-status/:id', isAdmin, async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to update order status' });
+    }
+});
+
+// Reports - GET
+router.get('/reports', isAdmin, async (req, res) => {
+    try {
+        renderAdminPage(req, res, 'AReports');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Helper function to calculate start date based on period
+function calculateStartDate(period) {
+    switch (period) {
+        case 'day':
+            return moment().subtract(1, 'days').toDate();
+        case 'week':
+            return moment().subtract(1, 'weeks').toDate();
+        case 'month':
+            return moment().subtract(1, 'months').toDate();
+        case 'year':
+            return moment().subtract(1, 'years').toDate();
+        default:
+            return moment().subtract(1, 'years').toDate(); // Default to 1 year
+    }
+}
+
+// Revenue Report Data - GET
+router.get('/reports/revenue', isAdmin, async (req, res) => {
+    try {
+        const period = req.query.period || 'year'; // Default to 'year'
+        const startDate = calculateStartDate(period);
+
+        const revenueData = await Order.aggregate([
+            {
+                $match: {
+                    status: 'completed',
+                    shipTime: { $gte: startDate }
+                }
+            },
+            {
+                $unwind: '$products'
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'products.product',
+                    foreignField: '_id',
+                    as: 'productInfo'
+                }
+            },
+            {
+                $unwind: '$productInfo'
+            },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: '$shipTime' },
+                        month: { $month: '$shipTime' },
+                        day: { $dayOfMonth: '$shipTime' }
+                    },
+                    revenue: { $sum: { $multiply: ['$products.quantity', '$productInfo.price'] } }
+                }
+            },
+            {
+                $sort: { '_id.year': 1, '_id.month': 1, '_id.day': 1 }
+            }
+        ]);
+
+        // Process data for the chart
+        const labels = revenueData.map(item => `${item._id.year}-${item._id.month}-${item._id.day}`);
+        const data = revenueData.map(item => item.revenue);
+
+        res.json({ labels, data });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch revenue data' });
+    }
+});
+
+// Top Products Report Data - GET
+router.get('/reports/top-products', isAdmin, async (req, res) => {
+    try {
+        const period = req.query.period || 'year'; // Default to 'year'
+        const startDate = calculateStartDate(period);
+
+        const topProductsData = await Order.aggregate([
+            {
+                $match: {
+                    status: 'completed',
+                    shipTime: { $gte: startDate }
+                }
+            },
+            {
+                $unwind: '$products'
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'products.product',
+                    foreignField: '_id',
+                    as: 'productInfo'
+                }
+            },
+            {
+                $unwind: '$productInfo'
+            },
+            {
+                $group: {
+                    _id: '$productInfo.name',
+                    totalRevenue: { $sum: { $multiply: ['$products.quantity', '$productInfo.price'] } }
+                }
+            },
+            {
+                $sort: { totalRevenue: -1 }
+            },
+            {
+                $limit: 10 // Top 10 products
+            }
+        ]);
+
+        // Process data for the chart
+        const labels = topProductsData.map(item => item._id);
+        const data = topProductsData.map(item => item.totalRevenue);
+
+        res.json({ labels, data });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch top products data' });
     }
 });
 

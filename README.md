@@ -44,6 +44,7 @@ Alternatively, host it locally by following the instructions below.
 
 4. **Access the application:**
     -   Open your web browser and go to `http://localhost:2000`.
+    -   You can access admin dashboard by using account `admin@example.com:password1`
 
 ### Running without Docker
 
@@ -77,6 +78,8 @@ Alternatively, host it locally by following the instructions below.
 
 6. **Access the application:**
     -   Open your web browser and go to `http://localhost:2000` (or the port specified in your configuration).
+    -   You can access admin dashboard by using account `admin@example.com:password1`
+
 
 ## Usage
 
@@ -141,10 +144,10 @@ Alternatively, host it locally by following the instructions below.
 
 ### 4. Features for Logged-in Users
 
--   [ ] Update user profile
-    -   [ ] Verify user input
-    -   [ ] Update the user's avatar
-    -   [ ] Update password (The user must input old password to update new password)
+-   [x] Update user profile
+    -   [x] Verify user input
+    -   [x] Update the user's avatar
+    -   [x] Update password (The user must input old password to update new password)
 -   [x] Checkout and payment
     -   [x] Bind the shopping cart to the user when login
     -   [x] Input shipping details
@@ -181,9 +184,9 @@ Alternatively, host it locally by following the instructions below.
     -   [x] Filter order by status
     -   [x] View order details
     -   [x] Update order status
--   [ ] Reports
-    -   [ ] View revenue report in time range: day, week, month, ...
-    -   [ ] View top revenue by product in time range: day, week, month
+-   [x] Reports
+    -   [x] View revenue report in time range: day, week, month, ...
+    -   [x] View top revenue by product in time range: day, week, month
 
 ### 6. Advanced Features
 
@@ -191,6 +194,6 @@ Alternatively, host it locally by following the instructions below.
 -   [ ] Use a search engine library
 -   [ ] Use memory cache to boost website performance
 -   [ ] Analyze and track user actions
--   [ ] Show interactive chart in reports
+-   [x] Show interactive chart in reports
 -   [x] Dockerize your project
 -   [x] CI/CD
