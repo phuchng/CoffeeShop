@@ -5,8 +5,10 @@ const Account = require('../models/Account');
 const { isAdmin } = require('../middleware/authentication');
 const bcrypt = require('bcrypt');
 const Category = require('../models/Category');
+const Order = require('../models/Order');
 const multer = require('multer');
 const path = require('path');
+
 
 // Function to render admin pages with AJAX support
 function renderAdminPage(req, res, page, options = {}) {
@@ -508,6 +510,88 @@ router.get('/products', isAdmin, async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
+    }
+});
+
+// Manage Orders - GET
+router.get('/orders', isAdmin, async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 10;
+        const skip = (page - 1) * perPage;
+
+        let query = {};
+        let sortOption = { orderDate: -1 }; // Default sort by order creation time (newest first)
+
+        // Filter by status
+        if (req.query.status) {
+            query.status = req.query.status;
+        }
+
+        const orders = await Order.find(query)
+            .sort(sortOption)
+            .skip(skip)
+            .limit(perPage)
+            .populate('account', 'first_name last_name email') // Populate basic user info
+            .populate('products.product', 'name price'); // Populate basic product info
+
+        const totalOrders = await Order.countDocuments(query);
+        const totalPages = Math.ceil(totalOrders / perPage);
+
+        if (req.xhr) {
+            // AJAX request: Send only JSON data
+            res.json({
+                orders,
+                currentPage: page,
+                totalPages,
+            });
+        } else {
+            // Initial page load: Render the full EJS template
+            renderAdminPage(req, res, 'AOrder', {
+                orders,
+                currentPage: page,
+                totalPages,
+                statusFilter: req.query.status,
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// View Order Details - GET
+router.get('/orders/:id', isAdmin, async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id)
+            .populate('account', 'first_name last_name email') // Populate user details
+            .populate('products.product');
+
+        if (!order) {
+            return res.status(404).send('Order not found');
+        }
+
+        renderAdminPage(req, res, 'AOrderDetail', { order });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Update Order Status - POST
+router.post('/orders/update-status/:id', isAdmin, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
+
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        res.json({ message: 'Order status updated successfully', order });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update order status' });
     }
 });
 

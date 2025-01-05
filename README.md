@@ -125,7 +125,7 @@ Alternatively, host it locally by following the instructions below.
 -   [x] Shopping cart
     -   [x] Add product to cart
     -   [x] View products in the cart
-    -   [x] AJAX update the product count in the cart
+    -   [ ] AJAX update the product count in the cart
     
 ### 3. Authentication and Authorization
 
@@ -176,11 +176,11 @@ Alternatively, host it locally by following the instructions below.
     -   [x] Change product category, manufacturer, ...
     -   [x] Update product status
     -   [x] Verify user input
--   [ ] Customer's orders
-    -   [ ] View list of orders sorted by order creation time
-    -   [ ] Filter order by status
-    -   [ ] View order details
-    -   [ ] Update order status
+-   [x] Customer's orders
+    -   [x] View list of orders sorted by order creation time
+    -   [x] Filter order by status
+    -   [x] View order details
+    -   [x] Update order status
 -   [ ] Reports
     -   [ ] View revenue report in time range: day, week, month, ...
     -   [ ] View top revenue by product in time range: day, week, month

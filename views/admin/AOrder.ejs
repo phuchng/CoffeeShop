@@ -1,0 +1,103 @@
+<div class="box-content-order"></div>
+    <h1 class="box-content-order--header">Manage Orders</h1>
+
+    <!-- Filter Form -->
+    <form action="/admin/orders" method="GET" class="filter-form" id="order-filter-form">
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="">All Statuses</option>
+            <option value="pending" <%= statusFilter === 'pending' ? 'selected' : '' %>>Pending</option>
+            <option value="processing" <%= statusFilter === 'processing' ? 'selected' : '' %>>Processing</option>
+            <option value="completed" <%= statusFilter === 'completed' ? 'selected' : '' %>>Completed</option>
+            <option value="cancelled" <%= statusFilter === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <div id="message"></div>
+
+    <ul class="box-content-order--list" id="order-list">
+        <!-- Order items will be loaded here -->
+    </ul>
+
+    <!-- Pagination -->
+    <div class="box-content-order--pagination" id="order-pagination">
+        <!-- Pagination links will be here -->
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Function to update the order list with AJAX response
+        function updateOrderList(orders) {
+            const orderList = $('#order-list');
+            orderList.empty();
+
+            orders.forEach(order => {
+                const listItem = `
+                    <li class="box-content-order--item">
+                        <div class="box-content-order--item-info">
+                            <span class="box-content-order--item-id">ID: <a href="/admin/orders/${order._id}">${order._id}</a></span>
+                            <span class="box-content-order--item-date">Date: ${new Date(order.orderDate).toLocaleDateString()}</span>
+                            <span class="box-content-order--item-customer">Customer: ${order.account.first_name} ${order.account.last_name}</span>
+                            <span class="box-content-order--item-status">Status: ${order.status}</span>
+                        </div>
+                    </li>
+                `;
+                orderList.append(listItem);
+            });
+        }
+
+        // Function to update pagination links
+        function updatePagination(currentPage, totalPages) {
+            const pagination = $('#order-pagination');
+            pagination.empty();
+
+            if (currentPage > 1) {
+                pagination.append(`<a href="#" data-page="${currentPage - 1}">Previous</a>`);
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                pagination.append(`<a href="#" data-page="${i}" ${i === currentPage ? 'class="active"' : ''}>${i}</a>`);
+            }
+
+            if (currentPage < totalPages) {
+                pagination.append(`<a href="#" data-page="${currentPage + 1}">Next</a>`);
+            }
+        }
+
+        // Function to fetch orders via AJAX
+        function fetchOrders(page = 1) {
+            const statusFilter = $('#status').val();
+
+            $.ajax({
+                url: `/admin/orders?page=${page}&status=${statusFilter}`,
+                method: 'GET',
+                success: function (data) {
+                    updateOrderList(data.orders);
+                    updatePagination(data.currentPage, data.totalPages);
+                },
+                error: function (error) {
+                    console.error("Error fetching orders:", error);
+                }
+            });
+        }
+
+        // Initial fetch on page load
+        fetchOrders();
+
+        // Handle filter form submission
+        $('#order-filter-form').submit(function (event) {
+            event.preventDefault();
+            fetchOrders(1); // Fetch first page with new filters
+        });
+
+        // Handle pagination link clicks
+        $('#order-pagination').on('click', 'a', function (event) {
+            event.preventDefault();
+            const page = $(this).data('page');
+            fetchOrders(page);
+        });
+    });
+</script>

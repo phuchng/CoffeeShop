@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const { Product } = require('./models/Product');
 const Account = require('./models/Account');
-const Cart = require('./models/Cart')
+const Cart = require('./models/Cart');
 const Category = require('./models/Category');
+const Order = require('./models/Order');
 const bcrypt = require('bcrypt');
 require('dotenv').config({ path: '.env' });
 
@@ -437,9 +438,9 @@ for (let i = 1; i <= 20; i++) {
         password: `password${i}`, // This will be hashed later
         role: 'user',
         address: {
-            first_name: `AddressFName${i}`,
-            last_name: `AddressLName${i}`,
-            company: `Company${i}`,
+            first_name: `Coffee`,
+            last_name: `Drinker ${i}`,
+            company: `Company ${i}`,
             address: `${i} Main St`,
             apartment: `Apt ${i}`,
             phone: `555-123-${1000 + i}`,
@@ -449,6 +450,148 @@ for (let i = 1; i <= 20; i++) {
     };
     usersData.push(user);
 }
+
+const ordersData = [
+    {
+        account: '666300959459785498000001',
+        products: [
+            { product: '666300959459785498000026', quantity: 2, servingOption: 'S' },
+            { product: '666300959459785498000027', quantity: 1, servingOption: 'M' }
+        ],
+        address: usersData[0].address, // Use address from Coffee Drinker 1
+        totalPrice: 19,
+        totalItems: 3,
+        orderDate: new Date('2025-01-04'),
+        shipTime: new Date('2025-01-05'),
+        status: 'processing'
+    },
+    {
+        account: '666300959459785498000002',
+        products: [
+            { product: '666300959459785498000028', quantity: 3, servingOption: 'L' }
+        ],
+        address: usersData[1].address, // Use address from Coffee Drinker 2
+        totalPrice: 18,
+        totalItems: 3,
+        orderDate: new Date('2025-01-03'),
+        shipTime: new Date('2025-01-04'),
+        status: 'pending'
+    },
+    {
+        account: '666300959459785498000003',
+        products: [
+            { product: '666300959459785498000029', quantity: 1, servingOption: 'S' },
+            { product: '666300959459785498000030', quantity: 2, servingOption: 'M' }
+        ],
+        address: usersData[2].address, // Use address from Coffee Drinker 3
+        totalPrice: 21,
+        totalItems: 3,
+        orderDate: new Date('2024-12-15'),
+        shipTime: new Date('2024-12-16'),
+        status: 'completed'
+    },
+    {
+        account: '666300959459785498000004',
+        products: [
+            { product: '666300959459785498000031', quantity: 4, servingOption: 'L' }
+        ],
+        address: usersData[3].address, // Use address from Coffee Drinker 4
+        totalPrice: 28,
+        totalItems: 4,
+        orderDate: new Date('2024-11-20'),
+        shipTime: new Date('2024-11-21'),
+        status: 'completed'
+    },
+    {
+        account: '666300959459785498000005',
+        products: [
+            { product: '666300959459785498000032', quantity: 1, servingOption: 'S' },
+            { product: '666300959459785498000033', quantity: 1, servingOption: 'M' },
+            { product: '666300959459785498000034', quantity: 1, servingOption: 'L' }
+        ],
+        address: usersData[4].address, // Use address from Coffee Drinker 5
+        totalPrice: 13,
+        totalItems: 3,
+        orderDate: new Date('2024-10-10'),
+        shipTime: new Date('2024-10-11'),
+        status: 'completed'
+    },
+    {
+        account: '666300959459785498000006',
+        products: [
+            { product: '666300959459785498000035', quantity: 2, servingOption: 'M' }
+        ],
+        address: usersData[5].address, // Use address from Coffee Drinker 6
+        totalPrice: 5,
+        totalItems: 2,
+        orderDate: new Date('2024-09-15'),
+        shipTime: new Date('2024-09-16'),
+        status: 'completed'
+    },
+    {
+        account: '666300959459785498000007',
+        products: [
+            { product: '666300959459785498000037', quantity: 3, servingOption: 'L' }
+        ],
+        address: usersData[6].address, // Use address from Coffee Drinker 7
+        totalPrice: 10.5,
+        totalItems: 3,
+        orderDate: new Date('2024-08-05'),
+        shipTime: new Date('2024-08-06'),
+        status: 'completed'
+    },
+    {
+        account: '666300959459785498000008',
+        products: [
+            { product: '666300959459785498000038', quantity: 1, servingOption: 'S' },
+            { product: '666300959459785498000039', quantity: 1, servingOption: 'M' }
+        ],
+        address: usersData[7].address, // Use address from Coffee Drinker 8
+        totalPrice: 7.5,
+        totalItems: 2,
+        orderDate: new Date('2024-07-15'),
+        shipTime: new Date('2024-07-16'),
+        status: 'cancelled'
+    },
+    {
+        account: '666300959459785498000009',
+        products: [
+            { product: '666300959459785498000040', quantity: 2, servingOption: 'M' }
+        ],
+        address: usersData[8].address, // Use address from Coffee Drinker 9
+        totalPrice: 12,
+        totalItems: 2,
+        orderDate: new Date('2024-05-05'),
+        shipTime: new Date('2024-05-06'),
+        status: 'completed'
+    },
+    {
+        account: '666300959459785498000010',
+        products: [
+            { product: '666300959459785498000021', quantity: 5, servingOption: 'L' }
+        ],
+        address: usersData[9].address, // Use address from Coffee Drinker 10
+        totalPrice: 30,
+        totalItems: 5,
+        orderDate: new Date('2024-03-10'),
+        shipTime: new Date('2024-03-11'),
+        status: 'completed'
+    },
+    {
+        account: '666300959459785498000011',
+        products: [
+            { product: '666300959459785498000022', quantity: 2, servingOption: 'S' },
+            { product: '666300959459785498000023', quantity: 1, servingOption: 'M' },
+            { product: '666300959459785498000024', quantity: 3, servingOption: 'L' }
+        ],
+        address: usersData[10].address, // Use address from Coffee Drinker 11
+        totalPrice: 50,
+        totalItems: 6,
+        orderDate: new Date('2024-01-15'),
+        shipTime: new Date('2024-01-16'),
+        status: 'cancelled'
+    }
+];
 
 async function addMockData() {
     try {
@@ -482,26 +625,27 @@ async function addMockData() {
         console.log('Users password: password1, ..., password20');
 
         // Add Admin Account
-        const existingAdmin = await Account.findOne({ email: 'admin@example.com' });
-        if (!existingAdmin) {
-            const hashedPassword = await bcrypt.hash('password1234', 10);
-            const adminAccount = new Account({
-                first_name: 'Admin',
-                last_name: 'User',
-                email: 'admin@example.com',
-                password: hashedPassword,
-                role: 'admin',
-                isVerified: true
-            });
-            await adminAccount.save();
-            console.log('Admin account added successfully!');
-            console.log('Admin account email: admin@example.com');
-            console.log('Admin account password: password1234');
-        } else {
-            console.log('Admin account already exists.');
-        }
+        const hashedPassword = await bcrypt.hash('password1', 10);
+        const adminAccount = new Account({
+            first_name: 'Admin',
+            last_name: 'User',
+            email: 'admin@example.com',
+            password: hashedPassword,
+            role: 'admin',
+            isVerified: true
+        });
+        await adminAccount.save();
+        console.log('Admin account added successfully!');
+        console.log('Admin account email: admin@example.com');
+        console.log('Admin account password: password1');
+
 
         await Cart.deleteMany({});
+
+        // Add Orders
+        await Order.deleteMany({});
+        await Order.insertMany(ordersData);
+        console.log('Orders added successfully!');
     } catch (error) {
         console.error('Error adding data:', error);
     } finally {
