@@ -1,0 +1,21 @@
+.box-content-reports--header {
+    font-size: 24px;
+    color: rgb(52, 71, 103);
+    margin: 60px 0 20px 0;
+    font-weight: 600;
+}
+
+.report-options {
+    margin-bottom: 20px;
+}
+
+.chart-container {
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.chart-container h2 {
+    margin-top: 0;
+}

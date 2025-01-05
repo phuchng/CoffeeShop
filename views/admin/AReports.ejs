@@ -1,0 +1,125 @@
+<h1 class="box-content-reports--header">Reports</h1>
+
+<div class="report-options">
+    <label for="period-select">Select Period:</label>
+    <select id="period-select">
+        <option value="day">Day</option>
+        <option value="week">Week</option>
+        <option value="month">Month</option>
+        <option value="year" selected>Year</option>
+    </select>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="chart-container">
+            <h2>Revenue Report</h2>
+            <canvas id="revenue-chart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="chart-container">
+            <h2>Top Products Report</h2>
+            <canvas id="top-products-chart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    $(document).ready(function () {
+        let revenueChart = null;
+        let topProductsChart = null;
+
+        function fetchRevenueData(period) {
+            $.ajax({
+                url: `/admin/reports/revenue?period=${period}`,
+                method: 'GET',
+                success: function (data) {
+                    createRevenueChart(data.labels, data.data);
+                },
+                error: function (error) {
+                    console.error("Error fetching revenue data:", error);
+                }
+            });
+        }
+
+        function fetchTopProductsData(period) {
+            $.ajax({
+                url: `/admin/reports/top-products?period=${period}`,
+                method: 'GET',
+                success: function (data) {
+                    createTopProductsChart(data.labels, data.data);
+                },
+                error: function (error) {
+                    console.error("Error fetching top products data:", error);
+                }
+            });
+        }
+
+        function createRevenueChart(labels, data) {
+            const ctx = document.getElementById('revenue-chart').getContext('2d');
+            if (revenueChart) {
+                revenueChart.destroy();
+            }
+            revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Revenue',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createTopProductsChart(labels, data) {
+            const ctx = document.getElementById('top-products-chart').getContext('2d');
+            if (topProductsChart) {
+                topProductsChart.destroy();
+            }
+            topProductsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Revenue',
+                        data: data,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initial fetch on page load
+        fetchRevenueData('year');
+        fetchTopProductsData('year');
+
+        // Handle period change
+        $('#period-select').change(function () {
+            const period = $(this).val();
+            fetchRevenueData(period);
+            fetchTopProductsData(period);
+        });
+    });
+</script>

@@ -60,6 +60,12 @@ const OrderSchema = new mongoose.Schema({
         default: 'pending'
     }
 });
+// Calculate total revenue for an order
+OrderSchema.virtual('revenue').get(function () {
+    return this.products.reduce((total, product) => {
+        return total + (product.quantity * product.product.price);
+    }, 0);
+});
 
 // Export Order Model
 const Order = mongoose.model('Order', OrderSchema)
