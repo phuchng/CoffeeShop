@@ -5,7 +5,7 @@
             <div class="boxSub">
                 <div class="texSub">
                     <span class="texSub-span">Subtotal</span>
-                    <span class="costSub">$<%= totalPrice %></span>
+                    <span class="totalCost costSub">$<%= totalPrice %></span>
                 </div>
                 <button class="checkout">
                     <i class="fa-solid fa-cart-shopping"></i>
@@ -22,9 +22,9 @@
                                 <img src="/assets/images/<%= item.image %>" alt="<%= item.name %>" width="120px" height="120px">
                                 <div class="InfoProduct">
                                     <h3><%= item.name %></h3>
-                                    <% if (item.servingOption) { %>
-                                        <span><strong>Serving Option:</strong> <%= item.servingOption %></span>
-                                    <% } %>
+
+                                    <span><strong>Serving Option:</strong> <%= item.servingOption %></span>
+
                                     <span><strong>Price:</strong> $<%= item.price %></span>
                                 </div>
                             </div>
@@ -39,15 +39,17 @@
                         </li>
                     <% }) %>
                 </ul>
-            <% } else { %>
-                <p>Your cart is empty.</p>
             <% } %>
 
         </div>
         <div class="checkout1">
             <div class="boxInfoCheckout">
                 <span class="boxInfoCheckout--header">Subtotal</span>
-                <span class="InfoCost boxInfoCheckout--header">$<%= totalPrice %></span>
+                <span class="totalCost InfoCost boxInfoCheckout--header">$<%= totalPrice %></span>
+            </div>
+            <div class="boxInfoCheckout">
+                <span class="boxInfoCheckout--header">Total Items</span>
+                <span class="totalItems InfoCost boxInfoCheckout--header"><%= totalItems %></span>
             </div>
             <button class="checkout">
                 <i class="fa-solid fa-cart-shopping"></i> CHECKOUT
@@ -75,12 +77,14 @@
                     const data = await response.json();
 
                     const newTotalPrice = data.newTotalPrice;
-                    
+                    const newTotalItems = data.newTotalItems;
                     remove_span.closest('.itemCart').remove();
-                    const totalPrice = document.querySelector('.InfoCost');
-                    const costSub = document.querySelector('.costSub');
-                    totalPrice.innerText = `$${newTotalPrice}`;
-                    costSub.innerText = `$${newTotalPrice}`;
+                    const totalCost = document.querySelectorAll('.totalCost');
+                    const totalItems = document.querySelector('.totalItems');
+                    totalCost.forEach((cost) => {
+                        cost.innerText = `$${newTotalPrice}`
+                    })
+                    totalItems.innerText = `${newTotalItems}`;
                     alert(data.message);
                 }
 

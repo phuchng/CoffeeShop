@@ -17,11 +17,11 @@ router.get('/', isAuthenticated, async (req, res, next) => {
         if (!cart) {
             const newCart = new Cart({ account: userID });
             await newCart.save();
-            return res.render('cart', { cartItems: [], totalPrice: 0 });
+            return res.render('cart', { cartItems: [], totalPrice: 0, totalItems: 0 });
         }
 
         if (!cart.products || cart.products.length === 0) {
-            return res.render('cart', { cartItems: [], totalPrice: 0 });
+            return res.render('cart', { cartItems: [], totalPrice: 0, totalItems: 0 });
         }
 
         const cartItems = await Promise.all(cart.products.map(async (item) => {
@@ -48,7 +48,7 @@ router.get('/', isAuthenticated, async (req, res, next) => {
         // Filter out any null values in case of errors
         const validCartItems = cartItems.filter(item => item !== null);
 
-        return res.render('cart', { cartItems: validCartItems, totalPrice: cart.totalPrice });
+        return res.render('cart', { cartItems: validCartItems, totalPrice: cart.totalPrice, totalItems: cart.totalItems });
     } catch (error) {
         console.error('Error fetching cart:', error);
         return res.status(500).render('error', { message: 'Error fetching cart', error: error });
@@ -122,7 +122,7 @@ router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
         cart.totalItems = totalItems; 
         await cart.save();
 
-        res.status(200).json({ success: true, message: 'Product removed from cart.', newTotalPrice: totalPrice });
+        res.status(200).json({ success: true, message: 'Product removed from cart.', newTotalPrice: totalPrice, newTotalItems: totalItems });
     } catch (error) {
         console.error('Error removing product from cart:', error);
         res.status(500).json({ success: false, message: 'Failed to remove product from cart.' });
