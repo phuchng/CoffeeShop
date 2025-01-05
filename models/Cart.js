@@ -16,7 +16,8 @@ const CartSchema = new mongoose.Schema({
           },
           servingOption: {
             type: String,
-            required: true
+            required: true,
+            default: 'Default'
         }
     }],
     totalPrice: {
