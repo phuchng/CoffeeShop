@@ -109,14 +109,17 @@ router.delete('/remove-item', isAuthenticated, async (req, res, next) => {
 
         // Recalculate total price
         let totalPrice = 0;
+        let totalItems = 0
         for (const item of cart.products) {
             const product = await Product.findById(item.product);
             if (product) {
+                totalItems += item.quantity;
                 totalPrice += product.price * item.quantity;
             }
         }
 
         cart.totalPrice = totalPrice;
+        cart.totalItems = totalItems; 
         await cart.save();
 
         res.status(200).json({ success: true, message: 'Product removed from cart.', newTotalPrice: totalPrice });
