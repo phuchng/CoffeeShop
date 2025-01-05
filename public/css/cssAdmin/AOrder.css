@@ -1,0 +1,109 @@
+.box-content-order--header {
+    font-size: 24px;
+    color: rgb(52, 71, 103);
+    margin: 60px 0 20px 0;
+    font-weight: 600;
+}
+
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.filter-form label {
+    font-size: 14px;
+    color: #7b809a;
+    margin-bottom: 0; /* Align label with input */
+}
+
+.filter-form input,
+.filter-form select {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #495057;
+}
+
+.filter-form button {
+    padding: 8px 16px;
+    background-color: #E91E63;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-form button:hover {
+    background-color: #9d1240;
+}
+
+.box-content-order--list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.box-content-order--item {
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.box-content-order--item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.box-content-order--item-id a {
+    font-size: 16px;
+    color: #344767;
+    text-decoration: none;
+}
+
+.box-content-order--item-id a:hover {
+    text-decoration: underline;
+}
+
+.box-content-order--item-date,
+.box-content-order--item-customer,
+.box-content-order--item-status {
+    font-size: 14px;
+    color: #7b809a;
+}
+
+.box-content-order--pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.box-content-order--pagination a {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 4px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #344767;
+    transition: background-color 0.3s ease;
+}
+
+.box-content-order--pagination a:hover {
+    background-color: #f0f0f0;
+}
+
+.box-content-order--pagination a.active {
+    background-color: #E91E63;
+    color: #fff;
+    border-color: #E91E63;
+}
