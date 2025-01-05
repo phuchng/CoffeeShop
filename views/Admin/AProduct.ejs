@@ -3,28 +3,34 @@
 
     <!-- Filter Form -->
     <form action="/admin/products" method="GET" class="filter-form" id="product-filter-form">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="<%= nameFilter || '' %>">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="<%= nameFilter || '' %>" class="form-control">
+        </div>
 
-        <label for="category">Category:</label>
-        <select id="category" name="category">
-            <option value="">All Categories</option>
-            <% categories.forEach(category => { %>
-                <option value="<%= category._id %>" <%= categoryFilter === category._id.toString() ? 'selected' : '' %>>
-                    <%= category.name %>
-                </option>
-            <% }); %>
-        </select>
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select id="category" name="category" class="form-control">
+                <option value="">All Categories</option>
+                <% categories.forEach(category => { %>
+                    <option value="<%= category._id %>" <%= categoryFilter === category._id.toString() ? 'selected' : '' %>>
+                        <%= category.name %>
+                    </option>
+                <% }); %>
+            </select>
+        </div>
 
-        <label for="sortBy">Sort By:</label>
-        <select id="sortBy" name="sortBy">
-            <option value="">None</option>
-            <option value="name" <%= sortBy === 'name' ? 'selected' : '' %>>Name</option>
-            <option value="price" <%= sortBy === 'price' ? 'selected' : '' %>>Price</option>
-            <option value="createdAt" <%= sortBy === 'createdAt' ? 'selected' : '' %>>Creation Date</option>
-        </select>
+        <div class="form-group">
+            <label for="sortBy">Sort By:</label>
+            <select id="sortBy" name="sortBy" class="form-control">
+                <option value="">None</option>
+                <option value="name" <%= sortBy === 'name' ? 'selected' : '' %>>Name</option>
+                <option value="price" <%= sortBy === 'price' ? 'selected' : '' %>>Price</option>
+                <option value="createdAt" <%= sortBy === 'createdAt' ? 'selected' : '' %>>Creation Date</option>
+            </select>
+        </div>
 
-        <button type="submit">Filter</button>
+        <button type="submit" class="btn btn-primary">Filter</button>
     </form>
 
     <div id="message"></div>
@@ -49,12 +55,15 @@
             products.forEach(product => {
                 const listItem = `
                     <li class="box-content-product--item">
-                        <div class="box-content-product--item-name">
-                            <img src="/assets/images/${product.image}" width="50" height="50" alt="${product.name}">
-                            <a href="/admin/products/${product._id}">${product.name}</a>
+                        <div class="product-info">
+                            <img src="/assets/images/${product.image}" width="50" height="50" alt="${product.name}" class="product-image">
+                            <a href="/admin/products/${product._id}" class="product-name">${product.name}</a>
                         </div>
-                        <span class="box-content-product--item-cost">$${product.price}</span>
-                        <span class="box-content-product--item-date">${new Date(product.createdAt).toLocaleDateString()}</span>
+                        <div class="product-details">
+                            <span class="product-price">$${product.price}</span>
+                            <span class="product-status ${product.status.toLowerCase().replace(/\s+/g, '-')}">${product.status}</span>
+                            <span class="product-date">${new Date(product.createdAt).toLocaleDateString()}</span>
+                        </div>
                     </li>
                 `;
                 productList.append(listItem);
@@ -67,15 +76,15 @@
             pagination.empty();
 
             if (currentPage > 1) {
-                pagination.append(`<a href="#" data-page="${currentPage - 1}">Previous</a>`);
+                pagination.append(`<a href="#" data-page="${currentPage - 1}" class="btn btn-secondary">Previous</a>`);
             }
 
             for (let i = 1; i <= totalPages; i++) {
-                pagination.append(`<a href="#" data-page="${i}" ${i === currentPage ? 'class="active"' : ''}>${i}</a>`);
+                pagination.append(`<a href="#" data-page="${i}" ${i === currentPage ? 'class="active btn btn-primary"' : 'class="btn btn-secondary"'} >${i}</a>`);
             }
 
             if (currentPage < totalPages) {
-                pagination.append(`<a href="#" data-page="${currentPage + 1}">Next</a>`);
+                pagination.append(`<a href="#" data-page="${currentPage + 1}" class="btn btn-secondary">Next</a>`);
             }
         }
 
@@ -115,3 +124,169 @@
         });
     });
 </script>
+
+<style>
+    /* Updated styles for AProduct */
+    .box-content-product {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .box-content-product--header {
+        font-size: 20px;
+        color: #344767;
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .filter-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+
+    .filter-form .form-group {
+        margin-bottom: 0;
+    }
+
+    .filter-form label {
+        font-size: 14px;
+        color: #7b809a;
+        margin-bottom: 0;
+    }
+
+    .filter-form .form-control {
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #495057;
+    }
+
+    .filter-form .btn-primary {
+        background-color: #E91E63;
+        border-color: #E91E63;
+        padding: 8px 16px;
+        font-size: 14px;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .filter-form .btn-primary:hover {
+        background-color: #9d1240;
+    }
+
+    .box-content-product--list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .box-content-product--item {
+        background-color: #f8f9fa;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .box-content-product--item-name {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .box-content-product--item-name .product-image {
+        border-radius: 4px;
+        flex-shrink: 0; /* Prevent image from shrinking */
+    }
+
+    .box-content-product--item-name a {
+        font-size: 16px;
+        color: #344767;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .box-content-product--item-name a:hover {
+        text-decoration: underline;
+    }
+
+    .product-details {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-left: auto; /* Push the details to the right */
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .box-content-product--item-cost {
+        font-size: 16px;
+        color: #344767;
+        font-weight: 600;
+    }
+
+    .box-content-product--item-date {
+        font-size: 14px;
+        color: #7b809a;
+    }
+
+    .box-content-product--pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .box-content-product--pagination a {
+        display: inline-block;
+        padding: 8px 12px;
+        margin: 0 4px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #344767;
+        transition: background-color 0.3s ease;
+    }
+
+    .box-content-product--pagination a:hover {
+        background-color: #f0f0f0;
+    }
+
+    .box-content-product--pagination a.active {
+        background-color: #E91E63;
+        color: #fff;
+        border-color: #E91E63;
+    }
+
+    .product-status {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .product-status.on-stock {
+        color: green;
+    }
+
+    .product-status.out-of-stock {
+        color: red;
+    }
+
+    .product-status.suspended {
+        color: orange;
+    }
+</style>

@@ -1,59 +1,63 @@
-<div>
-    <h1 class="box-categories--header">Manage Categories</h1>
+<div class="box-content-categories">
+    <h1 class="box-content-categories--header">Manage Categories</h1>
 
     <div id="message"></div>
 
     <!-- Form for Adding New Category -->
-    <h2 class="box-categories--header">Add New Category</h2>
-    <form id="addCategoryForm" action="/admin/categories/add" method="POST" class="box-categories--form">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-        <label for="description">Description:</label>
-        <textarea id="description" name="description"></textarea>
-        <label for="subcategories">Subcategories (comma-separated):</label>
-        <input type="text" id="subcategories" name="subcategories">
-        <button type="submit" class="box-categories--form--button">Add Category</button>
+    <h2 class="box-content-categories--header">Add New Category</h2>
+    <form id="addCategoryForm" action="/admin/categories/add" method="POST" class="box-content-categories--form">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="subcategories">Subcategories (comma-separated):</label>
+            <input type="text" id="subcategories" name="subcategories" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Category</button>
     </form>
 
     <!-- List of Existing Categories -->
-    <h2 class="box-categories--header">Existing Categories</h2>
-    <ul id="category-list" class="box-category-list">
+    <h2 class="box-content-categories--header">Existing Categories</h2>
+    <ul id="category-list" class="box-content-categories--list">
         <% categories.forEach(category => { %>
-            <li class="box-category-item">
-                <div class="box1-category-item">
-                    <div>
-                        <span id="category-name-<%= category._id %>"><%= category.name %></span> - 
-                        <span id="category-description-<%= category._id %>"><%= category.description %></span>
-                        <span id="category-subcategories-<%= category._id %>">
-                            <% if (category.subcategories && category.subcategories.length > 0) { %>
-                                (Subcategories: <%= category.subcategories.join(', ') %>)
-                            <% } %>
-                        </span>
-                    </div>
-                    <div>
-                        <button class="edit-category" data-id="<%= category._id %>">Edit</button>
-                        <form action="/admin/categories/delete/<%= category._id %>" method="POST" style="display:inline;">
-                            <button type="submit" class="delete-category">Delete</button>
-                        </form>
-                    </div>                
+            <li class="box-content-categories--item">
+                <div class="category-details">
+                    <span id="category-name-<%= category._id %>" class="category-name"><%= category.name %></span>
+                    <span id="category-description-<%= category._id %>" class="category-description"><%= category.description %></span>
+                    <span id="category-subcategories-<%= category._id %>" class="category-subcategories">
+                        <% if (category.subcategories && category.subcategories.length > 0) { %>
+                            (Subcategories: <%= category.subcategories.join(', ') %>)
+                        <% } %>
+                    </span>
                 </div>
-                
+                <div class="category-actions">
+                    <button class="btn btn-secondary edit-category" data-id="<%= category._id %>">Edit</button>
+                    <form action="/admin/categories/delete/<%= category._id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+
                 <!-- Form for Updating Category -->
                 <form action="/admin/categories/update/<%= category._id %>" method="POST" class="update-form" id="update-form-<%= category._id %>" style="display:none;">
-                    <div class="update-form--box">
-                        <label for="" style="margin-right: 5px;">Name: </label>
-                        <input type="text" name="name" value="<%= category.name %>" style="margin-right: 20px;" required>
-                        <label for="" style="margin-right: 5px;">Description:</label>
-                        <textarea name="description" style="width: 400px; "><%= category.description %></textarea>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" name="name" value="<%= category.name %>" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea name="description" class="form-control"><%= category.description %></textarea>
+                    </div>
+                    <div class="form-group">
                         <label for="subcategories">Subcategories (comma-separated):</label>
-                        <input type="text" name="subcategories" value="<%= category.subcategories ? category.subcategories.join(', ') : '' %>">
+                        <input type="text" name="subcategories" class="form-control" value="<%= category.subcategories ? category.subcategories.join(', ') : '' %>">
                     </div>
-                    
-                    <div style="margin-top: 10px;">
-                        <button type="submit" class="edit-category">Update</button>
-                        <button type="button" class="cancel-update delete-category" data-id="<%= category._id %>">Cancel</button>
-                    </div>
-                    
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-secondary cancel-update" data-id="<%= category._id %>">Cancel</button>
                 </form>
             </li>
         <% }); %>
@@ -70,11 +74,13 @@
                 method: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
-                    $('#message').html('<p>Category added successfully!</p>');
+                    $('#message').html('<p class="success-message">Category added successfully!</p>');
                     // Optionally refresh the category list or add the new category to the list
+                    // For simplicity, let's just reload the page
+                    location.reload();
                 },
                 error: function(err) {
-                    $('#message').html('<p>Error adding category.</p>');
+                    $('#message').html('<p class="error-message">Error adding category.</p>');
                 }
             });
         });
@@ -100,13 +106,128 @@
                 method: 'POST',
                 data: form.serialize(),
                 success: function(response) {
-                    $('#message').html('<p>Category updated successfully!</p>');
+                    $('#message').html('<p class="success-message">Category updated successfully!</p>');
                     // Optionally refresh the category list or update the edited category in the list
+                    // For simplicity, let's just reload the page
+                    location.reload();
                 },
                 error: function(err) {
-                    $('#message').html('<p>Error updating category.</p>');
+                    $('#message').html('<p class="error-message">Error updating category.</p>');
                 }
             });
         });
     });
 </script>
+
+<style>
+    /* Updated styles for ACategories */
+    .box-content-categories {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .box-content-categories--header {
+        font-size: 20px;
+        color: #344767;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .box-content-categories--form .form-group {
+        margin-bottom: 15px;
+    }
+
+    .box-content-categories--form label {
+        display: block;
+        margin-bottom: 5px;
+        color: #7b809a;
+        font-weight: 500;
+    }
+
+    .box-content-categories--form .form-control {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #495057;
+    }
+
+    .box-content-categories--form .btn-primary {
+        background-color: #E91E63;
+        border-color: #E91E63;
+        padding: 8px 16px;
+        font-size: 14px;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .box-content-categories--form .btn-primary:hover {
+        background-color: #9d1240;
+    }
+
+    .box-content-categories--list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .box-content-categories--item {
+        background-color: #f8f9fa;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .category-details {
+        margin-bottom: 10px;
+    }
+
+    .category-name {
+        font-weight: 600;
+        color: #344767;
+    }
+
+    .category-description,
+    .category-subcategories {
+        font-size: 14px;
+        color: #7b809a;
+    }
+
+    .category-actions .btn {
+        margin-right: 5px;
+    }
+
+    .update-form {
+        margin-top: 10px;
+    }
+
+    .update-form .form-group {
+        margin-bottom: 10px;
+    }
+
+    .update-form .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .update-form .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    /* Success and error message styling */
+    .success-message {
+        color: green;
+        margin-top: 10px;
+    }
+
+    .error-message {
+        color: red;
+        margin-top: 10px;
+    }
+</style>

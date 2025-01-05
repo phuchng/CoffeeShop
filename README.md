@@ -44,7 +44,7 @@ Alternatively, host it locally by following the instructions below.
 
 4. **Access the application:**
     -   Open your web browser and go to `http://localhost:2000`.
-    -   You can access admin dashboard by using account 'admin@example.com:password1'
+    -   You can access admin dashboard by using account `admin@example.com:password1`
 
 ### Running without Docker
 
@@ -78,7 +78,7 @@ Alternatively, host it locally by following the instructions below.
 
 6. **Access the application:**
     -   Open your web browser and go to `http://localhost:2000` (or the port specified in your configuration).
-    -   You can access admin dashboard by using account 'admin@example.com:password1'
+    -   You can access admin dashboard by using account `admin@example.com:password1`
 
 
 ## Usage
