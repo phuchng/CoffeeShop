@@ -3,9 +3,10 @@ var Account = require('../models/Account');
 var bcrypt = require('bcrypt')
 var router = express.Router();
 
+var getToken
 router.get('/', async(req, res, next) => {
-    const token = req.query.token;
-
+    const { token } = req.query;
+    getToken = token;
     try {
         const user = await Account.findOne({ token: token, expirationTime: { $gt: Date.now()} })
 
@@ -23,38 +24,38 @@ router.get('/', async(req, res, next) => {
       }
 })
 
-router.post('/', async(req, res, next) => {
-    const token = req.query.token;
+router.post('/', async (req, res, next) => {
+    const token  = getToken;
     const { newPassword, passwordConfirm } = req.body;
 
     try {
-        const user = await Account.findOne({ token: token, expirationTime: { $gt: Date.now()} })
+        const user = await Account.findOne({ token: token });
 
         if (!user) {
             req.flash("error_msg", "Invalid or expired token.");
             return res.redirect("/forgot-password");
         }
 
-        if (newPassword !== passwordConfirm){
-            req.flash("error_msg", "Password is invalid!")
-            return res.redirect("/reset-password")
+        if (newPassword !== passwordConfirm) {
+            req.flash("error_msg", "Passwords do not match!");
+            return res.redirect("/reset-password");
         }
 
-        user.password = await bcrypt.hash(password, 10);
-        user.token = null;
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const updateResult = await Account.updateOne(
+            { token: token },
+            { password: hashedPassword, token: null, expirationTime: null }
+        );
 
-        await user.save();
-
-        req.flash('success_msg', 'Reset Password successfully!')
-
+        if (updateResult.nModified === 0) {
+            req.flash("error_msg", "Failed to reset password. Please try again.");
+            return res.redirect(`/reset-password?token=${token}`);
+        }
+        req.flash('success_msg', 'Password reset successfully!');
         res.redirect('/login');
+    } catch (error) {
+        console.error('Error resetting password:', error);
+        return res.status(500).send('<script>alert("Password reset failed: Internal Server Error"); window.location.href = "/reset-password";</script>');
     }
-
-    catch(error)
-    {
-        console.error(error);
-        return res.status(500).send('<script>alert("Registration failed: Internal Server Error"); window.location.href = "/reset-password";</script>');
-    }
-})
-
+});
 module.exports = router;

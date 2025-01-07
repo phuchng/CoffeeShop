@@ -21,7 +21,7 @@ router.post('/', async(req, res) => {
         }
 
         const token = crypto.randomBytes(32).toString("hex");
-        const expirationTime = Date.now() + 6 * 60 * 1000;
+        const expirationTime = Date.now() + 24 * 60 * 60 * 1000;
 
         user.token = token;
         user.expirationTime = expirationTime;
