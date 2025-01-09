@@ -131,3 +131,30 @@
 .checkout1 {
     margin-bottom: 40px;
 }
+
+.BoxQuantity button {
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #70604d;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    margin: 0 2px;
+}
+
+.BoxQuantity button:hover {
+    background-color: #5b4d3b;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.BoxQuantity button:active {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+}
+
+.BoxQuantity .qtt {
+    margin: 0 10px; 
+    font-size: 16px;
+    font-weight: 600;
+}

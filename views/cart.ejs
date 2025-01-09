@@ -124,4 +124,64 @@
             }
         })
     })
+    document.querySelectorAll('.BoxQuantity .qtt').forEach((quantity_span) => {
+        const parent = quantity_span.closest('.itemCart');
+        const productID = parent.querySelector('.x').dataset.id;
+        const servingOption = parent.querySelector('.x').dataset.option;
+        const totalCostSpan = parent.querySelector('.costC');
+        const productPrice = parseFloat(parent.querySelector('.InfoProduct span:last-child').innerText.replace('Price: $', ''));
+
+        const decrementButton = document.createElement('button');
+        decrementButton.innerText = '-';
+        decrementButton.addEventListener('click', async () => {
+            let currentQuantity = parseInt(quantity_span.innerText);
+            if (currentQuantity > 1) {
+                currentQuantity--;
+                quantity_span.innerText = currentQuantity;
+                updateQuantity(productID, servingOption, currentQuantity);
+            }
+        });
+
+        const incrementButton = document.createElement('button');
+        incrementButton.innerText = '+';
+        incrementButton.addEventListener('click', async () => {
+            let currentQuantity = parseInt(quantity_span.innerText);
+            currentQuantity++;
+            quantity_span.innerText = currentQuantity;
+            updateQuantity(productID, servingOption, currentQuantity);
+        });
+
+        quantity_span.parentNode.insertBefore(decrementButton, quantity_span);
+        quantity_span.parentNode.insertBefore(incrementButton, quantity_span.nextSibling);
+
+        async function updateQuantity(productID, servingOption, newQuantity) {
+            try {
+                const response = await fetch('/cart/update-quantity', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productID: productID, servingOption: servingOption, newQuantity: newQuantity })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const newTotalPrice = data.newTotalPrice;
+                    const newTotalItems = data.newTotalItems;
+
+                    totalCostSpan.innerText = `$${(productPrice * newQuantity).toFixed(2)}`;
+                    const totalCost = document.querySelectorAll('.totalCost');
+                    const totalItems = document.querySelector('.totalItems');
+                    totalCost.forEach((cost) => {
+                        cost.innerText = `$${newTotalPrice}`;
+                    });
+                    totalItems.innerText = `${newTotalItems}`;
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.error}`);
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('An error occurred. Please try again.');
+            }
+        }
+    });
 </script>

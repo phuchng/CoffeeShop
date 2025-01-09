@@ -167,4 +167,48 @@ router.post('/order', isAuthenticated, async (req, res, next) => {
     }
 });
 
+router.patch('/update-quantity', isAuthenticated, async (req, res, next) => {
+    const { productID, servingOption, newQuantity } = req.body;
+    const accountID = req.user.id;
+
+    try {
+        const cart = await Cart.findOne({ account: accountID });
+
+        if (!cart) {
+            return res.status(404).json({ success: false, message: 'Cart not found.' });
+        }
+
+        const productIndex = cart.products.findIndex(item => item.product.toString() === productID && item.servingOption === servingOption);
+
+        if (productIndex === -1) {
+            return res.status(404).json({ success: false, message: 'Product not found in cart.' });
+        }
+
+        // Update the quantity of the product
+        const oldQuantity = cart.products[productIndex].quantity;
+        cart.products[productIndex].quantity = parseInt(newQuantity);
+
+        // Recalculate total price
+        let totalPrice = 0;
+        let totalItems = 0;
+        for (const item of cart.products) {
+            const product = await Product.findById(item.product);
+            if (product) {
+                totalItems += item.quantity;
+                totalPrice += product.price * item.quantity;
+            }
+        }
+
+        cart.totalPrice = totalPrice;
+        cart.totalItems = totalItems;
+        await cart.save();
+
+        res.status(200).json({ success: true, message: 'Product quantity updated.', newTotalPrice: totalPrice, newTotalItems: totalItems });
+    } catch (error) {
+        console.error('Error updating product quantity:', error);
+        res.status(500).json({ success: false, message: 'Failed to update product quantity.' });
+    }
+});
+
+
 module.exports = router;
