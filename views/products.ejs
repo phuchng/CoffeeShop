@@ -62,10 +62,44 @@
             <div class="col-md-9">
                 <div class="boxPro">
                     <ul id="product-list" class="productList">
-                        <!-- Products will be loaded here -->
+                        <!-- Initial product list (SSR) -->
+                        <% products.forEach(product => { %>
+                            <li class="product">
+                                <a href="/product/<%= product._id %>" class="img" style="display: block; width: 100%; height: 170px; overflow: hidden; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px">
+                                    <img src="/assets/images/<%= product.image %>" style="width: 100%; height: 100%; object-fit: cover;" alt="" class="image">
+                                </a>
+                                <span class="cost">$<%= product.price %></span>
+                                <div class="eval">
+                                    <% for (let i = 0; i < 5; i++) { %>
+                                        <% if (i < Math.round(product.ratings.averageRating)) { %>
+                                            <i class="fa-solid fa-star"></i>
+                                        <% } else { %>
+                                            <i class="fa-regular fa-star"></i>
+                                        <% } %>
+                                    <% } %>
+                                    <%= product.ratings.totalRatings %> reviews
+                                </div>
+                                <span class="name">
+                                    <a href="/product/<%= product._id %>"><%= product.name %></a>
+                                </span>
+                            </li>
+                        <% }); %>
+                        <!-- Products will be loaded here by AJAX -->
                     </ul>
                     <div id="pagination" class="pagination">
-                        <!-- Pagination links will be here -->
+                        <!-- Initial pagination links (SSR) -->
+                        <% if (totalPages > 1) { %>
+                            <% if (currentPage > 1) { %>
+                                <a href="#" data-page="<%= currentPage - 1 %>">Previous</a>
+                            <% } %>
+                            <% for (let i = 1; i <= totalPages; i++) { %>
+                                <a href="#" data-page="<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+                            <% } %>
+                            <% if (currentPage < totalPages) { %>
+                                <a href="#" data-page="<%= currentPage + 1 %>">Next</a>
+                            <% } %>
+                        <% } %>
+                        <!-- Pagination links will be updated here by AJAX -->
                     </div>
                     <% if (products.length === 0) { %>
                         <p>No products found.</p>
@@ -92,7 +126,9 @@ $(document).ready(function() {
             }
             const productItem = `
                 <li class="product">
-                    <a href="/product/${product._id}" class="img" style="display: block; width: 100%; height: 170px; overflow: hidden; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px">><img src="/assets/images/${product.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="" class="image"></a>
+                    <a href="/product/${product._id}" class="img" style="display: block; width: 100%; height: 170px; overflow: hidden; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px">
+                        <img src="/assets/images/${product.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="" class="image">
+                    </a>
                     <span class="cost">$${product.price}</span>
                     <div class="eval">
                         ${stars}
@@ -105,6 +141,7 @@ $(document).ready(function() {
             `;
             productList.append(productItem);
         });
+
         updatePagination(data.currentPage, data.totalPages);
     }
 
@@ -133,20 +170,34 @@ $(document).ready(function() {
         return new URLSearchParams(formData).toString();
     }
 
+    // Update the fetchProducts function to update the URL
     function fetchProducts(page = 1) {
         const filters = getFilters();
+        const url = `/products?${filters}&page=${page}`;
+
+        // Update the URL using the History API
+        history.pushState({ page: page }, '', url);
+
         $.ajax({
-            url: `/products?${filters}&page=${page}`,
+            url: url,
             method: 'GET',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 updateProducts(data);
             },
-            error: function(error) {
+            error: function (error) {
                 console.error("Error fetching products:", error);
             }
         });
     }
+
+    // Handle history navigation (back/forward buttons)
+    $(window).on('popstate', function (event) {
+        if (event.originalEvent.state) {
+            const page = event.originalEvent.state.page;
+            fetchProducts(page);
+        }
+    });
 
     // Event listener for filter form submission
     filterForm.on('submit', function(e) {
@@ -160,8 +211,5 @@ $(document).ready(function() {
         const page = $(this).data('page');
         fetchProducts(page);
     });
-
-    // Initial fetch on page load
-    fetchProducts();
 });
 </script>

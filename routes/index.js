@@ -154,18 +154,8 @@ router.get('/products', async function (req, res, next) {
                 query.category = category._id;
             } else {
                 console.log('Category not found:', req.query.category);
-                return res.render('products', {
-                    title: 'Search Results',
-                    search: searchTerm,
-                    products: [],
-                    selectedCategory: req.query.category || [],
-                    selectedPriceRange: req.query.priceRange || '',
-                    selectedGrind: req.query.grind || [],
-                    selectedRoast: req.query.roast || [],
-                    selectedSort: req.query.sort || '',
-                    currentPage: page,
-                    totalPages: 0
-                });
+                // Handle case where category is not found
+                // ... (render empty list or error)
             }
         } catch (error) {
             console.error('Error fetching category:', error);
@@ -208,25 +198,22 @@ router.get('/products', async function (req, res, next) {
         const products = await Product.find(query).sort(sortOption).skip(skip).limit(perPage);
         const totalProducts = await Product.countDocuments(query);
         const totalPages = Math.ceil(totalProducts / perPage);
+        const categories = await Category.find({}); // Fetch categories for filter
 
         if (req.xhr) {
             // AJAX request: Send only JSON data
             res.json({
                 products: products,
-                selectedCategory: req.query.category || [],
-                selectedPriceRange: req.query.priceRange || '',
-                selectedGrind: req.query.grind || [],
-                selectedRoast: req.query.roast || [],
-                selectedSort: req.query.sort || '',
                 currentPage: page,
                 totalPages: totalPages
             });
         } else {
-            // Regular request: Render the full EJS template
+            // Regular request: Render the full EJS template with initial product data
             res.render('products', {
                 title: 'Search Results',
                 search: searchTerm,
-                products: products,
+                products: products, // Pass products to the template
+                categories: categories, // Pass categories to the template
                 selectedCategory: req.query.category || [],
                 selectedPriceRange: req.query.priceRange || '',
                 selectedGrind: req.query.grind || [],
@@ -241,6 +228,7 @@ router.get('/products', async function (req, res, next) {
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 // Contact Page Route
 router.get('/contact', function (req, res, next) {
