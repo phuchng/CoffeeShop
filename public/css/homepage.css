@@ -489,14 +489,14 @@
     z-index: 1000;
 }
 
-/* HIỆU ỨNG HOVER (Di chuột vào) */
+/* HIỆU ỨNG HOVER*/
 #chat-icon-container:hover {
 
-    transform: scale(1.1); /* Phóng to 10% */
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); /* Bóng đổ đậm hơn */
+    transform: scale(1.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); 
 }
 
-/* Hiệu ứng khi Chatbox đang mở (Có thể thay đổi màu sắc hoặc icon) */
+/* Hiệu ứng khi Chatbox đang mở */
 #chat-icon-container.open {
 
     transform: rotate(360deg); 
@@ -511,21 +511,19 @@
 /* CONTAINER CHATBOX CHÍNH */
 #langchain-chatbox {
     position: fixed;
-    bottom: 20px; /* Cao hơn icon */
+    bottom: 20px; 
     right: 100px; 
-    width: 600px; /* Chiều rộng vừa phải */
-    height: 500px; /* Chiều cao */
+    width: 600px;
+    height: 500px;
     
-    background-color: #FFFFFF; /* Nền trắng sạch */
-    border-radius: 12px; /* Góc bo tròn */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Bóng đổ mạnh mẽ */
+    background-color: #FFFFFF; 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Quan trọng để bo tròn góc */
+    overflow: hidden; 
     z-index: 999; 
     
-    /* Hiệu ứng xuất hiện mượt mà */
     transform: scale(0.95);
     opacity: 0;
     transition: transform 0.3s ease-out, opacity 0.3s ease-out;
@@ -538,7 +536,7 @@
 
 /* HEADER */
 #chatbox-header {
-    background-color: #4B3621; /* Màu Nâu đậm của Cà Phê */
+    background-color: #4B3621; 
     color: #FFFFFF;
     padding: 15px;
     font-weight: bold;
@@ -566,10 +564,10 @@
 
 /* KHU VỰC HIỂN THỊ TIN NHẮN */
 #message-display-area {
-    flex-grow: 1; /* Choán hết không gian còn lại */
+    flex-grow: 1; 
     padding: 15px;
-    overflow-y: auto; /* Thanh cuộn */
-    background-color: #F8F8F8; /* Nền xám nhạt */
+    overflow-y: auto; 
+    background-color: #F8F8F8; 
 }
 
 /* ĐỊNH DẠNG TIN NHẮN CHUNG */
@@ -642,8 +640,6 @@
 }
 
 #send-button svg {
-    /* Đảm bảo display: block; và vertical-align: middle; đã được thêm ở trên */
     transform: translateY(-0.5px);
     transform: translateX(-1px); 
-
 }
