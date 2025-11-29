@@ -463,3 +463,187 @@
 .blog--link:hover {
     color: #8b561a;
 }
+
+/* chatboxx */
+/* CONTAINER CỦA ICON */
+#chat-icon-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    
+    width: 75px;
+    height: 75px;
+
+    background-image: url('../img/robot-icon.png'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+
+    border-radius: 50%;
+    
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer; 
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1000;
+}
+
+/* HIỆU ỨNG HOVER (Di chuột vào) */
+#chat-icon-container:hover {
+
+    transform: scale(1.1); /* Phóng to 10% */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); /* Bóng đổ đậm hơn */
+}
+
+/* Hiệu ứng khi Chatbox đang mở (Có thể thay đổi màu sắc hoặc icon) */
+#chat-icon-container.open {
+
+    transform: rotate(360deg); 
+}
+
+/* chatbox chat */
+/* Ẩn mặc định */
+.hidden {
+    display: none;
+}
+
+/* CONTAINER CHATBOX CHÍNH */
+#langchain-chatbox {
+    position: fixed;
+    bottom: 20px; /* Cao hơn icon */
+    right: 100px; 
+    width: 600px; /* Chiều rộng vừa phải */
+    height: 500px; /* Chiều cao */
+    
+    background-color: #FFFFFF; /* Nền trắng sạch */
+    border-radius: 12px; /* Góc bo tròn */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Bóng đổ mạnh mẽ */
+    
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Quan trọng để bo tròn góc */
+    z-index: 999; 
+    
+    /* Hiệu ứng xuất hiện mượt mà */
+    transform: scale(0.95);
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+#langchain-chatbox:not(.hidden) {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* HEADER */
+#chatbox-header {
+    background-color: #4B3621; /* Màu Nâu đậm của Cà Phê */
+    color: #FFFFFF;
+    padding: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+/* KHU VỰC HIỂN THỊ TIN NHẮN */
+#message-display-area {
+    flex-grow: 1; /* Choán hết không gian còn lại */
+    padding: 15px;
+    overflow-y: auto; /* Thanh cuộn */
+    background-color: #F8F8F8; /* Nền xám nhạt */
+}
+
+/* ĐỊNH DẠNG TIN NHẮN CHUNG */
+.message {
+    max-width: 80%;
+    padding: 10px 12px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    font-size: 14px;
+}
+
+/* TIN NHẮN TRỢ LÝ (LangChain) */
+.assistant-message {
+    background-color: #EAEAEA;
+    color: #333333;
+    float: left;
+    clear: both;
+    border-bottom-left-radius: 4px; 
+}
+
+/* TIN NHẮN NGƯỜI DÙNG */
+.user-message {
+    background-color: #795548; 
+    color: #FFFFFF;
+    float: right;
+    clear: both;
+    border-bottom-right-radius: 4px; 
+}
+
+/* KHU VỰC NHẬP LIỆU */
+#chatbox-input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #EEEEEE;
+    background-color: #FFFFFF;
+}
+
+#user-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #CCCCCC;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#user-input:focus {
+    border-color: #4B3621;
+}
+
+#send-button {
+    background-color: #4B3621; 
+    color: #FFFFFF;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#send-button:hover {
+    background-color: #795548;
+}
+
+#send-button svg {
+    /* Đảm bảo display: block; và vertical-align: middle; đã được thêm ở trên */
+    transform: translateY(-0.5px);
+    transform: translateX(-1px); 
+
+}
